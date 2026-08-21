@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4 — 2026-08-21
+
+- Replace the misleading disabled Spatial location select with a clearly read-only field while editing an existing port.
+- Add a tide icon beside every port and a resizable, size-preserving Display-style Details/Graph validation dialog.
+- Use the shared AJRM tide-curve renderer for the one-to-seven-day graph, datum reference lines and interactive time/height hover readout.
+
 ## 0.1.3 — 2026-08-21
 
 - Add validated create, update and removal operations for tidal-region serving-port assignments and parent-region hierarchy.

@@ -8,6 +8,7 @@ const test = require("node:test");
 test("webapp explains the refresh floor and exposes both station and port tables", () => {
 	const html = fs.readFileSync(path.join(__dirname,"..","public","index.html"),"utf8");
 	const app = fs.readFileSync(path.join(__dirname,"..","public","app.js"),"utf8");
+	const styles = fs.readFileSync(path.join(__dirname,"..","public","styles.css"),"utf8");
 	assert.match(html, /Provider stations/);
 	assert.match(html, /Tidal ports/);
 	assert.match(html, /more than 24 hours old/);
@@ -17,4 +18,16 @@ test("webapp explains the refresh floor and exposes both station and port tables
 	assert.match(app, /absoluteReferenceFields"\)\.hidden = secondary/);
 	assert.match(app, /definition\.datum = null;[\s\S]*definition\.referenceLevels = null/);
 	assert.match(app, /definitionKind"\)\.addEventListener\("change", updateDefinitionFields\)/);
+	assert.match(html, /id="definitionLocationReadOnly" hidden/);
+	assert.match(html, /class="tide-dialog"/);
+	assert.match(html, /id="tideDetailsPane"/);
+	assert.match(html, /id="tideGraphPane"/);
+	assert.match(app, /class="view-tide"/);
+	assert.match(app, /import\("\.\/tide-curve\.mjs\?v=0\.1\.4"\)/);
+	assert.match(html, /app\.js\?v=0\.1\.4/);
+	assert.match(app, /tideCurveSvg/);
+	assert.match(app, /attachTideCurveHover/);
+	assert.match(app, /TIDE_DIALOG_SIZE_KEY/);
+	assert.match(app, /saveTideDialogSize/);
+	assert.match(styles, /\[hidden\] \{ display:none !important; \}/);
 });

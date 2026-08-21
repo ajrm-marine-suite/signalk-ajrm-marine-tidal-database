@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AJRM Marine Tidal Database</title>
   <link rel="icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=0.1.4">
 </head>
 <body>
   <header>
@@ -24,13 +24,14 @@
     </section>
     <section class="panel">
       <div class="panel-heading"><div><h2>Tidal ports</h2><p>Direct ports use provider events. Entered-data secondary ports are calculated locally from their cached parent.</p></div><input id="portFilter" type="search" placeholder="Filter tidal ports"></div>
-      <div class="table-wrap"><table><thead><tr><th>Port</th><th>Kind</th><th>Prediction</th><th>Provider station</th><th>Parent</th><th>Status</th><th></th></tr></thead><tbody id="ports"></tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th aria-label="View tide"></th><th>Port</th><th>Kind</th><th>Prediction</th><th>Provider station</th><th>Parent</th><th>Status</th><th></th></tr></thead><tbody id="ports"></tbody></table></div>
     </section>
   </main>
   <dialog id="definitionDialog">
     <form id="definitionForm" method="dialog">
       <div class="dialog-heading"><div><h2>Tidal port definition</h2><p>Location and geometry remain in Location Editor.</p></div><button id="closeDefinition" type="button">×</button></div>
-      <label>Spatial Location<select id="definitionLocation" required></select></label>
+      <label id="definitionLocationChoice">Spatial location<select id="definitionLocation" required></select></label>
+      <label id="definitionLocationReadOnly" hidden>Spatial location<input id="definitionLocationName" readonly></label>
       <label>Name<input id="definitionName" required maxlength="200"></label>
       <div class="form-grid"><label>Port class<select id="definitionKind"><option value="standard">Standard port</option><option value="secondary">Secondary port</option></select></label><label>Prediction source<select id="definitionMode"><option value="provider">Provider station</option><option value="corrections">Entered secondary-port differences</option><option value="unavailable">Not yet configured</option></select></label></div>
       <section id="providerFields"><div class="form-grid"><label>Provider<select id="providerId"><option value="ukhoTidalEvents">UK Hydrographic Office Tidal API</option></select></label><label>Station identifier<input id="stationId"></label></div><label>Station name<input id="stationName"></label></section>
@@ -40,6 +41,38 @@
       <div class="dialog-actions"><button id="deleteDefinition" type="button" class="danger">Remove tidal definition</button><span></span><button id="cancelDefinition" type="button">Cancel</button><button id="saveDefinition" type="submit" class="primary">Save tidal definition</button></div>
     </form>
   </dialog>
-  <script src="app.js"></script>
+  <dialog id="tideDialog" class="tide-dialog">
+    <div class="tide-dialog-content">
+      <div class="dialog-heading"><div><h2 id="tideDialogTitle">Tidal prediction</h2><p>Cached prediction data for validation</p></div><button id="closeTide" type="button" aria-label="Close tidal prediction">×</button></div>
+      <div id="tideUnavailable" class="message error" hidden></div>
+      <div class="tabs" role="tablist" aria-label="Tidal prediction views">
+        <button id="tideDetailsTab" class="tab active" type="button" role="tab" aria-selected="true" aria-controls="tideDetailsPane">Details</button>
+        <button id="tideGraphTab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="tideGraphPane">Graph</button>
+      </div>
+      <section id="tideDetailsPane" class="tab-pane" role="tabpanel" aria-labelledby="tideDetailsTab">
+        <h3 id="tideDetailsPortName">No tidal port</h3>
+        <dl class="tide-details">
+          <dt>Current height</dt><dd id="tideHeightNow">—</dd>
+          <dt>Trend</dt><dd id="tideTrend">—</dd>
+          <dt>Next high water</dt><dd id="tideNextHigh">—</dd>
+          <dt>Next low water</dt><dd id="tideNextLow">—</dd>
+          <dt>Distance to fall</dt><dd id="tideDistanceToFall">—</dd>
+          <dt>Datum</dt><dd id="tideDatum">—</dd>
+          <dt>Station</dt><dd id="tideStation">—</dd>
+          <dt>Source/freshness</dt><dd id="tideSourceFreshness">—</dd>
+          <dt>Spring/neap</dt><dd id="tideSpringNeapStatus">—</dd>
+          <dt>Phase timing</dt><dd id="tideSpringNeapTiming">—</dd>
+        </dl>
+        <p class="muted tide-note">Spring/neap timing is an astronomical estimate. Predictions are planning aids; verify the station, datum and freshness.</p>
+      </section>
+      <section id="tideGraphPane" class="tab-pane" role="tabpanel" aria-labelledby="tideGraphTab" hidden>
+        <h3 id="tideGraphPortName">No tidal port — tidal curve</h3>
+        <div class="graph-controls"><label for="tideGraphDays">Graph range</label><select id="tideGraphDays"><option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="4">4 days</option><option value="5">5 days</option><option value="6">6 days</option><option value="7" selected>7 days</option></select></div>
+        <div id="tideCurve" class="ajrm-tide-curve" aria-label="Tide curve"></div>
+      </section>
+      <div class="dialog-actions"><button id="refreshTide" type="button" class="primary">Refresh if due</button><span></span><button id="closeTideBottom" type="button">Close</button></div>
+    </div>
+  </dialog>
+  <script src="app.js?v=0.1.4"></script>
 </body>
 </html>

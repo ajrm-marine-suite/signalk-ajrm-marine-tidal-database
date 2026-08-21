@@ -2,7 +2,7 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.3 provides a UKHO adapter behind a provider-neutral registry, a durable station database, a strict 24-hour minimum refresh interval per physical station, provider-wide request pacing, 429 backoff, automatic maintenance of every configured station, locally calculated entered-data secondary ports, spatial port selection and editable tidal-region assignments presented by Location Editor.
+Version 0.1.4 provides a UKHO adapter behind a provider-neutral registry, a durable station database, a strict 24-hour minimum refresh interval per physical station, provider-wide request pacing, 429 backoff, automatic maintenance of every configured station, locally calculated entered-data secondary ports, spatial port selection and editable tidal-region assignments presented by Location Editor. Each port can be opened from the left-hand tide icon to validate its cached details and the same shared tidal curve used by Display.
 
 ## Responsibilities
 
@@ -23,11 +23,11 @@ UKHO responses are retained on disk so ordinary restarts and offline operation d
 
 ## Setup
 
-Install and enable AJRM Marine Location Editor first, then this plugin. Configure the provider key and subscription tier in Signal K **Server → Plugin Config → AJRM Marine Tidal Database**. Open the Tidal Database webapp to inspect station coverage, update due stations, and edit prediction settings for tidal-port Locations. Port position and geometry continue to be edited only in Location Editor.
+Install and enable AJRM Marine Location Editor first, then this plugin. Configure the provider key and subscription tier in Signal K **Server → Plugin Config → AJRM Marine Tidal Database**. Open the Tidal Database webapp to inspect station coverage, update due stations, and edit prediction settings for tidal-port Locations. Select the tide icon at the left of any port to inspect its current height, next high/low water, source freshness, spring/neap estimate and interactive one-to-seven-day curve. Port position and geometry continue to be edited only in Location Editor.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.3 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.4 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 
