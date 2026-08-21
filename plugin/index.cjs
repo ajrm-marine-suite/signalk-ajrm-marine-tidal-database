@@ -101,7 +101,11 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 				title: "UKHO subscription tier",
 				enum: ["discovery", "foundation", "premium"],
 				default: "discovery",
-				description: "Foundation or Premium is required for restart-safe offline storage.",
+				description: "Select the tier attached to this key. Discovery records are stored only within the current UTC licence year.",
+			},
+			ukhoRequestIntervalSeconds: {
+				type: "number", title: "Minimum seconds between UKHO requests", default: 5, minimum: 1, maximum: 60,
+				description: "A conservative provider-wide pacing interval. UKHO Retry-After responses are also honoured.",
 			},
 			automaticMaintenance: { type: "boolean", title: "Keep all configured prediction stations up to date", default: true },
 		},
@@ -113,6 +117,7 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		providers = createProviderRegistry([createUkhoProvider({
 			apiKey: configured.ukhoApiKey || process.env.UKHO_API_KEY || "",
 			subscriptionTier: configured.ukhoSubscriptionTier || "discovery",
+			requestIntervalMs: Math.max(1, Number(configured.ukhoRequestIntervalSeconds) || 5) * 1000,
 		})]);
 		database = createTidalDatabase({ directory: path.join(dataDirectory, "stations"), providers });
 		const definitions = definitionStore.read();
@@ -327,7 +332,7 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 			contract: "ajrm-marine-tidal-database-status-v1", contractVersion: 1,
 			plugin: plugin.id, version: packageJson.version, enabled: running,
 			providers: providers?.list() || [], summary, maintenance: lastMaintenance,
-			policy:{ refreshFloorHours:24, offlineRetryHours:1, persistentCacheRequiresProviderPermission:true },
+			policy:{ refreshFloorHours:24, offlineRetryHours:1, discoveryCacheUtcYearBounded:true, requestIntervalSeconds:(providers?.list()?.[0]?.requestIntervalMs || 5000) / 1000 },
 			latestProjection: latestProjection ? { valid: latestProjection.valid, selectedPort: latestProjection.selectedPort, freshness: latestProjection.freshness, error: latestProjection.error } : null,
 			stations, ports,
 		};

@@ -36,6 +36,20 @@ test("a station is never fetched twice inside the 24-hour floor", async (t) => {
 	assert.equal(value.calls(), 1);
 });
 
+test("simultaneous requests for one station share a single provider fetch", async (t) => {
+	let release;
+	let calls = 0;
+	const wait = new Promise((resolve) => { release = resolve; });
+	const value = await fixture(t, { async fetchEvents() { calls += 1; await wait; return { events }; } });
+	const station = { providerId:"test", stationId:"one", stationName:"One" };
+	const first = value.db.stationData(station, { now:"2026-08-21T00:00:00Z" });
+	const second = value.db.stationData(station, { now:"2026-08-21T00:00:00Z" });
+	release();
+	const [left, right] = await Promise.all([first, second]);
+	assert.equal(left.fetchedAt, right.fetchedAt);
+	assert.equal(calls, 1);
+});
+
 test("licensed provider records survive a database restart", async (t) => {
 	const value = await fixture(t);
 	const station = { providerId:"test", stationId:"one", stationName:"One" };
@@ -44,6 +58,20 @@ test("licensed provider records survive a database restart", async (t) => {
 	const result = await restarted.stationData(station, { now:"2026-08-21T01:00:00Z" });
 	assert.equal(result.cache, "hit");
 	assert.equal(value.calls(), 1);
+});
+
+test("a persisted provider record is rejected at its declared licence boundary", async (t) => {
+	let calls = 0;
+	const value = await fixture(t, {
+		cacheUseUntil(now) { return new Date(Date.UTC(new Date(now).getUTCFullYear() + 1, 0, 1)).toISOString(); },
+		async fetchEvents() { calls += 1; return { events }; },
+	});
+	const station = { providerId:"test", stationId:"one", stationName:"One" };
+	await value.db.stationData(station, { now:"2026-12-31T23:00:00Z" });
+	const restarted = createTidalDatabase({ directory:value.directory, providers:value.registry });
+	const result = await restarted.stationData(station, { now:"2027-01-01T00:00:00Z" });
+	assert.equal(result.cache, "network");
+	assert.equal(calls, 2);
 });
 
 test("a locally corrected secondary reuses its parent provider record", async (t) => {

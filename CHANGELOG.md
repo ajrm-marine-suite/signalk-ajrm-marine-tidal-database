@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 — 2026-08-21
+
+- Serialize and pace all UKHO requests, stop duplicate endpoint calls after a 429, and honour `Retry-After` with provider-wide backoff.
+- Coalesce simultaneous requests for the same physical station.
+- Persist Discovery records for restart-safe day-to-day use, reject them at the UTC year boundary, and retain the 24-hour refresh floor.
+
 ## 0.1.0 — 2026-08-21
 
 - Add the standalone provider-neutral Tidal Database service and webapp.

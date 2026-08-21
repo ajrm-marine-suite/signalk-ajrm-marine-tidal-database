@@ -2,7 +2,7 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.0 provides a UKHO adapter behind a provider-neutral registry, a durable station database where licensing permits it, a strict 24-hour minimum refresh interval per physical station, offline fallback/backoff, automatic maintenance of every configured station, locally calculated entered-data secondary ports, spatial port selection and a web table showing cache coverage and provenance.
+Version 0.1.1 provides a UKHO adapter behind a provider-neutral registry, a durable station database where licensing permits it, a strict 24-hour minimum refresh interval per physical station, provider-wide request pacing, 429 backoff, automatic maintenance of every configured station, locally calculated entered-data secondary ports, spatial port selection and a web table showing cache coverage and provenance.
 
 ## Responsibilities
 
@@ -17,7 +17,9 @@ The plugin exposes `app.ajrmMarineTidalDatabase` and `Symbol.for("mcdonaldajr.aj
 
 Each provider station is fetched only when it has no usable record or its last successful fetch is **more than 24 hours old**. Repeated manual refreshes do not bypass this floor. Automatic maintenance checks hourly and covers all configured stations, not merely the currently selected route or vessel area. Locally entered secondary ports reuse their parent station cache and perform no provider request.
 
-If a provider cannot be reached, the latest permitted disk-backed record remains available and the provider enters a one-hour retry backoff. UKHO Discovery responses remain memory-only; Foundation or Premium must be selected before UKHO cache records are retained across Signal K restarts.
+If a provider cannot be reached, the latest permitted disk-backed record remains available and the provider enters a one-hour retry backoff. Calls are serialized and spaced by five seconds by default; a 429 stops alternate-endpoint retries and honours UKHO's `Retry-After` response. Concurrent requests for one station share one fetch.
+
+UKHO responses are retained on disk so ordinary restarts and offline operation do not repeat requests. Discovery records are scoped to the UTC calendar/licence year in which they were fetched and are rejected at the year boundary; Foundation and Premium records are retained under their configured subscription. All tiers still use the same 24-hour minimum refresh floor.
 
 ## Setup
 
@@ -25,7 +27,7 @@ Install and enable AJRM Marine Location Editor first, then this plugin. Configur
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.0 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.1 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

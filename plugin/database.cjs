@@ -27,6 +27,7 @@ function createTidalDatabase(options) {
 	const providers = options.providers;
 	const memory = new Map();
 	const attempts = new Map();
+	const inflight = new Map();
 	let networkBackoffUntil = 0;
 
 	function key(providerId, stationId) {
@@ -44,15 +45,21 @@ function createTidalDatabase(options) {
 		await fs.rename(temporary, filename);
 	}
 
-	async function read(providerId, stationId) {
+	async function read(providerId, stationId, nowMs = Date.now()) {
 		const cacheKey = key(providerId, stationId);
-		if (memory.has(cacheKey)) return memory.get(cacheKey);
-		// Discovery-tier UKHO responses may be used in memory but must not be
-		// recovered from disk. Other adapters declare their own persistence rule.
+		if (memory.has(cacheKey)) {
+			const value = memory.get(cacheKey);
+			if (!value.cacheUseUntil || nowMs < Date.parse(value.cacheUseUntil)) return value;
+			memory.delete(cacheKey);
+		}
 		if (!providers.get(providerId).persistentCachePermitted) return null;
 		try {
 			const value = JSON.parse(await fs.readFile(file(providerId, stationId), "utf8"));
 			if (value.contract !== RECORD_CONTRACT || !Array.isArray(value.events)) return null;
+			if (value.cacheUseUntil && nowMs >= Date.parse(value.cacheUseUntil)) {
+				await fs.unlink(file(providerId, stationId)).catch((error) => { if (error.code !== "ENOENT") throw error; });
+				return null;
+			}
 			memory.set(cacheKey, value);
 			return value;
 		} catch (error) {
@@ -61,12 +68,12 @@ function createTidalDatabase(options) {
 		}
 	}
 
-	async function stationData(station, request = {}) {
+	async function stationDataOnce(station, request = {}) {
 		const provider = providers.get(station.providerId);
 		const cacheKey = key(station.providerId, station.stationId);
 		const now = new Date(request.now || Date.now());
 		const nowMs = now.getTime();
-		const cached = await read(station.providerId, station.stationId);
+		const cached = await read(station.providerId, station.stationId, nowMs);
 		const ageMs = cached ? nowMs - Date.parse(cached.fetchedAt) : Infinity;
 		// A manual update means "update if due". It never bypasses the minimum
 		// 24-hour station gate and therefore cannot burn quota by repeated clicks.
@@ -91,6 +98,7 @@ function createTidalDatabase(options) {
 				coverage: eventCoverage,
 				events: fetched.events,
 				timestampContract: fetched.timestampContract || "explicit-offset-v1",
+				cacheUseUntil: provider.cacheUseUntil?.(now) || null,
 			};
 			memory.set(cacheKey, result);
 			attempts.set(cacheKey, { attemptedAt: nowMs, succeededAt: nowMs });
@@ -99,9 +107,21 @@ function createTidalDatabase(options) {
 			return { ...result, cache: "network", due: false };
 		} catch (error) {
 			attempts.set(cacheKey, { attemptedAt: nowMs, failedAt: nowMs, error: error.message });
-			networkBackoffUntil = nowMs + OFFLINE_RETRY_MS;
+			networkBackoffUntil = nowMs + Math.max(OFFLINE_RETRY_MS, Number(error.retryAfterMs) || 0);
 			if (cached) return { ...cached, cache: "staleFallback", due: true, fallbackReason: error.message, retryAt: new Date(networkBackoffUntil).toISOString() };
 			throw error;
+		}
+	}
+
+	async function stationData(station, request = {}) {
+		const cacheKey = key(station.providerId, station.stationId);
+		if (inflight.has(cacheKey)) return inflight.get(cacheKey);
+		const operation = stationDataOnce(station, request);
+		inflight.set(cacheKey, operation);
+		try {
+			return await operation;
+		} finally {
+			if (inflight.get(cacheKey) === operation) inflight.delete(cacheKey);
 		}
 	}
 
@@ -127,7 +147,7 @@ function createTidalDatabase(options) {
 	}
 
 	async function inspectStation(station, now = new Date()) {
-		const cached = await read(station.providerId, station.stationId);
+		const cached = await read(station.providerId, station.stationId, new Date(now).getTime());
 		const provider = providers.get(station.providerId);
 		const ageMs = cached ? new Date(now).getTime() - Date.parse(cached.fetchedAt) : Infinity;
 		const endMs = cached?.coverage?.endAt ? Date.parse(cached.coverage.endAt) : Number.NaN;

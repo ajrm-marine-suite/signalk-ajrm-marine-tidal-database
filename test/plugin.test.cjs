@@ -33,6 +33,8 @@ test("the standalone service owns tidal data and exposes all seeded ports", asyn
 	assert.equal(status.body.contract, "ajrm-marine-tidal-database-status-v1");
 	assert.equal(status.body.summary.stationCount, 50);
 	assert.equal(status.body.policy.refreshFloorHours, 24);
+	assert.equal(status.body.policy.discoveryCacheUtcYearBounded, true);
+	assert.equal(status.body.policy.requestIntervalSeconds, 5);
 	assert.equal(status.body.ports.length, 100);
 	const projection = await call("GET","/tides/status",{ query:{ portId:port.locationId } });
 	assert.equal(projection.body.contract, "ajrm-marine-tide-resolver-v1");

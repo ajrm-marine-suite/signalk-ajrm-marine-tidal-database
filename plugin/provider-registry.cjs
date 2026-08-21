@@ -9,8 +9,8 @@ function createProviderRegistry(providers = []) {
 			return provider;
 		},
 		list() {
-			return [...byId.values()].map(({ id, name, configured, persistentCachePermitted }) => ({
-				id, name, configured, persistentCachePermitted,
+			return [...byId.values()].map(({ id, name, configured, persistentCachePermitted, requestIntervalMs }) => ({
+				id, name, configured, persistentCachePermitted, requestIntervalMs: requestIntervalMs || null,
 			}));
 		},
 	});
