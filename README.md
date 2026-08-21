@@ -2,12 +2,12 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.2 provides a UKHO adapter behind a provider-neutral registry, a durable station database, a strict 24-hour minimum refresh interval per physical station, provider-wide request pacing, 429 backoff, automatic maintenance of every configured station, locally calculated entered-data secondary ports, spatial port selection and a web table showing cache coverage and provenance.
+Version 0.1.3 provides a UKHO adapter behind a provider-neutral registry, a durable station database, a strict 24-hour minimum refresh interval per physical station, provider-wide request pacing, 429 backoff, automatic maintenance of every configured station, locally calculated entered-data secondary ports, spatial port selection and editable tidal-region assignments presented by Location Editor.
 
 ## Responsibilities
 
-- **Location Editor** owns names, coordinates, geometry, location type and containment relationships.
-- **Tidal Database** owns prediction providers, credentials, station mappings, secondary-port correction tables, cached events and tidal calculations.
+- **Location Editor** owns names, coordinates, geometry and location type, and presents joined tidal-region assignment controls.
+- **Tidal Database** owns prediction providers, credentials, station mappings, secondary-port correction tables, tidal-region serving-port and parent-region relationships, cached events and tidal calculations.
 - **Display and Marine Planning** consume the Tidal Database service; they do not fetch or cache provider data themselves.
 - A future weather application will be a separate peer service with its own providers, cache and interface.
 
@@ -27,7 +27,7 @@ Install and enable AJRM Marine Location Editor first, then this plugin. Configur
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.2 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.3 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

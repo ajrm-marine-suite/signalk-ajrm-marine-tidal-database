@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3 — 2026-08-21
+
+- Add validated create, update and removal operations for tidal-region serving-port assignments and parent-region hierarchy.
+- Expose those operations through the lifecycle-safe service and authenticated HTTP API so Location Editor can present one joined editor without duplicating tidal data.
+
 ## 0.1.2 — 2026-08-21
 
 - Hide standard-port datum and absolute reference-level inputs when editing a secondary port.

@@ -29,6 +29,23 @@ function validate(value) {
 		const parent = value.ports.find((entry) => entry.locationId === port.prediction.parentLocationId);
 		if (!parent || parent.kind !== "standard" || parent.prediction.mode !== "provider") throw new Error(`${port.name} must use a provider-backed standard port as its parent.`);
 	}
+	const areaIds = new Set();
+	for (const area of value.areas) {
+		if (!area?.locationId || areaIds.has(area.locationId)) throw new Error("Each tidal area needs one unique Location id.");
+		areaIds.add(area.locationId);
+		if (!area.name || !ids.has(area.portLocationId)) throw new Error(`${area.name || area.locationId} needs a valid serving tidal port.`);
+		if (area.parentAreaLocationId === area.locationId) throw new Error(`${area.name} cannot be its own parent tidal region.`);
+	}
+	for (const area of value.areas) {
+		if (area.parentAreaLocationId && !areaIds.has(area.parentAreaLocationId)) throw new Error(`${area.name} refers to an unknown parent tidal region.`);
+		const seen = new Set([area.locationId]);
+		let parentId = area.parentAreaLocationId;
+		while (parentId) {
+			if (seen.has(parentId)) throw new Error(`${area.name} creates a cycle in the tidal-region hierarchy.`);
+			seen.add(parentId);
+			parentId = value.areas.find((entry) => entry.locationId === parentId)?.parentAreaLocationId || null;
+		}
+	}
 	return structuredClone(value);
 }
 
@@ -60,7 +77,18 @@ function createDefinitionStore(filename, bundled) {
 		next.areas=next.areas.filter((entry)=>entry.portLocationId!==locationId);
 		return save(next);
 	}
-	return Object.freeze({ read, removePort, save, setPort });
+	async function setArea(area) {
+		const next=read(); const index=next.areas.findIndex((entry)=>entry.locationId===area.locationId);
+		if(index<0) next.areas.push(area); else next.areas[index]=area;
+		return save(next);
+	}
+	async function removeArea(locationId) {
+		const next=read();
+		if(next.areas.some((entry)=>entry.parentAreaLocationId===locationId)) throw new Error("This tidal region is the parent of one or more smaller regions.");
+		next.areas=next.areas.filter((entry)=>entry.locationId!==locationId);
+		return save(next);
+	}
+	return Object.freeze({ read, removeArea, removePort, save, setArea, setPort });
 }
 
 module.exports = { CONTRACT, createDefinitionStore, validate };

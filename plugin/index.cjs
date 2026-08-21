@@ -54,6 +54,19 @@ function normalizePortDefinition(locationId, value = {}) {
 	return port;
 }
 
+function normalizeAreaDefinition(locationId, value = {}) {
+	const area = {
+		locationId: String(locationId || ""),
+		name: String(value.name || "").trim(),
+		portLocationId: String(value.portLocationId || "").trim(),
+		parentAreaLocationId: String(value.parentAreaLocationId || "").trim() || null,
+	};
+	if (!area.locationId || !area.name || !area.portLocationId) {
+		throw new Error("A tidal-region assignment needs a Location id, name and serving tidal port.");
+	}
+	return area;
+}
+
 async function readState(file) {
 	try {
 		const value = JSON.parse(await fsp.readFile(file, "utf8"));
@@ -132,6 +145,12 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 			listPorts: () => definitionStore.read().ports,
 			listAreas: () => definitionStore.read().areas,
 			listGates: () => definitionStore.read().gates,
+			setArea: async (locationId, value) => {
+				const area = normalizeAreaDefinition(locationId, value);
+				await definitionStore.setArea(area);
+				return area;
+			},
+			removeArea: (locationId) => definitionStore.removeArea(String(locationId || "")),
 			recommendSecondary: async (request = {}) => {
 				const locations = await listLocations();
 				const result = recommendSecondary(definitionStore.read(), locations, request.position || latestPosition);
@@ -195,6 +214,15 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		router.delete("/definitions/ports/:locationId", write(async (req,res) => {
 			await definitionStore.removePort(req.params.locationId);
 			res.json({ ok:true,status:await databaseStatus() });
+		}));
+		router.put("/definitions/areas/:locationId", write(async (req,res) => {
+			const area = normalizeAreaDefinition(req.params.locationId,req.body);
+			await definitionStore.setArea(area);
+			res.json({ ok:true,area,definitions:definitionStore.read() });
+		}));
+		router.delete("/definitions/areas/:locationId", write(async (req,res) => {
+			await definitionStore.removeArea(req.params.locationId);
+			res.json({ ok:true,definitions:definitionStore.read() });
 		}));
 		router.post("/stations/update", write(async (_req, res) => res.json(await maintainAll())));
 		router.get("/tides/status", async (req, res) => {
@@ -388,8 +416,11 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 	function write(handler) {
 		return async (req, res) => {
 			const permission = req.skPrincipal?.permissions;
-			if (permission === "admin" || permission === "readwrite" || (permission === undefined && req.skIsAuthenticated !== false)) return handler(req, res);
-			return res.status(403).json({ error: "Tidal Database updates require Signal K read/write or admin access." });
+			if (!(permission === "admin" || permission === "readwrite" || (permission === undefined && req.skIsAuthenticated !== false))) {
+				return res.status(403).json({ error: "Tidal Database updates require Signal K read/write or admin access." });
+			}
+			try { return await handler(req, res); }
+			catch (error) { return res.status(400).json({ error:error.message }); }
 		};
 	}
 

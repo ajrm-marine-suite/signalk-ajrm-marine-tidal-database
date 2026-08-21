@@ -54,7 +54,7 @@ test("OpenAPI and webapp metadata are present", async (t) => {
 });
 
 test("tidal definitions are editable without altering spatial Locations", async (t) => {
-	const { plugin,call } = await fixture(t);
+	const { plugin,call,port } = await fixture(t);
 	const initial = await call("GET","/definitions");
 	const candidate = initial.body.ports.find((entry) => entry.prediction.mode === "unavailable");
 	assert.ok(candidate);
@@ -66,5 +66,21 @@ test("tidal definitions are editable without altering spatial Locations", async 
 	const removed = await call("DELETE","/definitions/ports/:locationId",{ params:{ locationId:candidate.locationId } });
 	assert.equal(removed.body.ok,true);
 	assert.equal(removed.body.status.ports.some((entry)=>entry.locationId===candidate.locationId),false);
+	const region = initial.body.areas.find((entry) => !entry.parentAreaLocationId);
+	const changedArea = await call("PUT","/definitions/areas/:locationId",{
+		params:{ locationId:region.locationId }, body:{ ...region,portLocationId:port.locationId },
+	});
+	assert.equal(changedArea.body.ok,true);
+	assert.equal(changedArea.body.area.portLocationId,port.locationId);
+	const newAreaId = "f2770daf-61ba-4e78-8734-c79687155cb4";
+	const child = await call("PUT","/definitions/areas/:locationId",{
+		params:{ locationId:newAreaId }, body:{ name:"Test child tidal region",portLocationId:port.locationId,parentAreaLocationId:region.locationId },
+	});
+	assert.equal(child.body.area.parentAreaLocationId,region.locationId);
+	const parentRemoval = await call("DELETE","/definitions/areas/:locationId",{ params:{ locationId:region.locationId } });
+	assert.equal(parentRemoval.statusCode,400);
+	assert.match(parentRemoval.body.error,/parent/);
+	const childRemoval = await call("DELETE","/definitions/areas/:locationId",{ params:{ locationId:newAreaId } });
+	assert.equal(childRemoval.body.ok,true);
 	await plugin.stop();
 });

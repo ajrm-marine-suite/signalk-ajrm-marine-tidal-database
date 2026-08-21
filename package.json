@@ -1,6 +1,6 @@
 {
   "name": "signalk-ajrm-marine-tidal-database",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Provider-neutral durable tidal prediction database and Signal K service for AJRM Marine Suite.",
   "keywords": [
     "signalk-node-server-plugin",
@@ -13,7 +13,9 @@
     "marine"
   ],
   "main": "plugin/index.cjs",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "icon": "./icon-120.png",
   "scripts": {
     "test": "node --check plugin/index.cjs && node --check plugin/database.cjs && node --check plugin/providers/ukho.cjs && node --check public/app.js && node --test test/*.test.cjs"
@@ -29,7 +31,18 @@
   },
   "author": "Anthony McDonald, with assistance from William McAusland",
   "license": "AGPL-3.0-or-later",
-  "bugs": { "url": "https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database/issues" },
+  "bugs": {
+    "url": "https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database/issues"
+  },
   "homepage": "https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database#readme",
-  "files": ["plugin", "public", "defaults", "icon.svg", "icon-120.png", "README.md", "CHANGELOG.md", "LICENSE"]
+  "files": [
+    "plugin",
+    "public",
+    "defaults",
+    "icon.svg",
+    "icon-120.png",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ]
 }
