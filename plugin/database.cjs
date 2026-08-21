@@ -138,8 +138,8 @@ function createTidalDatabase(options) {
 			return {
 				...parentData,
 				events: applySecondaryCorrections(parentData.events, port.prediction.corrections, parentData.referenceLevels),
-				datum: port.datum || parentData.datum,
-				referenceLevels: port.referenceLevels || applyReferenceLevelCorrections(parentData.referenceLevels, port.prediction.corrections),
+				datum: parentData.datum,
+				referenceLevels: applyReferenceLevelCorrections(parentData.referenceLevels, port.prediction.corrections),
 				correctionChain: [...parentData.correctionChain, { locationId: port.locationId, name: port.name, parentLocationId: parent.locationId }],
 			};
 		}

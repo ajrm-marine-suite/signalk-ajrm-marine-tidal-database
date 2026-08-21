@@ -77,12 +77,13 @@ test("a persisted provider record is rejected at its declared licence boundary",
 test("a locally corrected secondary reuses its parent provider record", async (t) => {
 	const value = await fixture(t);
 	const parent = { locationId:"parent", name:"Parent", datum:"CD", referenceLevels:{ mhws:4, mhwn:3, mlwn:2, mlws:1 }, prediction:{ mode:"provider", providerId:"test", stationId:"one", stationName:"One" } };
-	const secondary = { locationId:"child", name:"Child", prediction:{ mode:"corrections", parentLocationId:"parent", corrections:{ timeOffsetPeriodMinutes:720, highWaterTimeOffsets:[{ referenceTimeMinutes:0, offsetMinutes:30 }], lowWaterTimeOffsets:[{ referenceTimeMinutes:0, offsetMinutes:-15 }], heightDifferencesM:{ mhws:.2, mhwn:.1, mlwn:-.1, mlws:-.2 } } } };
+	const secondary = { locationId:"child", name:"Child", datum:"Incorrect override", referenceLevels:{ mhws:null, mhwn:null, mlwn:null, mlws:null }, prediction:{ mode:"corrections", parentLocationId:"parent", corrections:{ timeOffsetPeriodMinutes:720, highWaterTimeOffsets:[{ referenceTimeMinutes:0, offsetMinutes:30 }], lowWaterTimeOffsets:[{ referenceTimeMinutes:0, offsetMinutes:-15 }], heightDifferencesM:{ mhws:.2, mhwn:.1, mlwn:-.1, mlws:-.2 } } } };
 	const result = await value.db.resolvePort(secondary, new Map([["parent",parent],["child",secondary]]), { now:"2026-08-21T00:00:00Z" });
 	assert.equal(value.calls(), 1);
 	assert.equal(result.events[0].at, "2026-08-20T23:45:00.000Z");
 	assert.equal(result.referenceLevels.mhws, 4.2);
 	assert.equal(result.referenceLevels.mlws, .8);
+	assert.equal(result.datum, "CD");
 });
 
 test("memory-only providers do not recover forbidden disk records", async (t) => {

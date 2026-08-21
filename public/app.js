@@ -73,10 +73,13 @@ function renderDefinitionChoices(selectedId = "") {
 
 function updateDefinitionFields() {
 	const mode = byId("definitionMode").value;
+	if (mode === "corrections") byId("definitionKind").value = "secondary";
+	const secondary = byId("definitionKind").value === "secondary";
 	byId("providerFields").hidden = mode !== "provider";
 	byId("correctionFields").hidden = mode !== "corrections";
 	byId("heightDifferenceFields").hidden = mode !== "corrections";
-	if (mode === "corrections") byId("definitionKind").value = "secondary";
+	byId("absoluteReferenceFields").hidden = secondary;
+	byId("definitionKind").disabled = mode === "corrections";
 }
 
 function openDefinition(locationId = "") {
@@ -115,6 +118,8 @@ function buildDefinition() {
 	if (mode === "provider") Object.assign(definition.prediction,{ providerId:byId("providerId").value, stationId:byId("stationId").value.trim(), stationName:byId("stationName").value.trim() || definition.name });
 	if (mode === "corrections") {
 		definition.kind = "secondary";
+		definition.datum = null;
+		definition.referenceLevels = null;
 		Object.assign(definition.prediction,{ parentLocationId:byId("parentPortId").value, corrections:{
 			contract:"ajrm-secondary-port-corrections-v4", timeOffsetPeriodMinutes:720,
 			highWaterTimeOffsets:[{ referenceTimeMinutes:minutes(byId("hwTime1").value), offsetMinutes:numberOrNull("hwOffset1") },{ referenceTimeMinutes:minutes(byId("hwTime2").value), offsetMinutes:numberOrNull("hwOffset2") }],
@@ -145,6 +150,7 @@ byId("stationFilter").addEventListener("input", renderStations);
 byId("portFilter").addEventListener("input", renderPorts);
 byId("newDefinition").addEventListener("click", () => openDefinition());
 byId("definitionMode").addEventListener("change", updateDefinitionFields);
+byId("definitionKind").addEventListener("change", updateDefinitionFields);
 byId("definitionLocation").addEventListener("change", () => { const location=state.locations.find((entry)=>entry.id===byId("definitionLocation").value); if(location) setValue("definitionName",location.name); });
 for (const id of ["closeDefinition","cancelDefinition"]) byId(id).addEventListener("click", () => byId("definitionDialog").close());
 byId("definitionForm").addEventListener("submit", (event) => {

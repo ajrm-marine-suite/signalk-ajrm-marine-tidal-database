@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 — 2026-08-21
+
+- Hide standard-port datum and absolute reference-level inputs when editing a secondary port.
+- Store correction-based secondary ports without redundant absolute overrides and always derive their datum and MHWS/MHWN/MLWN/MLWS levels from the parent standard port.
+- Ignore legacy blank/null secondary overrides during calculation.
+
 ## 0.1.1 — 2026-08-21
 
 - Serialize and pace all UKHO requests, stop duplicate endpoint calls after a 429, and honour `Retry-After` with provider-wide backoff.

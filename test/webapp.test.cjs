@@ -13,4 +13,8 @@ test("webapp explains the refresh floor and exposes both station and port tables
 	assert.match(html, /more than 24 hours old/);
 	assert.match(app, /button\.disabled = true/);
 	assert.match(app, /credentials:"include"/);
+	assert.match(html, /id="absoluteReferenceFields"[\s\S]*Standard-port datum and reference levels/);
+	assert.match(app, /absoluteReferenceFields"\)\.hidden = secondary/);
+	assert.match(app, /definition\.datum = null;[\s\S]*definition\.referenceLevels = null/);
+	assert.match(app, /definitionKind"\)\.addEventListener\("change", updateDefinitionFields\)/);
 });
