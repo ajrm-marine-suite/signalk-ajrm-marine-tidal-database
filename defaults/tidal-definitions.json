@@ -2,7 +2,7 @@
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
   "generatedAt": "2026-08-21T11:39:17.906Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.31",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.38",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -59,7 +59,7 @@
       }
     },
     {
-      "locationId": "bd73410e-54ac-4f4c-a5ae-8700a6fe3a7a",
+      "locationId": "57801294-1ad7-4c7d-adc8-d968b9e1547c",
       "name": "Cala Loch Baghasdail",
       "kind": "secondary",
       "datum": null,
@@ -103,7 +103,7 @@
       }
     },
     {
-      "locationId": "431ca630-05a7-40df-990f-88dee6c4e902",
+      "locationId": "76032286-71e1-4e42-b1d4-1f97011e8226",
       "name": "Castlebay",
       "kind": "secondary",
       "datum": null,
@@ -147,7 +147,7 @@
       }
     },
     {
-      "locationId": "d451e2d0-2402-4d9a-98b5-bf5e27722cd3",
+      "locationId": "28f26d07-cb45-4eec-bbaa-c461ddeae08f",
       "name": "Craighouse moorings",
       "kind": "secondary",
       "datum": null,
@@ -235,7 +235,7 @@
       }
     },
     {
-      "locationId": "ca205cec-6a47-497b-aa44-2637b9a6be0d",
+      "locationId": "6cfbe8d1-5c20-44af-abd8-c0a6e3e925ca",
       "name": "Gairloch Harbour",
       "kind": "secondary",
       "datum": null,
@@ -279,7 +279,7 @@
       }
     },
     {
-      "locationId": "1aba3e08-af55-4ae4-8751-de3da98501d6",
+      "locationId": "417dd82b-3565-40ef-930b-9eae61e9d2ef",
       "name": "Lochmaddy",
       "kind": "secondary",
       "datum": null,
@@ -323,7 +323,7 @@
       }
     },
     {
-      "locationId": "d8398a12-ada8-4c05-b2f6-30082a9b5743",
+      "locationId": "36916d83-6d21-4e4a-8fb9-177e2a5d07e5",
       "name": "Portree Harbour",
       "kind": "secondary",
       "datum": null,
@@ -367,7 +367,7 @@
       }
     },
     {
-      "locationId": "b3012c64-b3e1-4ecd-996a-100650300093",
+      "locationId": "e86661bf-475b-4855-9fc2-a072af016ddf",
       "name": "Scalasaig",
       "kind": "secondary",
       "datum": null,
@@ -411,7 +411,7 @@
       }
     },
     {
-      "locationId": "2e0eb500-8f1f-4c5c-85ab-391b0b7945d0",
+      "locationId": "d35da7fe-dddb-405e-9c7b-99b27d426c04",
       "name": "Tobermory",
       "kind": "secondary",
       "datum": null,
@@ -2898,19 +2898,19 @@
     {
       "locationId": "40e21510-f64b-4506-87df-e1e49f834840",
       "name": "Cala Loch Baghasdail tidal area",
-      "portLocationId": "bd73410e-54ac-4f4c-a5ae-8700a6fe3a7a",
+      "portLocationId": "57801294-1ad7-4c7d-adc8-d968b9e1547c",
       "parentAreaLocationId": null
     },
     {
       "locationId": "af59f5f8-da73-4d83-9bdb-e67650f54203",
       "name": "Castlebay tidal area",
-      "portLocationId": "431ca630-05a7-40df-990f-88dee6c4e902",
+      "portLocationId": "76032286-71e1-4e42-b1d4-1f97011e8226",
       "parentAreaLocationId": null
     },
     {
       "locationId": "a33728a4-5e40-47cf-a1cb-932c4677f5f6",
       "name": "Craighouse moorings tidal area",
-      "portLocationId": "d451e2d0-2402-4d9a-98b5-bf5e27722cd3",
+      "portLocationId": "28f26d07-cb45-4eec-bbaa-c461ddeae08f",
       "parentAreaLocationId": null
     },
     {
@@ -2922,31 +2922,31 @@
     {
       "locationId": "4f0ef199-6c3a-4392-80fe-331b819378be",
       "name": "Gairloch Harbour tidal area",
-      "portLocationId": "ca205cec-6a47-497b-aa44-2637b9a6be0d",
+      "portLocationId": "6cfbe8d1-5c20-44af-abd8-c0a6e3e925ca",
       "parentAreaLocationId": null
     },
     {
       "locationId": "66caea2a-d70d-4d5f-8e5b-851b7469cf5b",
       "name": "Lochmaddy tidal area",
-      "portLocationId": "1aba3e08-af55-4ae4-8751-de3da98501d6",
+      "portLocationId": "417dd82b-3565-40ef-930b-9eae61e9d2ef",
       "parentAreaLocationId": null
     },
     {
       "locationId": "d3d5aea4-6027-43b7-a7a8-d73132da322d",
       "name": "Portree Harbour tidal area",
-      "portLocationId": "d8398a12-ada8-4c05-b2f6-30082a9b5743",
+      "portLocationId": "36916d83-6d21-4e4a-8fb9-177e2a5d07e5",
       "parentAreaLocationId": null
     },
     {
       "locationId": "e0c56c5d-9ea8-4b5a-9223-9e6307ab8ad2",
       "name": "Scalasaig tidal area",
-      "portLocationId": "b3012c64-b3e1-4ecd-996a-100650300093",
+      "portLocationId": "e86661bf-475b-4855-9fc2-a072af016ddf",
       "parentAreaLocationId": null
     },
     {
       "locationId": "f1452c77-7f3c-4176-a87f-10d0c4bc1e1d",
       "name": "Tobermory tidal area",
-      "portLocationId": "2e0eb500-8f1f-4c5c-85ab-391b0b7945d0",
+      "portLocationId": "d35da7fe-dddb-405e-9c7b-99b27d426c04",
       "parentAreaLocationId": null
     },
     {
@@ -3016,7 +3016,7 @@
       "parentAreaLocationId": null
     },
     {
-      "locationId": "9febffc5-2af1-4fb6-8be8-82b1937ff803",
+      "locationId": "39a76db5-3ffb-4c2f-8cf1-f9526d95aee8",
       "name": "Seil Sound tidal area",
       "portLocationId": "c00865d1-dc0b-4aa9-884a-41c5a2d84beb",
       "parentAreaLocationId": null

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.7 — 2026-08-21
+
+- Align eight secondary-port references and the Seil Sound tidal-region
+  reference with their canonical Location Editor records.
+
 ## 0.1.6 — 2026-08-21
 
 - Aligns documentation with the standalone Weather Database peer and the
