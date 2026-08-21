@@ -1,6 +1,6 @@
 {
   "openapi": "3.0.3",
-  "info": { "title": "AJRM Marine Tidal Database", "version": "0.1.4" },
+  "info": { "title": "AJRM Marine Tidal Database", "version": "0.1.5" },
   "paths": {
     "/status": { "get": { "summary": "Inspect providers, cached stations and tidal ports", "responses": { "200": { "description": "Database status" } } } },
     "/definitions": { "get": { "summary": "Read tidal prediction and correction definitions", "responses": { "200": { "description": "Definition catalogue" } } } },

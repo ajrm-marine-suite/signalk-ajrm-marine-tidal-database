@@ -2,7 +2,7 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.4 provides a UKHO adapter behind a provider-neutral registry, a durable station database, a strict 24-hour minimum refresh interval per physical station, provider-wide request pacing, 429 backoff, automatic maintenance of every configured station, locally calculated entered-data secondary ports, spatial port selection and editable tidal-region assignments presented by Location Editor. Each port can be opened from the left-hand tide icon to validate its cached details and the same shared tidal curve used by Display.
+Version 0.1.5 provides a UKHO adapter behind a provider-neutral registry, a durable station database, a strict 24-hour minimum refresh interval per physical station, provider-wide request pacing, 429 backoff, automatic maintenance of every configured station, locally calculated entered-data secondary ports, spatial port selection and editable tidal-region assignments presented by Location Editor. Each port can be opened from the left-hand tide icon to validate its cached details and the same shared tidal curve used by Display. The graph identifies its curve as a smooth interpolation through the official high- and low-water events, rather than an official interval-height prediction.
 
 ## Responsibilities
 
@@ -27,7 +27,7 @@ Install and enable AJRM Marine Location Editor first, then this plugin. Configur
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.4 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.5 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

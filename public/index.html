@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AJRM Marine Tidal Database</title>
   <link rel="icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css?v=0.1.4">
+  <link rel="stylesheet" href="styles.css?v=0.1.5">
 </head>
 <body>
   <header>
@@ -69,10 +69,11 @@
         <h3 id="tideGraphPortName">No tidal port — tidal curve</h3>
         <div class="graph-controls"><label for="tideGraphDays">Graph range</label><select id="tideGraphDays"><option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="4">4 days</option><option value="5">5 days</option><option value="6">6 days</option><option value="7" selected>7 days</option></select></div>
         <div id="tideCurve" class="ajrm-tide-curve" aria-label="Tide curve"></div>
+        <p class="muted tide-curve-note">The curve is a smooth estimate interpolated between UKHO-predicted high- and low-water times and heights; it is not a UKHO interval-height prediction.</p>
       </section>
       <div class="dialog-actions"><button id="refreshTide" type="button" class="primary">Refresh if due</button><span></span><button id="closeTideBottom" type="button">Close</button></div>
     </div>
   </dialog>
-  <script src="app.js?v=0.1.4"></script>
+  <script src="app.js?v=0.1.5"></script>
 </body>
 </html>

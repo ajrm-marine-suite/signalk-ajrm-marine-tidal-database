@@ -55,6 +55,7 @@ input,select { padding:8px; border:1px solid #94a3b8; border-radius:6px; backgro
 .tide-details dt { font-weight:750; }
 .tide-details dd { margin:0; }
 .tide-note { margin-top:12px; }
+.tide-curve-note { margin-top:8px; font-size:.78rem; line-height:1.35; }
 .graph-controls { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
 .graph-controls label { display:block; }
 .ajrm-tide-curve { min-height:12rem; overflow-x:auto; overscroll-behavior-inline:contain; }

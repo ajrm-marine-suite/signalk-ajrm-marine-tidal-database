@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5 — 2026-08-21
+
+- Label the tidal curve as a smooth estimate interpolated between UKHO-predicted high- and low-water events, not an official UKHO interval-height prediction.
+
 ## 0.1.4 — 2026-08-21
 
 - Replace the misleading disabled Spatial location select with a clearly read-only field while editing an existing port.

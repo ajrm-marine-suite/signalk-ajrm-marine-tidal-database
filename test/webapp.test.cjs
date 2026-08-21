@@ -23,8 +23,9 @@ test("webapp explains the refresh floor and exposes both station and port tables
 	assert.match(html, /id="tideDetailsPane"/);
 	assert.match(html, /id="tideGraphPane"/);
 	assert.match(app, /class="view-tide"/);
-	assert.match(app, /import\("\.\/tide-curve\.mjs\?v=0\.1\.4"\)/);
-	assert.match(html, /app\.js\?v=0\.1\.4/);
+	assert.match(app, /import\("\.\/tide-curve\.mjs\?v=0\.1\.5"\)/);
+	assert.match(html, /app\.js\?v=0\.1\.5/);
+	assert.match(html, /smooth estimate interpolated between UKHO-predicted high- and low-water times and heights/);
 	assert.match(app, /tideCurveSvg/);
 	assert.match(app, /attachTideCurveHover/);
 	assert.match(app, /TIDE_DIALOG_SIZE_KEY/);
