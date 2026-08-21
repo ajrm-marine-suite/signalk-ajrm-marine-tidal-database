@@ -1,0 +1,3768 @@
+{
+  "contract": "ajrm-marine-tidal-database-seed-v1",
+  "contractVersion": 1,
+  "generatedAt": "2026-08-21T11:39:17.906Z",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.31",
+  "ports": [
+    {
+      "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "name": "Oban tidal prediction port",
+      "kind": "standard",
+      "datum": "UKHO station datum",
+      "referenceLevels": {
+        "mhws": 4,
+        "mhwn": 2.9,
+        "mlwn": 1.8,
+        "mlws": 0.7
+      },
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0372",
+        "stationName": "Oban"
+      }
+    },
+    {
+      "locationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+      "name": "Stornoway tidal prediction port",
+      "kind": "standard",
+      "datum": "UKHO station datum",
+      "referenceLevels": {
+        "mhws": 4.8,
+        "mhwn": 3.7,
+        "mlwn": 2,
+        "mlws": 0.7
+      },
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0308",
+        "stationName": "Stornoway"
+      }
+    },
+    {
+      "locationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+      "name": "Ullapool tidal prediction port",
+      "kind": "standard",
+      "datum": "UKHO station datum",
+      "referenceLevels": {
+        "mhws": 5.2,
+        "mhwn": 3.9,
+        "mlwn": 2.1,
+        "mlws": 0.7
+      },
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0334",
+        "stationName": "Ullapool"
+      }
+    },
+    {
+      "locationId": "bd73410e-54ac-4f4c-a5ae-8700a6fe3a7a",
+      "name": "Cala Loch Baghasdail",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-boisdale",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -55
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -30
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -20
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -40
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.7,
+            "mhwn": -0.7,
+            "mlwn": -0.3,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: Loch Boisdale, corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "431ca630-05a7-40df-990f-88dee6c4e902",
+      "name": "Castlebay",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "castle-bay-barra",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -75
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -40
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -45
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -60
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.5,
+            "mhwn": -0.6,
+            "mlwn": -0.3,
+            "mlws": -0.1
+          },
+          "notes": "User-supplied Reeds table: Castle Bay (Barra), corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "d451e2d0-2402-4d9a-98b5-bf5e27722cd3",
+      "name": "Craighouse moorings",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "craighouse",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -150
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -170
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -110
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -150
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -3,
+            "mhwn": -2.4,
+            "mlwn": -1.3,
+            "mlws": -0.6
+          },
+          "notes": "User-supplied Reeds table: Craighouse (SE Jura), corrections relative to Oban."
+        }
+      }
+    },
+    {
+      "locationId": "0b9ecfef-3260-4f1e-a41f-5f2fdf7dfbec",
+      "name": "Cuan Sound",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "cuan-sound",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -25
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -25
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -25
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -25
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1.3,
+            "mhwn": -0.9,
+            "mlwn": -0.7,
+            "mlws": -0.3
+          },
+          "notes": "Constant -0025 Oban (-0555 Dover). Heights: MHWS 2.7, MHWN 2.0, MLWN 1.1, MLWS 0.4. Stream: flood west +0430 Oban springs/+0515 neaps; ebb east -0145 springs/-0100 neaps; spring rate 7 kn both ways, neap up to 5 kn."
+        }
+      }
+    },
+    {
+      "locationId": "ca205cec-6a47-497b-aa44-2637b9a6be0d",
+      "name": "Gairloch Harbour",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-gairloch",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -12
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -11
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -11
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -11
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.2,
+            "mhwn": 0.1,
+            "mlwn": -0.2,
+            "mlws": 0.2
+          },
+          "notes": "User-supplied Reeds table: Loch Gairloch, corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "1aba3e08-af55-4ae4-8751-de3da98501d6",
+      "name": "Lochmaddy",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-maddy",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -44
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -14
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -16
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -30
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0,
+            "mhwn": -0.1,
+            "mlwn": -0.1,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: north Uist, corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "d8398a12-ada8-4c05-b2f6-30082a9b5743",
+      "name": "Portree Harbour",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "portree",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -25
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -25
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -25
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -25
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0.1,
+            "mhwn": -0.2,
+            "mlwn": -0.2,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: Portree (Skye), corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "b3012c64-b3e1-4ecd-996a-100650300093",
+      "name": "Scalasaig",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "scalasaig",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -20
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -5
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -15
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": 5
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.3,
+            "mhwn": -0.2,
+            "mlwn": -0.3,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: Scalasaig (E Colonsay), corrections relative to Oban."
+        }
+      }
+    },
+    {
+      "locationId": "2e0eb500-8f1f-4c5c-85ab-391b0b7945d0",
+      "name": "Tobermory",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "tobermory",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": 20
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": 20
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": 20
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": 20
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0.5,
+            "mhwn": 0.6,
+            "mlwn": 0.1,
+            "mlws": 0.2
+          },
+          "notes": "HW Oban +0020. LW time assumed +0020 until checked against your almanac."
+        }
+      }
+    },
+    {
+      "locationId": "47a24a27-bd5f-4db6-a6f9-a5c975364a72",
+      "name": "Port Ellen",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "port-ellen",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -330
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -50
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -45
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -330
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -3.1,
+            "mhwn": -2.1,
+            "mlwn": -1.3,
+            "mlws": -0.4
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Oban at HW 0100/0700 and LW 0100/0800, repeating after 12 hours."
+        }
+      }
+    },
+    {
+      "locationId": "10b62f70-ef91-4ad5-ac6f-3685d7bc5e77",
+      "name": "Glengarrisdale Bay",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "glengarrisdale-bay",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -20
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": 0
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -10
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": 0
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.4,
+            "mhwn": -0.2,
+            "mlwn": 0,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: Glengarrisdale Bay (N Jura), corrections relative to Oban."
+        }
+      }
+    },
+    {
+      "locationId": "27ca7bf5-0129-4130-9a81-4dfb70ca2e07",
+      "name": "Rubha a’ Mhail",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "rubha-a-mhail",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -20
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": 0
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": 5
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -15
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.3,
+            "mhwn": -0.1,
+            "mlwn": -0.3,
+            "mlws": -0.1
+          },
+          "notes": "User-supplied Reeds table: Rubha a’ Mhail (N Islay), corrections relative to Oban."
+        }
+      }
+    },
+    {
+      "locationId": "7b6408f4-c1f5-4caf-a3e8-7f1690360e71",
+      "name": "Ardnave Point",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "ardnave-point",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -35
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": 10
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": 0
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -25
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.4,
+            "mhwn": -0.2,
+            "mlwn": -0.3,
+            "mlws": -0.1
+          },
+          "notes": "User-supplied Reeds table: Ardnave Point (NW Islay), corrections relative to Oban."
+        }
+      }
+    },
+    {
+      "locationId": "a73b84ef-2f72-4419-b52f-cf9a3eea9267",
+      "name": "Orsay Island",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "orsay-island",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -70
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -70
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -40
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -40
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1.4,
+            "mhwn": -0.6,
+            "mlwn": -0.5,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: Orsay Island (SW Islay), corrections relative to Oban."
+        }
+      }
+    },
+    {
+      "locationId": "2a78bd38-1064-48a4-912b-bba8385a0741",
+      "name": "Bruichladdich",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "bruichladdich",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -65
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -35
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -70
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -70
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1.8,
+            "mhwn": -1.3,
+            "mlwn": -0.4,
+            "mlws": 0.3
+          },
+          "notes": "User-supplied Reeds table: Bruichladdich (Islay, Loch Indaal), corrections relative to Oban."
+        }
+      }
+    },
+    {
+      "locationId": "a5337680-366b-4a60-b88d-c187312f4c49",
+      "name": "Port Askaig",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "port-askaig",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -30
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -35
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -15
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -25
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1.8,
+            "mhwn": -1.3,
+            "mlwn": -0.7,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: Port Askaig (Sound of Islay), corrections relative to Oban."
+        }
+      }
+    },
+    {
+      "locationId": "a162df13-40f5-4a8e-a8ff-c7d495929ed1",
+      "name": "Gigha Sound",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "gigha-sound",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -290
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -130
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -90
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -250
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -2.8,
+            "mhwn": -1.9,
+            "mlwn": -1.3,
+            "mlws": -0.4
+          },
+          "notes": "User-supplied Reeds table: Gigha Sound (Sound of Jura), corrections relative to Oban."
+        }
+      }
+    },
+    {
+      "locationId": "9f185284-11e2-4849-9bf6-89410efaef67",
+      "name": "Machrihanish",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "unavailable",
+        "details": {
+          "contract": "ajrm-secondary-port-source-data-v1",
+          "status": "incomplete",
+          "legacyId": "machrihanish",
+          "timeOffsetPeriodMinutes": 720,
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -320
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -230
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -220
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -340
+            }
+          ],
+          "meanRangeM": 0.5,
+          "missing": [
+            "heightDifferencesM"
+          ],
+          "notes": "User-supplied Reeds table gives time corrections and mean range 0.5 m, but not the four height differences needed for chart-datum predictions. Retained as incomplete and excluded from tide calculation."
+        }
+      }
+    },
+    {
+      "locationId": "3d1309a3-1a5a-4a29-b337-536224ffb1da",
+      "name": "Sound of Mull (Craignure)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "sound-of-mull-craignure",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": 15
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": 15
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": 15
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": 15
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0,
+            "mhwn": 0.1,
+            "mlwn": -0.1,
+            "mlws": -0.1
+          },
+          "notes": "Constant +0015 Oban (-0515 Dover). Heights at Craignure: MHWS 4.0, MHWN 3.0, MLWN 1.7, MLWS 0.6. Stream: north-going -0545 Oban; south-going +0025 Oban; spring rate 3 kn, neap 1 kn."
+        }
+      }
+    },
+    {
+      "locationId": "20c6ef3c-3eb1-4563-af18-ac0eeb8f75e4",
+      "name": "Loch Melfort",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-melfort",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -55
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -25
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -40
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -35
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1.2,
+            "mhwn": -0.8,
+            "mlwn": -0.5,
+            "mlws": -0.1
+          },
+          "notes": "User-supplied Reeds almanac page 9.8.19: corrections relative to Oban. Position 56°14.59'N 005°34.07'W is stated in the page heading."
+        }
+      }
+    },
+    {
+      "locationId": "c00865d1-dc0b-4aa9-884a-41c5a2d84beb",
+      "name": "Seil Sound",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "seil-sound",
+          "standardPortName": "Oban",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -35
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -15
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -40
+            },
+            {
+              "referenceTimeMinutes": 480,
+              "offsetMinutes": -15
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1.3,
+            "mhwn": -0.9,
+            "mlwn": -0.7,
+            "mlws": -0.3
+          },
+          "notes": "User-supplied Reeds almanac page 9.8.19: corrections relative to Oban. Position is an approximate open-data centre for Seil Sound and should be checked on the chart."
+        }
+      }
+    },
+    {
+      "locationId": "f61940aa-fb71-4232-b345-ee4ce1178e43",
+      "name": "Plockton",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "plockton",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": 5
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -25
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -5
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -10
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0.5,
+            "mhwn": 0.5,
+            "mlwn": 0.5,
+            "mlws": 0.2
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "9d44165c-d37f-4214-93e1-b665574344c3",
+      "name": "Shieldaig",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "shieldaig",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -20
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -20
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -15
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -15
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0.4,
+            "mhwn": 0.3,
+            "mlwn": 0.1,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: Shieldaig (Loch Torridon), corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "ff57f0fb-e423-45f2-80f7-a57dfba3e9dd",
+      "name": "Loch a’ Bhraige",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-a-bhraige-rona",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -20
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": 0
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -10
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": 0
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.1,
+            "mhwn": -0.1,
+            "mlwn": -0.1,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: Loch a’ Bhraige (Rona), corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "d0fd245d-a636-4fc5-b32a-69973b7b1216",
+      "name": "Loch Snizort (Uig Bay)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-snizort-uig-bay",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -45
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -20
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -5
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -25
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0.1,
+            "mhwn": -0.4,
+            "mlwn": -0.2,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "deebd206-b3e2-4f63-b7e7-d56a227f9a70",
+      "name": "Loch Dunvegan",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-dunvegan",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -65
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -30
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -20
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -40
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0,
+            "mhwn": -0.1,
+            "mlwn": 0,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "a263f943-80b3-4bee-bbc5-5c49f3ee76ed",
+      "name": "Loch Harport",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-harport",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -75
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -35
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -20
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -60
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.1,
+            "mhwn": -0.1,
+            "mlwn": 0,
+            "mlws": 0.1
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "58e0499b-5c60-4e8b-8054-0e51843e363a",
+      "name": "Soay (Camus nan Gall)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "unavailable",
+        "details": {
+          "contract": "ajrm-secondary-port-source-data-v1",
+          "status": "incomplete",
+          "legacyId": "soay-camus-nan-gall",
+          "timeOffsetPeriodMinutes": 720,
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -55
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -25
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -25
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -45
+            }
+          ],
+          "meanRangeM": null,
+          "knownHeightDifferencesM": {
+            "mhws": -0.4,
+            "mhwn": -0.2,
+            "mlwn": null,
+            "mlws": null
+          },
+          "missing": [
+            "heightDifferencesM"
+          ],
+          "notes": "User-supplied Reeds table gives MHWS/MHWN differences but records MLWN and MLWS as ND. Retained as incomplete and excluded from tide calculation."
+        }
+      }
+    },
+    {
+      "locationId": "dcf945cf-cc97-4f30-8a51-e80930bfce12",
+      "name": "Loch Laxford",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-laxford",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": 15
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": 15
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": 5
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": 5
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.3,
+            "mhwn": -0.4,
+            "mlwn": -0.2,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "9c103f21-bb09-49d5-8485-2e9204e65bc8",
+      "name": "Badcall Bay",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "badcall-bay",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": 5
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": 5
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": 5
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": 5
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.7,
+            "mhwn": -0.5,
+            "mlwn": -0.5,
+            "mlws": 0.2
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "8f65cb00-2a01-4048-8b65-9ff6195015ae",
+      "name": "Loch Nedd",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-nedd",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": 0
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": 0
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": 0
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": 0
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.3,
+            "mhwn": -0.2,
+            "mlwn": -0.2,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "3f47e2bb-faf3-4c1c-bbc4-051f73834128",
+      "name": "Loch Inver",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-inver",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -5
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -5
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -5
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -5
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.2,
+            "mhwn": 0,
+            "mlwn": 0,
+            "mlws": 0.1
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "77cd79ab-ffa1-4753-903f-711557c55af5",
+      "name": "Summer Isles (Tanera Mòr)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "summer-isles-tanera-mor",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -5
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -5
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -10
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -10
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.1,
+            "mhwn": 0.1,
+            "mlwn": 0,
+            "mlws": 0.1
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "f3d5c25c-c044-426e-a08f-ce17a8343493",
+      "name": "Loch Ewe (Mellon Charles)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-ewe-mellon-charles",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -5
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -10
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -5
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -5
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.1,
+            "mhwn": -0.1,
+            "mlwn": -0.1,
+            "mlws": 0.1
+          },
+          "notes": "User-supplied Reeds table: coordinates 57°51′N 05°38′W; corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "21d80c4d-c95d-44cc-b451-4df506891a52",
+      "name": "Loch Bervie",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-bervie",
+          "standardPortName": "Ullapool",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": 17
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": 20
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": 15
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": 15
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.4,
+            "mhwn": -0.2,
+            "mlwn": -0.1,
+            "mlws": 0.1
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Ullapool."
+        }
+      }
+    },
+    {
+      "locationId": "04af8b5c-ac18-4df0-b2a2-5ed3cdda0d4a",
+      "name": "Scolpaig",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "scolpaig",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -33
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -33
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -40
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -40
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1,
+            "mhwn": -0.9,
+            "mlwn": -0.5,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: west side of Outer Hebrides, corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "394c7651-19a6-4151-9118-24aabd51e456",
+      "name": "Balivanich",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "balivanich",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -63
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -17
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -31
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -45
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.7,
+            "mhwn": -0.6,
+            "mlwn": -0.5,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: west Benbecula, corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "550c626f-3339-4bc5-8ae7-1dac13ad4118",
+      "name": "Flannan Isles",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "flannan-isles",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -26
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -16
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -16
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -26
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.9,
+            "mhwn": -0.7,
+            "mlwn": -0.6,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "bb4bda1f-09b3-4896-a5c2-860fa4e883de",
+      "name": "Village Bay (St Kilda)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "village-bay-st-kilda",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -40
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -40
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -45
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -45
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1.4,
+            "mhwn": -1.1,
+            "mlwn": -0.8,
+            "mlws": -0.3
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "cc360cde-7f5c-4aed-b1f9-a9f0d7955ca7",
+      "name": "Rockall",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "rockall",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -55
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -55
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -65
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -65
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1.8,
+            "mhwn": -1.5,
+            "mlwn": -0.9,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "8282c620-42dd-4781-94ed-d59698a81992",
+      "name": "Shillay (Monach Islands)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "shillay-monach-islands",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -63
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -43
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -47
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -67
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.6,
+            "mhwn": -0.7,
+            "mlwn": -0.7,
+            "mlws": -0.3
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "5f7fd250-0df5-4473-861e-76148b5f89b6",
+      "name": "Loch Shell",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-shell",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -13
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": 0
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": 0
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -17
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0,
+            "mhwn": -0.1,
+            "mlwn": -0.1,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: east side of Outer Hebrides, corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "5305ceb6-79bf-4dbb-9d33-e8eb965d4104",
+      "name": "East Loch Tarbert (Harris)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "east-loch-tarbert-harris",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -25
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -10
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -10
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -20
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": 0.2,
+            "mhwn": 0,
+            "mlwn": 0.1,
+            "mlws": 0.1
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "510fa5a1-6a76-4de6-bd77-599b22dfd896",
+      "name": "Loch Carnan",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-carnan",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -50
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -10
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -20
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -40
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.3,
+            "mhwn": -0.5,
+            "mlwn": -0.1,
+            "mlws": -0.1
+          },
+          "notes": "User-supplied Reeds table: south Uist, corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "5b12b1ca-4233-4e5a-8919-5f38da9d686d",
+      "name": "Loch Skipport",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "loch-skipport",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -60
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -25
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -24
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -24
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.2,
+            "mhwn": -0.4,
+            "mlwn": -0.3,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: south Uist, corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "7b33e04b-755e-4f11-bc86-2a77193c6238",
+      "name": "Barra (North Bay)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "barra-north-bay",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -63
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -31
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -34
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -48
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.6,
+            "mhwn": -0.5,
+            "mlwn": -0.2,
+            "mlws": -0.1
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "5b394b58-36c1-424e-9b7e-0821de539f5b",
+      "name": "Barra Head (Berneray)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "barra-head-berneray",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -75
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -40
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -45
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -55
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.8,
+            "mhwn": -0.7,
+            "mlwn": -0.2,
+            "mlws": 0.1
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "f8798ae9-84a0-440c-b402-a61e8f27c0b2",
+      "name": "Carloway",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "carloway",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -40
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": 20
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -35
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -15
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.7,
+            "mhwn": -0.5,
+            "mlwn": -0.3,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: west Lewis, corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "b3456ce1-b573-4649-8dd9-2cb9a8030476",
+      "name": "Little Bernera",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "little-bernera",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -21
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -11
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -17
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -27
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -0.5,
+            "mhwn": -0.6,
+            "mlwn": -0.4,
+            "mlws": -0.2
+          },
+          "notes": "User-supplied Reeds table: west Lewis, corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "ec97022b-afa1-44c5-94c4-ea3e471381f3",
+      "name": "West Loch Tarbert (Harris)",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 720,
+          "legacyId": "west-loch-tarbert-harris",
+          "standardPortName": "Stornoway",
+          "highWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 60,
+              "offsetMinutes": -15
+            },
+            {
+              "referenceTimeMinutes": 420,
+              "offsetMinutes": -15
+            }
+          ],
+          "lowWaterTimeOffsets": [
+            {
+              "referenceTimeMinutes": 180,
+              "offsetMinutes": -46
+            },
+            {
+              "referenceTimeMinutes": 540,
+              "offsetMinutes": -46
+            }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1.1,
+            "mhwn": -0.9,
+            "mlwn": -0.5,
+            "mlws": 0
+          },
+          "notes": "User-supplied Reeds table: corrections relative to Stornoway."
+        }
+      }
+    },
+    {
+      "locationId": "7fe57a83-1868-4c69-b4a6-c8bcaad43c85",
+      "name": "Warrenpoint (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0628",
+        "stationName": "WARRENPOINT"
+      }
+    },
+    {
+      "locationId": "2429f5e1-e52c-4fba-9609-362ecb283834",
+      "name": "Kilkeel (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0629",
+        "stationName": "Kilkeel"
+      }
+    },
+    {
+      "locationId": "d7c83c59-9d7b-4d4f-b146-a4824e6606fd",
+      "name": "Newcastle (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0630",
+        "stationName": "Newcastle (N.Ireland)"
+      }
+    },
+    {
+      "locationId": "e0fb7860-081f-44b4-899e-13f1e81b197c",
+      "name": "Ardglass (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0631",
+        "stationName": "Ardglass"
+      }
+    },
+    {
+      "locationId": "e1a684fd-275f-4dc0-97f2-915abd20c2c8",
+      "name": "Strangford Bar (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0633",
+        "stationName": "Strangford"
+      }
+    },
+    {
+      "locationId": "b35a17ff-a8a0-47a7-a7e7-8d61bc877260",
+      "name": "Killyleagh (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0634",
+        "stationName": "Killyleagh"
+      }
+    },
+    {
+      "locationId": "de278673-36c8-4a81-9a2f-b589b5dab7d5",
+      "name": "South Rock (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0635",
+        "stationName": "South Rock"
+      }
+    },
+    {
+      "locationId": "193431e5-ce89-448c-8f1b-3ae1b5041a3f",
+      "name": "Donaghadee (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0637",
+        "stationName": "Donaghadee"
+      }
+    },
+    {
+      "locationId": "28ab841a-613d-482f-9795-4a551e24fbc4",
+      "name": "Bangor (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0637A",
+        "stationName": "Bangor"
+      }
+    },
+    {
+      "locationId": "46aacb48-9fb0-41d7-8cb7-e0a98994e8e0",
+      "name": "Belfast (Admiralty API)",
+      "kind": "standard",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0638",
+        "stationName": "BELFAST"
+      }
+    },
+    {
+      "locationId": "c1cabf4a-90c3-42d6-9bc6-2fbfc2ed78d0",
+      "name": "Carrickfergus (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0639",
+        "stationName": "Carrickfergus"
+      }
+    },
+    {
+      "locationId": "b30864b9-f9c6-4d06-8893-c459fd184838",
+      "name": "Larne (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0641",
+        "stationName": "LARNE"
+      }
+    },
+    {
+      "locationId": "6d1a5e7e-1fc3-4b2e-a28c-61b8b9bdec41",
+      "name": "Red Bay (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0643",
+        "stationName": "Red Bay"
+      }
+    },
+    {
+      "locationId": "aa98a044-0478-49f3-9599-a3f8d851ef3e",
+      "name": "Portrush (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0652",
+        "stationName": "Portrush"
+      }
+    },
+    {
+      "locationId": "84a74a23-5b7d-42ec-8891-2853ab049b7d",
+      "name": "Coleraine (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0653",
+        "stationName": "Coleraine"
+      }
+    },
+    {
+      "locationId": "b4e17d3f-e95a-4dc7-bd87-bed3eb707d8f",
+      "name": "Londonderry (Derry) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0659",
+        "stationName": "Londonderry"
+      }
+    },
+    {
+      "locationId": "e569f23f-a5f4-4f27-a240-1a605a302d5b",
+      "name": "Kirkcudbright Bay (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0422A",
+        "stationName": "Kirkcudbright Bay"
+      }
+    },
+    {
+      "locationId": "8acdbf5f-642a-4ca0-acb5-fe148293a062",
+      "name": "Portpatrick (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0415",
+        "stationName": "Portpatrick"
+      }
+    },
+    {
+      "locationId": "81a974dc-8606-4385-8826-36c25028b100",
+      "name": "Girvan (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0414",
+        "stationName": "Girvan"
+      }
+    },
+    {
+      "locationId": "a3607c70-bfb8-4792-8b0e-3ecffd2f1826",
+      "name": "Ayr (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0413",
+        "stationName": "Ayr"
+      }
+    },
+    {
+      "locationId": "6795d6f1-940e-424f-a37e-87c111dc010c",
+      "name": "Troon (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0412",
+        "stationName": "Troon"
+      }
+    },
+    {
+      "locationId": "7a6e5154-5e6d-487e-9f89-4cabc5a1f60a",
+      "name": "Irvine (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0411",
+        "stationName": "Irvine"
+      }
+    },
+    {
+      "locationId": "035ec744-8e5d-4c47-acea-22ffc3263371",
+      "name": "Ardrossan (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0410",
+        "stationName": "Ardrossan"
+      }
+    },
+    {
+      "locationId": "be827e89-1128-42c3-9e1e-e89018d2d550",
+      "name": "Rothesay (Isle of Bute) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0399",
+        "stationName": "Rothesay Bay"
+      }
+    },
+    {
+      "locationId": "29910eb5-6c47-4796-8af7-592742737562",
+      "name": "Greenock (Admiralty API)",
+      "kind": "standard",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0404",
+        "stationName": "GREENOCK"
+      }
+    },
+    {
+      "locationId": "5e7b1024-0046-4e98-ae78-246d7ba82188",
+      "name": "Glasgow (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0407",
+        "stationName": "GLASGOW"
+      }
+    },
+    {
+      "locationId": "05c0964f-dccf-4310-af6d-399786441461",
+      "name": "Brodick (Isle of Arran) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0408",
+        "stationName": "Brodick Bay"
+      }
+    },
+    {
+      "locationId": "dcb3eba0-5097-4ea8-bba0-936969a5b567",
+      "name": "Campbeltown (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0393",
+        "stationName": "CAMPBELTOWN"
+      }
+    },
+    {
+      "locationId": "f9532193-12f6-4734-a1e8-f0368882321d",
+      "name": "Port Ellen (Islay) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0381",
+        "stationName": "Port Ellen"
+      }
+    },
+    {
+      "locationId": "9b95ee38-19ca-49e8-abb8-b63c4041bcaf",
+      "name": "Craighouse (Jura) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0383",
+        "stationName": "Craighouse"
+      }
+    },
+    {
+      "locationId": "2a4c4964-a33d-4bf9-92ae-52f7a71860b8",
+      "name": "Port Askaig (Islay) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0382",
+        "stationName": "Port Askaig"
+      }
+    },
+    {
+      "locationId": "0fe40e8a-7ab4-4ef8-88f3-0ac3ba191e15",
+      "name": "Carsaig Bay / Crinan (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0387",
+        "stationName": "Carsaig Bay"
+      }
+    },
+    {
+      "locationId": "db2501af-50b5-47ae-bc66-476e6a20d88d",
+      "name": "Dunstaffnage (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0371",
+        "stationName": "Dunstaffnage Bay"
+      }
+    },
+    {
+      "locationId": "0b1155f1-da85-4463-8afd-ffe3f6259ccb",
+      "name": "Lochaline (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0365",
+        "stationName": "Loch Aline"
+      }
+    },
+    {
+      "locationId": "ac1c6581-7c04-4d70-b75c-2877ca47aff9",
+      "name": "Tobermory (Isle of Mull) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0364",
+        "stationName": "Tobermory"
+      }
+    },
+    {
+      "locationId": "d25f0fbe-c2b3-4a5b-a65e-a00e7db70487",
+      "name": "Coll (Arinagour) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0356",
+        "stationName": "Loch Eatharna"
+      }
+    },
+    {
+      "locationId": "6284abd7-b3f1-4abc-992d-3ae4178dea94",
+      "name": "Tiree (Scarinish) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0357",
+        "stationName": "Gott Bay"
+      }
+    },
+    {
+      "locationId": "bfaf0c0d-5d8a-461d-b6f0-13d33815131b",
+      "name": "Corpach / Fort William (Admiralty API)",
+      "kind": "standard",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0368",
+        "stationName": "Corpach"
+      }
+    },
+    {
+      "locationId": "e13058fd-e1b6-476f-b2cb-e1b6852c4fbb",
+      "name": "Mallaig (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0353A",
+        "stationName": "Mallaig"
+      }
+    },
+    {
+      "locationId": "22a0c155-39f1-49ca-b517-ce8637e6abd0",
+      "name": "Kyle of Lochalsh (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0349",
+        "stationName": "Kyle Of Lochalsh"
+      }
+    },
+    {
+      "locationId": "242f35ec-cbba-4262-a9d6-acdb661d6dfa",
+      "name": "Portree (Skye) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0342",
+        "stationName": "Portree"
+      }
+    },
+    {
+      "locationId": "8efd6901-e6b9-4886-84e8-62b45be6aaa3",
+      "name": "Gairloch (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0337",
+        "stationName": "Gairloch"
+      }
+    },
+    {
+      "locationId": "530764db-1055-439e-87b9-7da04fff02af",
+      "name": "Lochinver (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0332",
+        "stationName": "Loch Inver"
+      }
+    },
+    {
+      "locationId": "97cef556-cef3-4b14-bb50-6108720b9ae5",
+      "name": "Kinlochbervie (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0327",
+        "stationName": "Kinlochbervie"
+      }
+    },
+    {
+      "locationId": "bd222f14-4196-4022-befc-6e5ef51a2416",
+      "name": "Castlebay (Barra) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0314A",
+        "stationName": "Castlebay"
+      }
+    },
+    {
+      "locationId": "b84bd3ef-afb0-431a-a981-b2551d9dac4d",
+      "name": "Lochmaddy (North Uist) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0311",
+        "stationName": "Lochmaddy"
+      }
+    },
+    {
+      "locationId": "1a1b77d7-a7eb-478f-abd3-ef3841f689cd",
+      "name": "Tarbert (Harris) (Admiralty API)",
+      "kind": "secondary",
+      "datum": "Chart Datum",
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0310",
+        "stationName": "East Loch Tarbert, Outer Hebrides"
+      }
+    }
+  ],
+  "areas": [
+    {
+      "locationId": "9077fa0a-658e-49f7-b006-86767a605d86",
+      "name": "West Scotland tidal planning region",
+      "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "f297596a-4959-47ff-b665-18ac2cb74924",
+      "name": "Oban tidal prediction port tidal area",
+      "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "682c132d-cc1c-4dfb-92c0-469f7844aead",
+      "name": "Stornoway tidal prediction port tidal area",
+      "portLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "937c30db-cbfe-4cbb-9da7-2644d44b3714",
+      "name": "Ullapool tidal prediction port tidal area",
+      "portLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "40e21510-f64b-4506-87df-e1e49f834840",
+      "name": "Cala Loch Baghasdail tidal area",
+      "portLocationId": "bd73410e-54ac-4f4c-a5ae-8700a6fe3a7a",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "af59f5f8-da73-4d83-9bdb-e67650f54203",
+      "name": "Castlebay tidal area",
+      "portLocationId": "431ca630-05a7-40df-990f-88dee6c4e902",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "a33728a4-5e40-47cf-a1cb-932c4677f5f6",
+      "name": "Craighouse moorings tidal area",
+      "portLocationId": "d451e2d0-2402-4d9a-98b5-bf5e27722cd3",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "8889a579-1cf6-4ca3-a217-6413a6d4921a",
+      "name": "Cuan Sound tidal area",
+      "portLocationId": "0b9ecfef-3260-4f1e-a41f-5f2fdf7dfbec",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "4f0ef199-6c3a-4392-80fe-331b819378be",
+      "name": "Gairloch Harbour tidal area",
+      "portLocationId": "ca205cec-6a47-497b-aa44-2637b9a6be0d",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "66caea2a-d70d-4d5f-8e5b-851b7469cf5b",
+      "name": "Lochmaddy tidal area",
+      "portLocationId": "1aba3e08-af55-4ae4-8751-de3da98501d6",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "d3d5aea4-6027-43b7-a7a8-d73132da322d",
+      "name": "Portree Harbour tidal area",
+      "portLocationId": "d8398a12-ada8-4c05-b2f6-30082a9b5743",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "e0c56c5d-9ea8-4b5a-9223-9e6307ab8ad2",
+      "name": "Scalasaig tidal area",
+      "portLocationId": "b3012c64-b3e1-4ecd-996a-100650300093",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "f1452c77-7f3c-4176-a87f-10d0c4bc1e1d",
+      "name": "Tobermory tidal area",
+      "portLocationId": "2e0eb500-8f1f-4c5c-85ab-391b0b7945d0",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "31f59b1f-7739-4b75-b1ed-975c30785984",
+      "name": "Port Ellen tidal area",
+      "portLocationId": "47a24a27-bd5f-4db6-a6f9-a5c975364a72",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "904a5198-407d-4ccc-955b-52ef22b69ce1",
+      "name": "Glengarrisdale Bay tidal area",
+      "portLocationId": "10b62f70-ef91-4ad5-ac6f-3685d7bc5e77",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "f85677de-ba0b-446e-8415-825231bb225e",
+      "name": "Rubha a’ Mhail tidal area",
+      "portLocationId": "27ca7bf5-0129-4130-9a81-4dfb70ca2e07",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "35d909ed-271e-4e56-b2b4-a795f9517a7e",
+      "name": "Ardnave Point tidal area",
+      "portLocationId": "7b6408f4-c1f5-4caf-a3e8-7f1690360e71",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "1b3ae003-dab9-4a74-bbdb-e9167b3a43ab",
+      "name": "Orsay Island tidal area",
+      "portLocationId": "a73b84ef-2f72-4419-b52f-cf9a3eea9267",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "a2d1e95b-0d5a-429f-8269-884b1549b6d0",
+      "name": "Bruichladdich tidal area",
+      "portLocationId": "2a78bd38-1064-48a4-912b-bba8385a0741",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "84e394e7-986c-4d8a-845f-75ac76ea48a7",
+      "name": "Port Askaig tidal area",
+      "portLocationId": "a5337680-366b-4a60-b88d-c187312f4c49",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "6a763058-9930-4e17-a954-8ded8bdc344d",
+      "name": "Gigha Sound tidal area",
+      "portLocationId": "a162df13-40f5-4a8e-a8ff-c7d495929ed1",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "fc6c4d1b-a50f-4188-b3bf-8d4caef3eb0c",
+      "name": "Machrihanish tidal area",
+      "portLocationId": "9f185284-11e2-4849-9bf6-89410efaef67",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "be8dd820-e2b0-45bb-9037-9861eec6f1bd",
+      "name": "Sound of Mull (Craignure) tidal area",
+      "portLocationId": "3d1309a3-1a5a-4a29-b337-536224ffb1da",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "77316bb8-4da3-445f-9969-a3a77b8c936e",
+      "name": "Loch Melfort tidal area",
+      "portLocationId": "20c6ef3c-3eb1-4563-af18-ac0eeb8f75e4",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "9febffc5-2af1-4fb6-8be8-82b1937ff803",
+      "name": "Seil Sound tidal area",
+      "portLocationId": "c00865d1-dc0b-4aa9-884a-41c5a2d84beb",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "6d3be9f3-99fa-4b3d-85da-a3cecccccc53",
+      "name": "Plockton tidal area",
+      "portLocationId": "f61940aa-fb71-4232-b345-ee4ce1178e43",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "5a77fb35-ec57-442f-b332-cbbaa38a3d29",
+      "name": "Shieldaig tidal area",
+      "portLocationId": "9d44165c-d37f-4214-93e1-b665574344c3",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "80a8d021-badf-4a14-80fe-57e6faba6e24",
+      "name": "Loch a’ Bhraige tidal area",
+      "portLocationId": "ff57f0fb-e423-45f2-80f7-a57dfba3e9dd",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "216625c1-13f9-4d6e-bedb-ce33730c0295",
+      "name": "Loch Snizort (Uig Bay) tidal area",
+      "portLocationId": "d0fd245d-a636-4fc5-b32a-69973b7b1216",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "c4d8cc0a-299b-4c5e-a720-70bbb742eebf",
+      "name": "Loch Dunvegan tidal area",
+      "portLocationId": "deebd206-b3e2-4f63-b7e7-d56a227f9a70",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "d40e8993-21b1-400c-a24f-9edbe6d34ffc",
+      "name": "Loch Harport tidal area",
+      "portLocationId": "a263f943-80b3-4bee-bbc5-5c49f3ee76ed",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "5f85fb21-f9ab-49fe-a373-aadf28393fb9",
+      "name": "Soay (Camus nan Gall) tidal area",
+      "portLocationId": "58e0499b-5c60-4e8b-8054-0e51843e363a",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "22abf375-16dc-44b1-9699-2d0cfb5a4b29",
+      "name": "Loch Laxford tidal area",
+      "portLocationId": "dcf945cf-cc97-4f30-8a51-e80930bfce12",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "2caebaa4-15d2-4cfc-adab-9746919406e7",
+      "name": "Badcall Bay tidal area",
+      "portLocationId": "9c103f21-bb09-49d5-8485-2e9204e65bc8",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "8d9d839f-beb0-4e89-a257-08f170a02613",
+      "name": "Loch Nedd tidal area",
+      "portLocationId": "8f65cb00-2a01-4048-8b65-9ff6195015ae",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "edd186da-5b5f-4640-b8b4-8aea23c8efac",
+      "name": "Loch Inver tidal area",
+      "portLocationId": "3f47e2bb-faf3-4c1c-bbc4-051f73834128",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "58937fc5-e9d4-4f64-9e07-2bc75f957941",
+      "name": "Summer Isles (Tanera Mòr) tidal area",
+      "portLocationId": "77cd79ab-ffa1-4753-903f-711557c55af5",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "cf016cb0-71ed-49d6-b514-49bad2c04f3f",
+      "name": "Loch Ewe (Mellon Charles) tidal area",
+      "portLocationId": "f3d5c25c-c044-426e-a08f-ce17a8343493",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "634ec8e9-7182-428d-8f20-131d21f3de14",
+      "name": "Loch Bervie tidal area",
+      "portLocationId": "21d80c4d-c95d-44cc-b451-4df506891a52",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "ead30bce-29db-4ac8-bbba-d704c1fcd7e9",
+      "name": "Scolpaig tidal area",
+      "portLocationId": "04af8b5c-ac18-4df0-b2a2-5ed3cdda0d4a",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "50f57abf-0157-432a-9881-c85e6130e67b",
+      "name": "Balivanich tidal area",
+      "portLocationId": "394c7651-19a6-4151-9118-24aabd51e456",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "70f3c3b5-4839-4b57-acd2-3ab7a5611158",
+      "name": "Flannan Isles tidal area",
+      "portLocationId": "550c626f-3339-4bc5-8ae7-1dac13ad4118",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "c7f17b17-030b-4dd8-91a3-6e2d00a8232f",
+      "name": "Village Bay (St Kilda) tidal area",
+      "portLocationId": "bb4bda1f-09b3-4896-a5c2-860fa4e883de",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "713e5296-60a8-49f7-8495-8b349e4437d7",
+      "name": "Rockall tidal area",
+      "portLocationId": "cc360cde-7f5c-4aed-b1f9-a9f0d7955ca7",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "c0aca872-dffe-43bb-92c8-8028d33cd28f",
+      "name": "Shillay (Monach Islands) tidal area",
+      "portLocationId": "8282c620-42dd-4781-94ed-d59698a81992",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "1eca39c3-fd7b-49c6-86ee-b38b4fc07f1c",
+      "name": "Loch Shell tidal area",
+      "portLocationId": "5f7fd250-0df5-4473-861e-76148b5f89b6",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "de6b62f9-1ee3-4fc2-8ba9-1d296d9adf36",
+      "name": "East Loch Tarbert (Harris) tidal area",
+      "portLocationId": "5305ceb6-79bf-4dbb-9d33-e8eb965d4104",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "ed0891cb-65df-4556-b8fc-ad3395847f9d",
+      "name": "Loch Carnan tidal area",
+      "portLocationId": "510fa5a1-6a76-4de6-bd77-599b22dfd896",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "21d63cdc-4976-4b1c-967f-66bc7c7dc74d",
+      "name": "Loch Skipport tidal area",
+      "portLocationId": "5b12b1ca-4233-4e5a-8919-5f38da9d686d",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "bbf1fcf7-db76-4ec4-8c00-fc4129cf8d75",
+      "name": "Barra (North Bay) tidal area",
+      "portLocationId": "7b33e04b-755e-4f11-bc86-2a77193c6238",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "97988ce5-dae8-4a36-9c27-719773c23256",
+      "name": "Barra Head (Berneray) tidal area",
+      "portLocationId": "5b394b58-36c1-424e-9b7e-0821de539f5b",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "559530e7-71a2-4d18-95f8-a4e30c0dbdea",
+      "name": "Carloway tidal area",
+      "portLocationId": "f8798ae9-84a0-440c-b402-a61e8f27c0b2",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "0463f17e-3b52-49a8-a459-2690ab316c26",
+      "name": "Little Bernera tidal area",
+      "portLocationId": "b3456ce1-b573-4649-8dd9-2cb9a8030476",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "e59930a7-722b-408e-94af-d3c9d567b4a1",
+      "name": "West Loch Tarbert (Harris) tidal area",
+      "portLocationId": "ec97022b-afa1-44c5-94c4-ea3e471381f3",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "b91184c6-6a88-4669-a16a-2ea2844b1e68",
+      "name": "Warrenpoint (Admiralty API) tidal area",
+      "portLocationId": "7fe57a83-1868-4c69-b4a6-c8bcaad43c85",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "4af97250-8b92-4bc9-95af-5a6d731e35b8",
+      "name": "Kilkeel (Admiralty API) tidal area",
+      "portLocationId": "2429f5e1-e52c-4fba-9609-362ecb283834",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "32146fc4-ec1b-46aa-a54b-8b00cf0531fe",
+      "name": "Newcastle (Admiralty API) tidal area",
+      "portLocationId": "d7c83c59-9d7b-4d4f-b146-a4824e6606fd",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "0f60ee91-dad4-45e5-b596-d3e1f0f2994f",
+      "name": "Ardglass (Admiralty API) tidal area",
+      "portLocationId": "e0fb7860-081f-44b4-899e-13f1e81b197c",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "d5ce86a2-e8c1-4c23-bd69-5b38a086f823",
+      "name": "Strangford Bar (Admiralty API) tidal area",
+      "portLocationId": "e1a684fd-275f-4dc0-97f2-915abd20c2c8",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "f2ab796c-a548-4490-8d75-c86922e10d74",
+      "name": "Killyleagh (Admiralty API) tidal area",
+      "portLocationId": "b35a17ff-a8a0-47a7-a7e7-8d61bc877260",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "7d3df4de-12f9-42ee-9618-30e1f4b49923",
+      "name": "South Rock (Admiralty API) tidal area",
+      "portLocationId": "de278673-36c8-4a81-9a2f-b589b5dab7d5",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "ad00f604-286b-4d6a-a5c8-9a3e803ad000",
+      "name": "Donaghadee (Admiralty API) tidal area",
+      "portLocationId": "193431e5-ce89-448c-8f1b-3ae1b5041a3f",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "02635cb4-c540-4ba9-8263-2899dd62338a",
+      "name": "Bangor (Admiralty API) tidal area",
+      "portLocationId": "28ab841a-613d-482f-9795-4a551e24fbc4",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "6e291240-1cfe-412b-9c38-273a7af72edd",
+      "name": "Belfast (Admiralty API) tidal area",
+      "portLocationId": "46aacb48-9fb0-41d7-8cb7-e0a98994e8e0",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "b4426caa-2caf-4c01-951d-5527268e7dbc",
+      "name": "Carrickfergus (Admiralty API) tidal area",
+      "portLocationId": "c1cabf4a-90c3-42d6-9bc6-2fbfc2ed78d0",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "4d4470f5-7b91-40f0-8d69-789fd294d2ea",
+      "name": "Larne (Admiralty API) tidal area",
+      "portLocationId": "b30864b9-f9c6-4d06-8893-c459fd184838",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "784fb8c0-7ce2-4bdb-9f9f-ab05ce37d748",
+      "name": "Red Bay (Admiralty API) tidal area",
+      "portLocationId": "6d1a5e7e-1fc3-4b2e-a28c-61b8b9bdec41",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "21086710-5745-484e-9f21-c600a16f9849",
+      "name": "Portrush (Admiralty API) tidal area",
+      "portLocationId": "aa98a044-0478-49f3-9599-a3f8d851ef3e",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "4e9fd5db-1942-40a4-82b5-2c73f639465b",
+      "name": "Coleraine (Admiralty API) tidal area",
+      "portLocationId": "84a74a23-5b7d-42ec-8891-2853ab049b7d",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "a0397a65-908a-43b9-9a68-c00ff58e52e3",
+      "name": "Londonderry (Derry) (Admiralty API) tidal area",
+      "portLocationId": "b4e17d3f-e95a-4dc7-bd87-bed3eb707d8f",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "5d7dba6e-683f-4f57-8b0e-47af53421cc3",
+      "name": "Kirkcudbright Bay (Admiralty API) tidal area",
+      "portLocationId": "e569f23f-a5f4-4f27-a240-1a605a302d5b",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "ff797c71-0cdc-4962-96e2-c86041543a8e",
+      "name": "Portpatrick (Admiralty API) tidal area",
+      "portLocationId": "8acdbf5f-642a-4ca0-acb5-fe148293a062",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "524c3d2a-c472-4ef9-874b-e360839d6991",
+      "name": "Girvan (Admiralty API) tidal area",
+      "portLocationId": "81a974dc-8606-4385-8826-36c25028b100",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "690cd280-be09-4f0e-9320-9bd972070b08",
+      "name": "Ayr (Admiralty API) tidal area",
+      "portLocationId": "a3607c70-bfb8-4792-8b0e-3ecffd2f1826",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "1b42de88-14aa-4480-8130-7c915b8c2c46",
+      "name": "Troon (Admiralty API) tidal area",
+      "portLocationId": "6795d6f1-940e-424f-a37e-87c111dc010c",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "f2bc21e2-d0fd-4b12-a42f-bb0fe8a7b3f5",
+      "name": "Irvine (Admiralty API) tidal area",
+      "portLocationId": "7a6e5154-5e6d-487e-9f89-4cabc5a1f60a",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "1feec752-3da6-44de-bdb5-074f78d28532",
+      "name": "Ardrossan (Admiralty API) tidal area",
+      "portLocationId": "035ec744-8e5d-4c47-acea-22ffc3263371",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "855338bb-b6ee-4f6c-9f79-102c7fb39709",
+      "name": "Rothesay (Isle of Bute) (Admiralty API) tidal area",
+      "portLocationId": "be827e89-1128-42c3-9e1e-e89018d2d550",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "229f475b-a09d-4bbd-a091-5fa9048b35c1",
+      "name": "Greenock (Admiralty API) tidal area",
+      "portLocationId": "29910eb5-6c47-4796-8af7-592742737562",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "73a91f56-ed18-4584-8cb6-fce2568d76a8",
+      "name": "Glasgow (Admiralty API) tidal area",
+      "portLocationId": "5e7b1024-0046-4e98-ae78-246d7ba82188",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "a8a26ba2-2cac-4b9e-aa8b-0fc70ddc61b1",
+      "name": "Brodick (Isle of Arran) (Admiralty API) tidal area",
+      "portLocationId": "05c0964f-dccf-4310-af6d-399786441461",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "68de0f9d-1c5f-44ed-b00a-54c69fa44da0",
+      "name": "Campbeltown (Admiralty API) tidal area",
+      "portLocationId": "dcb3eba0-5097-4ea8-bba0-936969a5b567",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "94aca3cc-f145-4e46-99b5-c7b7d19bae36",
+      "name": "Port Ellen (Islay) (Admiralty API) tidal area",
+      "portLocationId": "f9532193-12f6-4734-a1e8-f0368882321d",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "385d1a86-6b90-4fa5-8fe0-2ae2a45eb5b6",
+      "name": "Craighouse (Jura) (Admiralty API) tidal area",
+      "portLocationId": "9b95ee38-19ca-49e8-abb8-b63c4041bcaf",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "fce8d0a9-9264-4aae-8a6a-42f707c2e755",
+      "name": "Port Askaig (Islay) (Admiralty API) tidal area",
+      "portLocationId": "2a4c4964-a33d-4bf9-92ae-52f7a71860b8",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "539ffa00-8c4f-465a-a4eb-d1c8d452b2df",
+      "name": "Carsaig Bay / Crinan (Admiralty API) tidal area",
+      "portLocationId": "0fe40e8a-7ab4-4ef8-88f3-0ac3ba191e15",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "534d5498-1110-4e56-9fb1-9f51adba0a06",
+      "name": "Dunstaffnage (Admiralty API) tidal area",
+      "portLocationId": "db2501af-50b5-47ae-bc66-476e6a20d88d",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "0be2823b-854f-4602-a04b-b750afd44e80",
+      "name": "Lochaline (Admiralty API) tidal area",
+      "portLocationId": "0b1155f1-da85-4463-8afd-ffe3f6259ccb",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "b451041f-ce20-46aa-ac77-bbaabc05362c",
+      "name": "Tobermory (Isle of Mull) (Admiralty API) tidal area",
+      "portLocationId": "ac1c6581-7c04-4d70-b75c-2877ca47aff9",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "dd4c8dc1-08be-4947-97a9-a4f577f91c7f",
+      "name": "Coll (Arinagour) (Admiralty API) tidal area",
+      "portLocationId": "d25f0fbe-c2b3-4a5b-a65e-a00e7db70487",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "fa244d75-fc1f-43de-a210-0c23d4d3613a",
+      "name": "Tiree (Scarinish) (Admiralty API) tidal area",
+      "portLocationId": "6284abd7-b3f1-4abc-992d-3ae4178dea94",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "f5bca4c9-939e-44d4-922d-c4a55424638b",
+      "name": "Corpach / Fort William (Admiralty API) tidal area",
+      "portLocationId": "bfaf0c0d-5d8a-461d-b6f0-13d33815131b",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "feac5e79-79cd-441d-b290-560b3f17e475",
+      "name": "Mallaig (Admiralty API) tidal area",
+      "portLocationId": "e13058fd-e1b6-476f-b2cb-e1b6852c4fbb",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "9587b7f4-92ad-41a6-8ed7-84d50c36c2b9",
+      "name": "Kyle of Lochalsh (Admiralty API) tidal area",
+      "portLocationId": "22a0c155-39f1-49ca-b517-ce8637e6abd0",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "753d4eb6-586f-421d-88c5-ddf416f6ae86",
+      "name": "Portree (Skye) (Admiralty API) tidal area",
+      "portLocationId": "242f35ec-cbba-4262-a9d6-acdb661d6dfa",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "163cdaed-2940-42cb-aacd-b3c846347b87",
+      "name": "Gairloch (Admiralty API) tidal area",
+      "portLocationId": "8efd6901-e6b9-4886-84e8-62b45be6aaa3",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "662ea888-2ca4-4a8d-a542-7d83dd0f0d74",
+      "name": "Lochinver (Admiralty API) tidal area",
+      "portLocationId": "530764db-1055-439e-87b9-7da04fff02af",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "b6e8fbc4-4a06-4436-8f4b-fcaf745e44be",
+      "name": "Kinlochbervie (Admiralty API) tidal area",
+      "portLocationId": "97cef556-cef3-4b14-bb50-6108720b9ae5",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "5a0a50bc-d35c-4f0b-ab71-1588a2ab9a87",
+      "name": "Castlebay (Barra) (Admiralty API) tidal area",
+      "portLocationId": "bd222f14-4196-4022-befc-6e5ef51a2416",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "7ebb7014-56bc-43a8-9299-87e2e2eda37a",
+      "name": "Lochmaddy (North Uist) (Admiralty API) tidal area",
+      "portLocationId": "b84bd3ef-afb0-431a-a981-b2551d9dac4d",
+      "parentAreaLocationId": null
+    },
+    {
+      "locationId": "814d0850-621d-494d-aec6-1e41d342f2d8",
+      "name": "Tarbert (Harris) (Admiralty API) tidal area",
+      "portLocationId": "1a1b77d7-a7eb-478f-abd3-ef3841f689cd",
+      "parentAreaLocationId": null
+    }
+  ],
+  "gates": [
+    {
+      "locationId": "0b9ecfef-3260-4f1e-a41f-5f2fdf7dfbec",
+      "name": "Cuan Sound",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "W",
+      "ebbSet": "E",
+      "springPeakFlowKnots": 7,
+      "neapPeakFlowKnots": 5,
+      "floodSpringAfter": "4:30:00",
+      "floodNeapAfter": "5:15:00",
+      "floodSpringSlack": "0:15:00",
+      "floodNeapSlack": "0:40:00",
+      "ebbSpringAfter": "-1:45:00",
+      "ebbNeapAfter": "-1:00:00",
+      "ebbSpringSlack": "0:15:00",
+      "ebbNeapSlack": "0:40:00",
+      "source": "User almanac extract: flood west +0430 Oban springs, +0515 neaps; ebb east -0145 springs, -0100 neaps; spring rate 7 kn, neap up to 5 kn"
+    },
+    {
+      "locationId": "9d4cf5a6-7fd3-49e7-b486-d9ac16b6ff67",
+      "name": "Dorus Mòr",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "W",
+      "ebbSet": "E",
+      "springPeakFlowKnots": 8,
+      "neapPeakFlowKnots": 6,
+      "floodSpringAfter": "4:30:00",
+      "floodNeapAfter": "5:15:00",
+      "floodSpringSlack": "0:15:00",
+      "floodNeapSlack": "1:00:00",
+      "ebbSpringAfter": "-1:45:00",
+      "ebbNeapAfter": "-1:00:00",
+      "ebbSpringSlack": "0:15:00",
+      "ebbNeapSlack": "1:00:00",
+      "source": "User almanac extract: flood east-to-west +0430 Oban springs, +0515 neaps; ebb west-to-east -0145 springs, -0100 neaps; 8 kn springs, 6 kn neaps; spring slack text says 4 hr, needs confirmation"
+    },
+    {
+      "locationId": "c21dcbcc-41bf-4ad0-9db9-7697c92c7bcb",
+      "name": "Gulf of Corryvreckan",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "W",
+      "ebbSet": "E",
+      "springPeakFlowKnots": 8.5,
+      "neapPeakFlowKnots": 4,
+      "floodSpringAfter": "4:10:00",
+      "floodNeapAfter": "4:10:00",
+      "floodSpringSlack": "0:12:00",
+      "floodNeapSlack": "0:40:00",
+      "ebbSpringAfter": "-2:10:00",
+      "ebbNeapAfter": "-2:10:00",
+      "ebbSpringSlack": "0:12:00",
+      "ebbNeapSlack": "0:40:00",
+      "source": "Existing app constants; spring rate agrees with Paddle Argyll"
+    },
+    {
+      "locationId": "ef6ce8b6-5fb3-4960-9145-f8d1669302a6",
+      "name": "Kyle Rhea",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "",
+      "ebbSet": "",
+      "springPeakFlowKnots": null,
+      "neapPeakFlowKnots": null,
+      "floodSpringAfter": "",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "Tethys scoping report notes streams can exceed 8 kn at springs and 5 kn on neap flood; no complete timing/slack constants sourced yet"
+    },
+    {
+      "locationId": "f2e31a99-65af-4188-8743-c4ae67e2cf3d",
+      "name": "Sound of Islay",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "N",
+      "ebbSet": "S",
+      "springPeakFlowKnots": 5.4,
+      "neapPeakFlowKnots": null,
+      "floodSpringAfter": "",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "Tethys/Sound of Islay monitoring reports flood north, ebb south, recorded 5.44 kn; no complete timing/slack/neap source yet"
+    },
+    {
+      "locationId": "79d09bf4-933b-4834-a835-177c9a53400c",
+      "name": "Sound of Luing",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "N",
+      "ebbSet": "S",
+      "springPeakFlowKnots": 7,
+      "neapPeakFlowKnots": 5,
+      "floodSpringAfter": "4:30:00",
+      "floodNeapAfter": "5:15:00",
+      "floodSpringSlack": "0:15:00",
+      "floodNeapSlack": "1:00:00",
+      "ebbSpringAfter": "-1:45:00",
+      "ebbNeapAfter": "-1:00:00",
+      "ebbSpringSlack": "0:15:00",
+      "ebbNeapSlack": "1:00:00",
+      "source": "User almanac extract: north-going +0430 Oban springs, +0515 neaps; south-going -0145 springs, -0100 neaps; slack 0:15 springs, 1:00 neaps; 7 kn springs, 5 kn neaps"
+    },
+    {
+      "locationId": "bc8ddb8f-ba38-4b60-8d31-443dc2a96d1a",
+      "name": "Mull of Kintyre",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "",
+      "ebbSet": "",
+      "springPeakFlowKnots": null,
+      "neapPeakFlowKnots": null,
+      "floodSpringAfter": "",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "User-provided Sail Scotland list; UKCityMap coordinates; no complete timing/slack/neap source yet"
+    },
+    {
+      "locationId": "73849d2d-5faf-4d15-acb5-c3c29e655a3a",
+      "name": "Firth of Lorn",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "NE",
+      "ebbSet": "SW",
+      "springPeakFlowKnots": 3,
+      "neapPeakFlowKnots": 1.5,
+      "floodSpringAfter": "4:30:00",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "-1:55:00",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "User almanac extract: northeast-going about +0430 Oban; southwest-going about -0155 Oban; 3 kn springs, 1.5 kn neaps; location point, neap timings, and slack durations not yet supplied"
+    },
+    {
+      "locationId": "222ef9b7-8894-47da-a323-5acf2905be25",
+      "name": "Sound of Kerrera",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "N",
+      "ebbSet": "S",
+      "springPeakFlowKnots": 1.5,
+      "neapPeakFlowKnots": null,
+      "floodSpringAfter": "4:30:00",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "-1:55:00",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "Paddle Argyll Kayak Trail spring rate/start times; Mindat coordinates"
+    },
+    {
+      "locationId": "d434ff4f-edac-4d9d-b72e-257414285e78",
+      "name": "Clachan Sound",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "N",
+      "ebbSet": "S",
+      "springPeakFlowKnots": 5,
+      "neapPeakFlowKnots": null,
+      "floodSpringAfter": "5:55:00",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "-0:25:00",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "Paddle Argyll Kayak Trail spring rate/start times; Trove/HES coordinates"
+    },
+    {
+      "locationId": "3397d35d-fbb6-4270-8894-281c61f8f46f",
+      "name": "Torsa",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "N",
+      "ebbSet": "S",
+      "springPeakFlowKnots": 1,
+      "neapPeakFlowKnots": null,
+      "floodSpringAfter": "4:15:00",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "-2:00:00",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "Paddle Argyll Kayak Trail spring rate/start times; Torsa coordinates"
+    },
+    {
+      "locationId": "dd71c30b-b105-4d2f-a61e-3d6b9695e863",
+      "name": "Duart Point",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "NW",
+      "ebbSet": "SE",
+      "springPeakFlowKnots": 2,
+      "neapPeakFlowKnots": null,
+      "floodSpringAfter": "-6:00:00",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "-0:45:00",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "UKRGB/seakayakphoto timing at SE Sound of Mull/Rubha an Ridire; NLB Duart Point coordinates"
+    },
+    {
+      "locationId": "2f25fd92-fbd0-4942-a883-17084a7b2eb2",
+      "name": "Sound of Mull",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "NW",
+      "ebbSet": "SE",
+      "springPeakFlowKnots": 3,
+      "neapPeakFlowKnots": 1,
+      "floodSpringAfter": "-5:45:00",
+      "floodNeapAfter": "-5:45:00",
+      "floodSpringSlack": "0:00:00",
+      "floodNeapSlack": "0:00:00",
+      "ebbSpringAfter": "0:25:00",
+      "ebbNeapAfter": "0:25:00",
+      "ebbSpringSlack": "0:00:00",
+      "ebbNeapSlack": "0:00:00",
+      "source": "User almanac extract plus web direction check: constant +0015 Oban, heights at Craignure MHWS 4.0 MHWN 3.0 MLWN 1.7 MLWS 0.6; NW-going flood -0545 Oban, SE-going ebb +0025 Oban; 3 kn springs, 1 kn neaps; slack duration not supplied, modeled as zero"
+    },
+    {
+      "locationId": "88bc36c7-6cdd-4390-8690-21a3fb7fa556",
+      "name": "Kyle of Loch Alsh",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "",
+      "ebbSet": "",
+      "springPeakFlowKnots": null,
+      "neapPeakFlowKnots": null,
+      "floodSpringAfter": "",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "User-provided Sail Scotland list; Geodatos coordinates; no complete tidal stream constants sourced yet"
+    },
+    {
+      "locationId": "9ff6eb8a-9f7a-4067-bc13-8fd97873f088",
+      "name": "Ardnamurchan Point",
+      "contract": "ajrm-tidal-gate-constants-v1",
+      "standardPortRef": "/resources/locations/e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+      "floodSet": "",
+      "ebbSet": "",
+      "springPeakFlowKnots": null,
+      "neapPeakFlowKnots": null,
+      "floodSpringAfter": "",
+      "floodNeapAfter": "",
+      "floodSpringSlack": "",
+      "floodNeapSlack": "",
+      "ebbSpringAfter": "",
+      "ebbNeapAfter": "",
+      "ebbSpringSlack": "",
+      "ebbNeapSlack": "",
+      "source": "British Place Names coordinates; no complete tidal stream timing/slack/neap source yet"
+    }
+  ]
+}
