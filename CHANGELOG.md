@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.6 — 2026-08-21
+
+- Aligns documentation with the standalone Weather Database peer and the
+  Location/Tidal topology contract now checked by Console BITE.
+
 ## 0.1.5 — 2026-08-21
 
 - Label the tidal curve as a smooth estimate interpolated between UKHO-predicted high- and low-water events, not an official UKHO interval-height prediction.
