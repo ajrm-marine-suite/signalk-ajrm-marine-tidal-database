@@ -1,8 +1,8 @@
 {
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
-  "generatedAt": "2026-08-22T15:48:00.000Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.44",
+  "generatedAt": "2026-08-22T16:22:30.000Z",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.45",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -5410,6 +5410,424 @@
           "turn-times-not-regime-specific",
           "shared-multi-locality-more-than-rate-not-turn-regime-exact",
           "caolas-nan-con-timing-separate",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "fbd3ab30-6bf6-4e70-bf91-f7141d9586fc",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5400-loch-leven-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "in-going",
+          "name": "In-going stream begins",
+          "direction": {
+            "label": "In-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction only as in-going and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source puts this beginning 45 minutes after the narrows' -315 min beginning, deriving one regime-neutral nominal offset (-270 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5400-loch-leven-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source puts this beginning 45 minutes after the narrows' -315 min beginning, deriving one regime-neutral nominal offset (-270 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5400-loch-leven-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "out-going",
+          "name": "Out-going stream begins",
+          "direction": {
+            "label": "Out-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction only as out-going and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source says this begins at the same time as the narrows, giving one regime-neutral nominal offset (+60 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5400-loch-leven-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source says this begins at the same time as the narrows, giving one regime-neutral nominal offset (+60 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5400-loch-leven-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5400-loch-leven-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5400.jpeg; Loch Leven / Tides; Caolas nan Con subordinate locality; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T16:22:30.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed notation key identifies Oban stream offsets as relative to HW; not reopened for Segment 5B",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T16:22:30.000Z",
+          "notes": "IMG_5400 gives Caolas nan Con a separately scoped in-going beginning 45 minutes after the Loch Leven narrows and the same out-going beginning as the narrows. The derived regime-neutral nominal offsets are -270 min and +60 min relative to HW Oban. The jointly scoped more-than 5 kn wording remains blocking uncertainty and is not a turn/regime rate. Candidate 10 remains unchanged."
+        }
+      },
+      "cautions": [],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "named-channel-representative-point",
+          "summary": "The joined Location is an OS Open Names representative point for Caolas nan Con, not a surveyed gate line, fairway, safe-water point, exact timing observation or passage waypoint.",
+          "sourceIds": [
+            "img-5400-loch-leven-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "derived-turn-times-not-regime-specific",
+          "summary": "The source derives a regime-neutral HW Oban beginning of -270 min in-going from 45 minutes after the narrows' -315 min, and gives +60 min out-going by saying it begins at the same time as the narrows; no separate spring/neap timings are supplied.",
+          "sourceIds": [
+            "img-5400-loch-leven-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "shared-multi-locality-more-than-rate",
+          "summary": "The source gives one lower-bound statement of more than 5 kn jointly for the Loch Leven narrows and Caolas nan Con, with no direction-specific or spring/neap rate observations.",
+          "sourceIds": [
+            "img-5400-loch-leven-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "loch-leven-narrows-identity-separate",
+          "summary": "Caolas nan Con is a separate locality roughly five miles east of the narrows; its timing record and Location are not aliases or revisions of the existing Loch Leven Narrows record.",
+          "sourceIds": [
+            "img-5400-loch-leven-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "named-channel-representative-point",
+          "derived-turn-times-not-regime-specific",
+          "shared-multi-locality-more-than-rate-not-turn-regime-exact",
+          "loch-leven-narrows-identity-separate",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "dd2f8629-e052-42ac-84b3-07e49390c7b1",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5399-lynn-of-morvern-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "north-going",
+          "name": "North-going stream begins",
+          "direction": {
+            "label": "North-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction only as north-going and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (-345 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5399-lynn-of-morvern-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (-345 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5399-lynn-of-morvern-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "south-going",
+          "name": "South-going stream begins",
+          "direction": {
+            "label": "South-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction only as south-going and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (+25 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5399-lynn-of-morvern-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (+25 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5399-lynn-of-morvern-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5399-lynn-of-morvern-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5399.jpeg; Lynn of Morvern / Tides; complete block before Directions; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T16:22:30.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed notation key identifies Oban stream offsets as relative to HW; not reopened for Segment 5B",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T16:22:30.000Z",
+          "notes": "IMG_5399 gives regime-neutral nominal beginnings of -345 min north-going and +25 min south-going relative to HW Oban. Its one-knot main-body statement, localized 2.5 kn flood stream and localized springs-only 4 kn ebb stream are kept separate and outside turn/regime rate observations. A conflicting legacy generic Sound of Mull record is preserved unchanged and is not reused for this identity."
+        }
+      },
+      "cautions": [
+        {
+          "id": "bernera-bay-ebb-eddy",
+          "summary": "The source describes an ebb eddy setting into Bernera Bay; it gives no rate or operational boundary for that eddy.",
+          "sourceIds": [
+            "img-5399-lynn-of-morvern-tides"
+          ],
+          "blocking": false
+        },
+        {
+          "id": "morvern-bernera-springs-overfalls",
+          "summary": "At springs on the ebb, the source describes overfalls with a separately localized 4 kn southeast-going stream off the Morvern shore northwest of Bernera; this is not a passage-wide rate.",
+          "sourceIds": [
+            "img-5399-lynn-of-morvern-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "broad-named-sea-representative-point",
+          "summary": "The joined Location is a broad OS Open Names representative point for Lynn of Morvern, not the entrance line between Lismore and Morvern, a surveyed gate, fairway, route, safe-water point or local-stream position.",
+          "sourceIds": [
+            "img-5399-lynn-of-morvern-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives regime-neutral HW Oban beginning offsets of -345 min north-going and +25 min south-going, with no separate spring/neap timings.",
+          "sourceIds": [
+            "img-5399-lynn-of-morvern-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "main-body-rate-not-turn-specific",
+          "summary": "The one-knot statement applies to the main body of Lynn of Morvern without a turn, direction or spring/neap assignment and is not a structured rate observation.",
+          "sourceIds": [
+            "img-5399-lynn-of-morvern-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "lismore-shuna-flood-rate-localized",
+          "summary": "The 2.5 kn flood statement applies only to a narrow stream running north from Lismore lighthouse across towards the Morvern shore and then northeast towards Shuna Island; it is not a passage-wide north-going rate or spring/neap observation.",
+          "sourceIds": [
+            "img-5399-lynn-of-morvern-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "morvern-bernera-spring-ebb-rate-localized",
+          "summary": "The 4 kn statement is springs-only on the ebb and localized off the Morvern shore northwest of Bernera, setting southeast with overfalls; it is not a passage-wide south-going or neap rate.",
+          "sourceIds": [
+            "img-5399-lynn-of-morvern-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "legacy-sound-of-mull-conflict",
+          "summary": "A preserved legacy generic Sound of Mull record has matching nominal beginnings but different identity, direction and shared modelled rates; it is not reused, revised or treated as Lynn of Morvern evidence.",
+          "sourceIds": [
+            "img-5399-lynn-of-morvern-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "broad-named-sea-representative-point",
+          "turn-times-not-regime-specific",
+          "main-body-rate-not-turn-specific",
+          "localized-flood-rate-not-passage-turn-regime-exact",
+          "localized-springs-ebb-rate-not-passage-turn-regime-exact",
+          "localized-springs-ebb-overfalls",
+          "legacy-sound-of-mull-conflict",
           "true-bearings-not-stated",
           "slack-not-stated",
           "flow-model-not-stated",

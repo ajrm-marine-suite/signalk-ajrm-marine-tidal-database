@@ -2,13 +2,14 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.13 adds distinct photo-verified native v2 reference records for
-Corran Narrows and the Loch Leven narrows at Caolas Mhic Phadruig. Printed
-regime-neutral stream beginnings remain visible only in sourced unavailable
-reasons. Gate-wide and multi-locality more-than 5 kn lower bounds remain
+Version 0.1.14 adds distinct photo-verified native v2 reference records for
+Caolas nan Con and Lynn of Morvern. Regime-neutral stream beginnings remain
+visible only in sourced unavailable reasons. The Loch Leven shared more-than
+5 kn lower bound and Lynn's passage/local flow figures remain separately scoped
 blocking uncertainty, never turn/regime rate fields. Missing exact rates,
 bearings, slack and supported models keep both out of Planning's operational
-allow-list while every prior gate remains unchanged.
+allow-list. Candidate 10 and the conflicting legacy Sound of Mull record remain
+byte-for-byte unchanged.
 
 ## Responsibilities
 
@@ -53,6 +54,9 @@ separates the two Sound of Mull timing regimes, their spatial anchors and the
 conflicting legacy records. The [Segment 5A source review](docs/tidal-gate-source-review-segment-5a.md)
 records the corrected Corran/Loch Eil/Loch Leven image index, separates the
 Loch Leven narrows from Caolas nan Con and documents both fail-closed joins.
+The [Segment 5B source review](docs/tidal-gate-source-review-segment-5b.md)
+records the Caolas nan Con derivation, the complete Lynn locality split and
+the legacy Sound of Mull conflict without changing prior records.
 
 ## Offline and refresh behaviour
 
@@ -76,7 +80,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.13 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.14 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

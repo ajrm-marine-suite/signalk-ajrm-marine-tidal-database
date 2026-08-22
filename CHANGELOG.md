@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.14 — 2026-08-22
+
+- Add separate native-v2 reference-only records for Caolas nan Con and Lynn of
+  Morvern, joined to fresh Location IDs rather than candidate 10 or legacy
+  Sound of Mull identities.
+- Preserve their regime-neutral HW Oban stream beginnings only in sourced
+  unavailable reasons, including Caolas nan Con's explicit 45-minute
+  derivation from the Loch Leven narrows.
+- Keep the shared more-than 5 kn bound and Lynn's main-body, flood-local and
+  springs-ebb-local rates outside structured turn/regime observations; leave
+  bearings, slack and calculation models unavailable and the effective
+  operational allow-list empty.
+- Add focused heading-index, locality, conflict, one-to-one join, unavailable
+  semantics and prior-record byte-preservation tests.
+
 ## 0.1.13 — 2026-08-22
 
 - Add distinct native v2 reference-only timing records for Corran Narrows and
