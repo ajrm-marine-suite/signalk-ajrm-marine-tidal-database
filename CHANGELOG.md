@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.19 — 2026-08-22
+
+- Add explicit operational-with-assumptions profiles for all 17 completed
+  source-reviewed named-channel records while preserving their original
+  reference-only evidence records byte-for-byte under `sourceReview`.
+- Publish estimated bearings, turn inputs, slack placement, rates and flow/
+  interpolation models separately from source facts; estimated rates use the
+  `approximate` qualifier and are never described as definitive.
+- Expose the 17 profiles through the effective operational allow-list, retain
+  all cautions, hazards and uncertainty, and leave unfinished legacy-only
+  records non-operational.
+
 ## 0.1.18 — 2026-08-22
 
 - Add distinct native-v2 reference records for Sound of Luing and Dorus Mòr,

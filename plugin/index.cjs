@@ -10,6 +10,7 @@ const { createUkhoProvider } = require("./providers/ukho.cjs");
 const { createTidalDatabase } = require("./database.cjs");
 const { createDefinitionStore } = require("./definition-store.cjs");
 const { GATE_CONTRACT_V2, catalogueDiagnostics, validateGateV2 } = require("./gate-contract.cjs");
+const { applyOperationalProfiles } = require("./provisional-gate-profiles.cjs");
 const { recommendSecondary, selectPort } = require("./spatial-selection.cjs");
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
@@ -280,14 +281,31 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 	}
 
 	async function gateCatalogue() {
-		const gates = definitionStore.read().gates;
-		const diagnostics = await gateCatalogueDiagnostics({ ...definitionStore.read(), gates });
+		const evidenceGates = definitionStore.read().gates;
+		const diagnostics = await gateCatalogueDiagnostics({ ...definitionStore.read(), gates:evidenceGates });
+		const gates = applyOperationalProfiles(evidenceGates);
+		const catalogueBlocked = diagnostics.issues.some((entry) => entry.severity === "error" && entry.locationId === null);
+		const operationalLocationIds = gates
+			.filter((gate) => gate.readiness?.state === "operational"
+				&& !catalogueBlocked
+				&& !diagnostics.issues.some((entry) => entry.severity === "error" && entry.locationId === gate.locationId))
+			.map((gate) => gate.locationId);
+		const publishedDiagnostics = {
+			...diagnostics,
+			operationalLocationIds,
+			summary:{
+				...diagnostics.summary,
+				operationalCount:operationalLocationIds.length,
+				nonOperationalCount:gates.length - operationalLocationIds.length,
+				operationalWithAssumptionsCount:gates.filter((gate) => gate.calculationBasis?.mode === "operational-with-assumptions").length,
+			},
+		};
 		return {
 			contract:"ajrm-tidal-gate-catalogue-v2",
 			contractVersion:2,
 			gates,
-			operationalLocationIds:diagnostics.operationalLocationIds,
-			diagnostics,
+			operationalLocationIds,
+			diagnostics:publishedDiagnostics,
 		};
 	}
 

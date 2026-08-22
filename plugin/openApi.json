@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "AJRM Marine Tidal Database",
-    "version": "0.1.18",
+    "version": "0.1.19",
     "description": "Provider-neutral tidal predictions and the versioned ajrm-tidal-gate-constants-v2 contract. Gate timing mutations belong to Tidal Database; names, types and geometry remain owned by Location Editor."
   },
   "paths": {
@@ -468,13 +468,51 @@
           "issues": { "type": "array", "items": { "$ref": "#/components/schemas/GateCatalogueIssue" } }
         }
       },
+      "TidalGateCatalogueRecordV2": {
+        "type": "object",
+        "description": "A TidalGateV2 catalogue projection. Estimated operational projections additionally carry calculationBasis and the preserved strict sourceReview; mutation endpoints continue to accept only strict TidalGateV2 records.",
+        "required": ["contract", "contractVersion", "revision", "locationId", "conventions", "reference", "flowModel", "regimeInterpolation", "turns", "rateObservations", "provenance", "cautions", "hazards", "uncertainty", "readiness"],
+        "properties": {
+          "contract": { "type": "string", "enum": ["ajrm-tidal-gate-constants-v2"] },
+          "contractVersion": { "type": "integer", "enum": [2] },
+          "revision": { "type": "integer", "minimum": 1 },
+          "locationId": { "type": "string", "minLength": 1 },
+          "conventions": { "type": "object" },
+          "reference": { "type": "object" },
+          "flowModel": { "type": "object" },
+          "regimeInterpolation": { "type": "object" },
+          "turns": { "type": "array" },
+          "rateObservations": { "type": "array" },
+          "provenance": { "type": "object" },
+          "cautions": { "type": "array" },
+          "hazards": { "type": "array" },
+          "uncertainty": { "type": "array" },
+          "readiness": { "type": "object" },
+          "legacy": { "type": "object" },
+          "calculationBasis": {
+            "type": "object",
+            "required": ["contract", "contractVersion", "mode", "sourceReadiness", "warning", "assumptions"],
+            "properties": {
+              "contract": { "type": "string", "enum": ["ajrm-tidal-gate-operational-profile-v1"] },
+              "contractVersion": { "type": "integer", "enum": [1] },
+              "mode": { "type": "string", "enum": ["operational-with-assumptions"] },
+              "sourceReadiness": { "type": "string", "nullable": true },
+              "warning": { "type": "string" },
+              "assumptions": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          },
+          "sourceReview": { "$ref": "#/components/schemas/TidalGateV2" }
+        },
+        "additionalProperties": false
+      },
       "TidalGateCatalogueV2": {
         "type": "object",
         "required": ["contract", "contractVersion", "gates", "operationalLocationIds", "diagnostics"],
         "properties": {
           "contract": { "type": "string", "enum": ["ajrm-tidal-gate-catalogue-v2"] },
           "contractVersion": { "type": "integer", "enum": [2] },
-          "gates": { "type": "array", "items": { "$ref": "#/components/schemas/TidalGateV2" } },
+          "gates": { "type": "array", "items": { "$ref": "#/components/schemas/TidalGateCatalogueRecordV2" } },
           "operationalLocationIds": { "type": "array", "items": { "type": "string" } },
           "diagnostics": { "$ref": "#/components/schemas/GateCatalogueDiagnostics" }
         }

@@ -2,15 +2,13 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.18 adds distinct photo-verified native v2 reference records for
-Sound of Luing and Dorus Mòr, joined to fresh OS named-sea and named-channel
-Locations. Their attributable spring/neap beginnings, passage-level slack and
-shared or spatially varying rates remain unavailable for calculation: neither
-source supplies exact timing precision, true bearings, per-turn slack
-placement, exact gate-local turn rates or supported flow/interpolation models.
-Incomplete citation, heading/Directions and locally variable hazard evidence
-also blocks operation. Both legacy Locations and v1 gates remain byte-for-byte
-unchanged, and Planning's effective allow-list remains empty.
+Version 0.1.19 adds explicit operational-with-assumptions profiles for all 17
+completed source-reviewed named-channel records. The original evidence records
+remain preserved for inspection. The profiles turn reviewed published guidance
+into estimated planning inputs with visible assumptions for bearings, regime
+copying, slack placement, rate scope and the sine/interpolation model. None of
+these values is definitive; all must be taken with a pinch of salt and checked
+against current official information and observed conditions.
 
 ## Responsibilities
 
@@ -30,17 +28,18 @@ locality-specific rate observations with units, bounds and qualifiers. It also
 stores structured citation metadata, review, cautions, hazards, uncertainty and
 readiness without embedding publication page text.
 
-Operational `none` slack assertions and every operational caution, hazard or
-uncertainty require meaningful structured citations. Any note marked blocking,
-or any supplied named-locality Location ID that does not join, excludes the
-gate from operational use.
+Strict evidence-backed operational records retain the positive v2 eligibility
+rules. Completed reviews may additionally publish a separately identified
+`operational-with-assumptions` profile. That profile never changes the retained
+source record or turns an approximate/bounded statement into a definitive fact;
+Planning must display its warning and assumptions with the calculation.
 
 Unknown and unavailable values never become zero or the other regime's value.
 Planning must use the catalogue's computed `operationalLocationIds`; stored
-readiness alone does not bypass Location joins, reference-port capability or
-review checks. Approximate, bounded, up-to, more-than and named-locality rates
-are reference-only in this foundation and are never collapsed into a scalar
-passage calculation.
+readiness alone does not bypass Location joins or reference-port capability.
+Where an estimated operational profile is present, its scalar model input is
+kept explicitly separate from the approximate, bounded, up-to, more-than or
+named-locality observation that informed it.
 
 See [AJRM tidal-gate constants v2](docs/tidal-gate-contract-v2.md) and the
 plugin's OpenAPI document for the full representation, migration semantics,
@@ -95,7 +94,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.18 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.19 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

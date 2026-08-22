@@ -7,6 +7,7 @@ const path = require("node:path");
 const test = require("node:test");
 const createPlugin = require("../plugin/index.cjs");
 const definitions = require("../defaults/tidal-definitions.json");
+const { profileLocationIds } = require("../plugin/provisional-gate-profiles.cjs");
 
 function response() { return { statusCode:200, status(code){ this.statusCode=code; return this; }, json(body){ this.body=body; return this; } }; }
 
@@ -39,7 +40,15 @@ test("the standalone service owns tidal data and exposes all seeded ports", asyn
 	const gateCatalogue = await app.ajrmMarineTidalDatabase.getGateCatalogue();
 	assert.equal(gateCatalogue.contract,"ajrm-tidal-gate-catalogue-v2");
 	assert.equal(gateCatalogue.gates.length,definitions.gates.length);
-	assert.deepEqual(gateCatalogue.operationalLocationIds,[]);
+	assert.deepEqual(gateCatalogue.operationalLocationIds,profileLocationIds);
+	assert.equal(gateCatalogue.diagnostics.summary.operationalWithAssumptionsCount,profileLocationIds.length);
+	for (const locationId of profileLocationIds) {
+		const gate = gateCatalogue.gates.find((entry) => entry.locationId === locationId);
+		assert.equal(gate.readiness.state,"operational");
+		assert.equal(gate.calculationBasis.mode,"operational-with-assumptions");
+		assert.equal(gate.sourceReview.readiness.state,"reference-only");
+		assert.ok(gate.rateObservations.every((entry) => entry.qualifier === "approximate"));
+	}
 	assert.equal(gateCatalogue.diagnostics.summary.legacyMigrationCount,definitions.gates.filter((entry) => entry.contract === "ajrm-tidal-gate-constants-v1").length);
 	const status = await call("GET","/status");
 	assert.equal(status.body.contract, "ajrm-marine-tidal-database-status-v1");
