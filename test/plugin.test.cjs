@@ -28,14 +28,14 @@ async function fixture(t) {
 test("the standalone service owns tidal data and exposes all seeded ports", async (t) => {
 	const { app,plugin,call,port } = await fixture(t);
 	assert.equal(app.ajrmMarineTidalDatabase.contract, "ajrm-marine-tidal-database-service-v1");
-	assert.equal(app.ajrmMarineTidalDatabase.listPorts().length, 100);
+	assert.equal(app.ajrmMarineTidalDatabase.listPorts().length, definitions.ports.length);
 	const status = await call("GET","/status");
 	assert.equal(status.body.contract, "ajrm-marine-tidal-database-status-v1");
-	assert.equal(status.body.summary.stationCount, 50);
+	assert.equal(status.body.summary.stationCount, new Set(definitions.ports.filter((entry)=>entry.prediction.mode==="provider").map((entry)=>`${entry.prediction.providerId}:${entry.prediction.stationId}`)).size);
 	assert.equal(status.body.policy.refreshFloorHours, 24);
 	assert.equal(status.body.policy.discoveryCacheUtcYearBounded, true);
 	assert.equal(status.body.policy.requestIntervalSeconds, 5);
-	assert.equal(status.body.ports.length, 100);
+	assert.equal(status.body.ports.length, definitions.ports.length);
 	const projection = await call("GET","/tides/status",{ query:{ portId:port.locationId } });
 	assert.equal(projection.body.contract, "ajrm-marine-tide-resolver-v1");
 	assert.equal(projection.body.selectedPort.id, port.locationId);
@@ -43,6 +43,17 @@ test("the standalone service owns tidal data and exposes all seeded ports", asyn
 	await plugin.stop();
 	assert.equal(app.ajrmMarineTidalDatabase, undefined);
 	assert.equal(app.ajrmMarineTidalDiagnostics, undefined);
+});
+
+test("the seed includes corrected Bucklers Hard data and explicit direct-station preferences", () => {
+	const portsmouth=definitions.ports.find((entry)=>entry.name==="Portsmouth tidal prediction port");
+	const bucklers=definitions.ports.find((entry)=>entry.name==="Bucklers Hard");
+	assert.equal(portsmouth.prediction.stationId,"0065");
+	assert.equal(bucklers.prediction.parentLocationId,portsmouth.locationId);
+	assert.deepEqual(bucklers.prediction.corrections.heightDifferencesM,{ mhws:-1,mhwn:-0.8,mlwn:-0.2,mlws:-0.3 });
+	assert.equal(bucklers.prediction.corrections.highWaterTimeOffsets.length,4);
+	assert.equal(definitions.ports.filter((entry)=>entry.automaticPreferredPortLocationId).length,10);
+	for (const name of ["Port Ellen","Craighouse moorings","Gigha Sound"]) assert.equal(definitions.ports.find((entry)=>entry.name===name).advisory.status,"caution");
 });
 
 test("OpenAPI and webapp metadata are present", async (t) => {

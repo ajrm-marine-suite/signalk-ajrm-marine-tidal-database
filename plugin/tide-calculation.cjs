@@ -31,8 +31,21 @@ function normalizeTideEvents(payload) {
 		.sort((left, right) => Date.parse(left.at) - Date.parse(right.at));
 }
 
+function tideEventCapabilities(events) {
+	const values = normalizeTideEvents(events);
+	const highWater = values.some((event) => event.type === "high");
+	const lowWater = values.some((event) => event.type === "low");
+	return {
+		highWater,
+		lowWater,
+		completeExtrema: highWater && lowWater,
+		curve: highWater && lowWater,
+	};
+}
+
 function calculateTide(events, now = new Date()) {
 	const values = normalizeTideEvents(events);
+	const capabilities = tideEventCapabilities(values);
 	const nowMs = new Date(now).getTime();
 	const nextHighWater = values.find((event) => event.type === "high" && Date.parse(event.at) >= nowMs) || null;
 	const nextLowWater = values.find((event) => event.type === "low" && Date.parse(event.at) >= nowMs) || null;
@@ -44,7 +57,7 @@ function calculateTide(events, now = new Date()) {
 		if (at >= nowMs && !after) after = event;
 	}
 	if (!before || !after || before.type === after.type || Date.parse(after.at) === Date.parse(before.at)) {
-		return { valid: false, heightNowM: null, trend: "unknown", nextHighWater, nextLowWater, curve: values };
+		return { valid: false, heightNowM: null, trend: "unknown", nextHighWater, nextLowWater, curve: values, capabilities };
 	}
 	const fraction = Math.max(0, Math.min(1,
 		(nowMs - Date.parse(before.at)) / (Date.parse(after.at) - Date.parse(before.at)),
@@ -57,8 +70,9 @@ function calculateTide(events, now = new Date()) {
 		nextHighWater,
 		nextLowWater,
 		curve: values,
+		capabilities,
 		interpolation: "cosine-between-extremes-v1",
 	};
 }
 
-module.exports = { calculateTide, normalizeTideEvents };
+module.exports = { calculateTide, normalizeTideEvents, tideEventCapabilities };

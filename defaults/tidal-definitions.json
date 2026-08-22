@@ -59,6 +59,59 @@
       }
     },
     {
+      "locationId": "3df939c1-6949-4d51-960d-b489951e5aa9",
+      "name": "Portsmouth tidal prediction port",
+      "kind": "standard",
+      "datum": "UKHO station datum",
+      "referenceLevels": {
+        "mhws": 4.7,
+        "mhwn": 3.8,
+        "mlwn": 1.9,
+        "mlws": 0.8
+      },
+      "prediction": {
+        "mode": "provider",
+        "providerId": "ukhoTidalEvents",
+        "stationId": "0065",
+        "stationName": "Portsmouth"
+      }
+    },
+    {
+      "locationId": "29bdf6ae-922e-486a-b9b3-8c1ca88a7624",
+      "name": "Bucklers Hard",
+      "kind": "secondary",
+      "datum": null,
+      "referenceLevels": null,
+      "prediction": {
+        "mode": "corrections",
+        "parentLocationId": "3df939c1-6949-4d51-960d-b489951e5aa9",
+        "corrections": {
+          "contract": "ajrm-secondary-port-corrections-v4",
+          "timeOffsetPeriodMinutes": 1440,
+          "standardPortName": "Portsmouth",
+          "highWaterTimeOffsets": [
+            { "referenceTimeMinutes": 5, "offsetMinutes": -40 },
+            { "referenceTimeMinutes": 600, "offsetMinutes": -10 },
+            { "referenceTimeMinutes": 1020, "offsetMinutes": -40 },
+            { "referenceTimeMinutes": 1320, "offsetMinutes": -10 }
+          ],
+          "lowWaterTimeOffsets": [
+            { "referenceTimeMinutes": 0, "offsetMinutes": -10 },
+            { "referenceTimeMinutes": 360, "offsetMinutes": -10 },
+            { "referenceTimeMinutes": 720, "offsetMinutes": -10 },
+            { "referenceTimeMinutes": 1080, "offsetMinutes": -10 }
+          ],
+          "heightDifferencesM": {
+            "mhws": -1,
+            "mhwn": -0.8,
+            "mlwn": -0.2,
+            "mlws": -0.3
+          },
+          "notes": "Admiralty Tide Tables Volume 1 (NP201), Table 5600: corrections relative to Portsmouth."
+        }
+      }
+    },
+    {
       "locationId": "57801294-1ad7-4c7d-adc8-d968b9e1547c",
       "name": "Cala Loch Baghasdail",
       "kind": "secondary",
@@ -108,6 +161,7 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "bd222f14-4196-4022-befc-6e5ef51a2416",
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
@@ -152,6 +206,11 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "9b95ee38-19ca-49e8-abb8-b63c4041bcaf",
+      "advisory": {
+        "status": "caution",
+        "message": "Entered almanac corrections differ materially from the direct Admiralty station. Automatic selection uses the direct station; review carefully if selecting this entered definition manually."
+      },
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -240,6 +299,7 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "8efd6901-e6b9-4886-84e8-62b45be6aaa3",
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
@@ -284,6 +344,7 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "b84bd3ef-afb0-431a-a981-b2551d9dac4d",
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",
@@ -328,6 +389,7 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "242f35ec-cbba-4262-a9d6-acdb661d6dfa",
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
@@ -416,6 +478,7 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "ac1c6581-7c04-4d70-b75c-2877ca47aff9",
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -460,6 +523,11 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "f9532193-12f6-4734-a1e8-f0368882321d",
+      "advisory": {
+        "status": "caution",
+        "message": "Entered almanac corrections differ materially from the direct Admiralty station. Automatic selection uses the direct station; review carefully if selecting this entered definition manually."
+      },
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -724,6 +792,7 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "2a4c4964-a33d-4bf9-92ae-52f7a71860b8",
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -768,6 +837,10 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "advisory": {
+        "status": "caution",
+        "message": "The unusually large almanac corrections were checked against the supplied source image, but no matching direct station was available for comparison. Treat this prediction with caution."
+      },
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -1428,6 +1501,7 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "530764db-1055-439e-87b9-7da04fff02af",
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "24c0305b-8e6a-4ed7-98a1-809b9bab0334",
@@ -1912,6 +1986,7 @@
       "kind": "secondary",
       "datum": null,
       "referenceLevels": null,
+      "automaticPreferredPortLocationId": "1a1b77d7-a7eb-478f-abd3-ef3841f689cd",
       "prediction": {
         "mode": "corrections",
         "parentLocationId": "f31d48a1-d625-4a93-a9c2-b54fc6cad308",

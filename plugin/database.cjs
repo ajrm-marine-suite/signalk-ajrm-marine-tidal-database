@@ -3,6 +3,7 @@
 const fs = require("node:fs/promises");
 const path = require("node:path");
 const { applyReferenceLevelCorrections, applySecondaryCorrections } = require("./secondary-corrections.cjs");
+const { tideEventCapabilities } = require("./tide-calculation.cjs");
 
 const RECORD_CONTRACT = "ajrm-marine-tidal-station-cache-v1";
 const MINIMUM_REFRESH_MS = 24 * 3600000;
@@ -165,6 +166,7 @@ function createTidalDatabase(options) {
 			coverageEndAt: cached?.coverage?.endAt || null,
 			coveredNow: Boolean(cached && Date.parse(cached.coverage?.startAt) <= new Date(now).getTime() && endMs >= new Date(now).getTime()),
 			eventCount: cached?.events?.length || 0,
+			eventCapabilities: tideEventCapabilities(cached?.events || []),
 			lastError: attempts.get(key(station.providerId, station.stationId))?.error || null,
 		};
 	}

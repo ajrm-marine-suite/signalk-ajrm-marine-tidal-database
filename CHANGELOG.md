@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.8 — 2026-08-22
+
+- Add Portsmouth and correct the previously omitted/incomplete Bucklers Hard
+  secondary-port definition from Admiralty table 5600.
+- Prefer ten matching direct provider stations during automatic selection while
+  preserving explicitly selected entered corrections for comparison.
+- Add visible cautions for anomalous source-checked corrections and suppress
+  current-height/curve claims for high-only or low-only stations.
+- Merge package safety metadata and newly bundled ports into durable catalogues
+  without overwriting user-edited prediction data.
+
 ## 0.1.7 — 2026-08-21
 
 - Align eight secondary-port references and the Seil Sound tidal-region

@@ -40,6 +40,11 @@ function normalizePortDefinition(locationId, value = {}) {
 		kind:value.kind === "standard" ? "standard" : "secondary",
 		datum:String(value.datum || "").trim() || null,
 		referenceLevels:value.referenceLevels || null,
+		automaticPreferredPortLocationId:String(value.automaticPreferredPortLocationId || "").trim() || null,
+		advisory:value.advisory && typeof value.advisory === "object" ? {
+			status:String(value.advisory.status || "").trim() || "caution",
+			message:String(value.advisory.message || "").trim(),
+		} : null,
 		prediction:{ mode },
 	};
 	if (!port.locationId || !port.name) throw new Error("A tidal definition needs a Location id and name.");
@@ -264,6 +269,12 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 			const data = await database.resolvePort(selection.port, byId, { now });
 			const calculated = calculateTide(data.events, now);
 			const covered = calculated.valid;
+			const availability = {
+				...calculated.capabilities,
+				currentHeight: calculated.valid,
+				nextHighWater: Boolean(calculated.nextHighWater),
+				nextLowWater: Boolean(calculated.nextLowWater),
+			};
 			const ageSeconds = Math.max(0, (now.getTime() - Date.parse(data.fetchedAt)) / 1000);
 			const freshness = {
 				state: !covered ? "expired" : ageSeconds > 24 * 3600 ? "stale" : "fresh",
@@ -277,21 +288,25 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 				contract: "ajrm-marine-tide-resolver-v1",
 				contractVersion: 1,
 				valid: covered,
+				availability,
 				calculationReferenceAt: now.toISOString(),
 				selectedPort: { id: selection.port.locationId, name: selection.port.name, types: [`tidal${selection.port.kind === "standard" ? "Standard" : "Secondary"}Port`] },
-				selection: { reason: selection.reason, pinned: selection.pinned, tidalRegion: selection.area ? { id: selection.area.locationId, name: selection.area.name } : null },
+				selection: { reason: selection.reason, pinned: selection.pinned, tidalRegion: selection.area ? { id: selection.area.locationId, name: selection.area.name } : null, automaticPreference: selection.automaticPreference || null },
 				heightNowM: covered ? calculated.heightNowM : null,
 				nextHighWater: eventSummary(calculated.nextHighWater),
 				nextLowWater: eventSummary(calculated.nextLowWater),
 				trend: calculated.trend,
 				datum: data.datum,
 				referenceLevels: data.referenceLevels,
+				advisory: selection.port.advisory || null,
 				station: { providerId: data.providerId, id: data.stationId, name: data.stationName, standardPort: { id: data.rootPort.locationId, name: data.rootPort.name } },
 				source: { provider: providers.get(data.providerId).name, fetchedAt: data.fetchedAt, cache: data.cache, persistent: providers.get(data.providerId).persistentCachePermitted, fallbackReason: data.fallbackReason || null, interpolation: calculated.interpolation || null, secondaryPortCorrections: data.correctionChain },
 				freshness,
 				curve: calculated.curve,
 				events: request.includeEvents ? data.events : undefined,
-				error: covered ? "" : "Cached tidal events do not cover the requested time.",
+				error: covered ? "" : !availability.completeExtrema
+					? `Provider supplies ${availability.highWater ? "high-water" : availability.lowWater ? "low-water" : "no usable"} events only; current height and a full tidal curve are unavailable.`
+					: "Cached tidal events do not cover the requested time.",
 			};
 			latestProjection = result;
 			publish(TIDE_PATH, { ...result, curve: undefined });
@@ -307,7 +322,8 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 			calculationReferenceAt: now.toISOString(), selectedPort: selection.port ? { id: selection.port.locationId, name: selection.port.name } : null,
 			selection: { reason: selection.reason || "unavailable", pinned: selection.pinned || false },
 			heightNowM: null, nextHighWater: null, nextLowWater: null, trend: "unknown", datum: null,
-			referenceLevels: null, station: null, source: null, freshness: null, curve: [], error,
+			referenceLevels: null, station: null, source: null, freshness: null, curve: [], advisory: null,
+			availability: { highWater:false, lowWater:false, completeExtrema:false, curve:false, currentHeight:false, nextHighWater:false, nextLowWater:false }, error,
 		};
 	}
 
@@ -353,6 +369,7 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 				coverageEndAt: source?.station?.coverageEndAt || null,
 				coveredNow: source?.station?.coveredNow || false,
 				due: source?.station?.due ?? true,
+				advisory: port.advisory || null,
 				status: !source ? "unavailable" : source.station?.fetchedAt ? (source.station.coveredNow ? "ready" : "cached-outside-coverage") : "not-cached",
 			};
 		});

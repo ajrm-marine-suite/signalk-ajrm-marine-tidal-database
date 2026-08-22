@@ -53,6 +53,14 @@ function distanceM(left, right) {
 	return Math.hypot(latitudeM, longitudeM);
 }
 
+function automaticPreference(port, ports) {
+	const preferredId = port?.automaticPreferredPortLocationId;
+	const preferred = preferredId ? ports.get(preferredId) : null;
+	return preferred?.prediction?.mode === "provider"
+		? { port: preferred, replaced: port }
+		: { port, replaced: null };
+}
+
 function selectPort(definitions, locations, request = {}) {
 	const byLocationId = new Map(locations.map((location) => [location.id, location]));
 	const ports = new Map(definitions.ports.map((port) => [port.locationId, port]));
@@ -66,14 +74,27 @@ function selectPort(definitions, locations, request = {}) {
 		.filter(({ area, location }) => ports.has(area.portLocationId) && contains(location, request.position))
 		.sort((left, right) => areaSize(left.location) - areaSize(right.location));
 	if (containing.length) {
-		return { port: ports.get(containing[0].area.portLocationId), reason: "containing-tidal-area", pinned: false, area: containing[0].area };
+		const selected = automaticPreference(ports.get(containing[0].area.portLocationId), ports);
+		return {
+			port: selected.port,
+			reason: selected.replaced ? "preferred-direct-provider" : "containing-tidal-area",
+			pinned: false,
+			area: containing[0].area,
+			automaticPreference: selected.replaced ? { id:selected.replaced.locationId, name:selected.replaced.name } : null,
+		};
 	}
 	const nearest = definitions.ports
 		.filter((port) => port.prediction.mode !== "unavailable")
 		.map((port) => ({ port, position: representativePosition(byLocationId.get(port.locationId)) }))
 		.filter((entry) => entry.position)
 		.sort((left, right) => distanceM(left.position, request.position) - distanceM(right.position, request.position))[0];
-	return { port: nearest?.port || null, reason: nearest ? "nearest-prediction-port" : "no-port", pinned: false };
+	const selected = automaticPreference(nearest?.port || null, ports);
+	return {
+		port: selected.port || null,
+		reason: selected.replaced ? "preferred-direct-provider" : nearest ? "nearest-prediction-port" : "no-port",
+		pinned: false,
+		automaticPreference: selected.replaced ? { id:selected.replaced.locationId, name:selected.replaced.name } : null,
+	};
 }
 
 function recommendSecondary(definitions, locations, position) {
@@ -101,7 +122,15 @@ function recommendSecondary(definitions, locations, position) {
 			const point = representativePosition(byLocationId.get(port.locationId));
 			return point ? { port, distanceM:distanceM(point,position) } : null;
 		}).filter(Boolean).sort((left,right) => left.distanceM - right.distanceM);
-	return { port:candidates[0]?.port || null, tidalRegion:region, distanceM:candidates[0]?.distanceM || null, reason:candidates.length ? "nearestSecondaryPortInTidalRegion" : "no-secondary-in-region" };
+	const ports = new Map(definitions.ports.map((port) => [port.locationId, port]));
+	const selected = automaticPreference(candidates[0]?.port || null, ports);
+	return {
+		port:selected.port || null,
+		tidalRegion:region,
+		distanceM:candidates[0]?.distanceM || null,
+		reason:selected.replaced ? "preferredDirectProviderInTidalRegion" : candidates.length ? "nearestSecondaryPortInTidalRegion" : "no-secondary-in-region",
+		automaticPreference:selected.replaced ? { id:selected.replaced.locationId, name:selected.replaced.name } : null,
+	};
 }
 
 module.exports = { contains, recommendSecondary, selectPort };

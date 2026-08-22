@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AJRM Marine Tidal Database</title>
   <link rel="icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css?v=0.1.7">
+  <link rel="stylesheet" href="styles.css?v=0.1.8">
 </head>
 <body>
   <header>
@@ -19,7 +19,7 @@
     <section id="message" class="message" aria-live="polite"></section>
     <section id="summary" class="cards"></section>
     <section class="panel">
-      <div class="panel-heading"><div><h2>Provider stations</h2><p>Each physical provider station is fetched at most once in any 24-hour period. One station can supply several locally corrected secondary ports.</p></div><input id="stationFilter" type="search" placeholder="Filter stations or ports"></div>
+      <div class="panel-heading"><div><h2>Provider stations</h2><p>Each physical provider station is fetched at most once in any 24-hour period. One station can supply several locally corrected secondary ports. High-only or low-only stations cannot supply current height or a full curve.</p></div><input id="stationFilter" type="search" placeholder="Filter stations or ports"></div>
       <div class="table-wrap"><table><thead><tr><th>Station</th><th>Provider</th><th>Used by</th><th>Last fetched</th><th>Coverage</th><th>Events</th><th>Status</th></tr></thead><tbody id="stations"></tbody></table></div>
     </section>
     <section class="panel">
@@ -74,6 +74,6 @@
       <div class="dialog-actions"><button id="refreshTide" type="button" class="primary">Refresh if due</button><span></span><button id="closeTideBottom" type="button">Close</button></div>
     </div>
   </dialog>
-  <script src="app.js?v=0.1.7"></script>
+  <script src="app.js?v=0.1.8"></script>
 </body>
 </html>

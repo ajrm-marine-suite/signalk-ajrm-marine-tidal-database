@@ -15,6 +15,7 @@ function validate(value) {
 		if (!["standard","secondary"].includes(port.kind)) throw new Error(`${port.name || port.locationId} has an invalid port kind.`);
 		if (!["provider","corrections","unavailable"].includes(port.prediction?.mode)) throw new Error(`${port.name || port.locationId} has an invalid prediction mode.`);
 		if (port.prediction.mode === "provider" && (!port.prediction.providerId || !port.prediction.stationId)) throw new Error(`${port.name} needs a provider and station id.`);
+		if (port.automaticPreferredPortLocationId === port.locationId) throw new Error(`${port.name} cannot prefer itself for automatic selection.`);
 		if (port.prediction.mode === "corrections") {
 			if (!port.prediction.parentLocationId || port.prediction.parentLocationId === port.locationId) throw new Error(`${port.name} needs a different parent standard port.`);
 			const correction = port.prediction.corrections;
@@ -28,6 +29,12 @@ function validate(value) {
 	for (const port of value.ports.filter((entry) => entry.prediction.mode === "corrections")) {
 		const parent = value.ports.find((entry) => entry.locationId === port.prediction.parentLocationId);
 		if (!parent || parent.kind !== "standard" || parent.prediction.mode !== "provider") throw new Error(`${port.name} must use a provider-backed standard port as its parent.`);
+	}
+	for (const port of value.ports.filter((entry) => entry.automaticPreferredPortLocationId)) {
+		const preferred = value.ports.find((entry) => entry.locationId === port.automaticPreferredPortLocationId);
+		if (!preferred || preferred.prediction.mode !== "provider") {
+			throw new Error(`${port.name} must prefer an existing provider-backed port.`);
+		}
 	}
 	const areaIds = new Set();
 	for (const area of value.areas) {
@@ -49,9 +56,43 @@ function validate(value) {
 	return structuredClone(value);
 }
 
+function mergeBundledDefinitions(current, bundled) {
+	const next = structuredClone(current);
+	const portById = new Map(next.ports.map((entry) => [entry.locationId, entry]));
+	for (const bundledPort of bundled.ports || []) {
+		const existing = portById.get(bundledPort.locationId);
+		if (!existing) {
+			next.ports.push(structuredClone(bundledPort));
+			continue;
+		}
+		// These package-authored fields express safety and automatic-selection
+		// policy. User-entered corrections and provider details remain untouched.
+		for (const key of ["automaticPreferredPortLocationId", "advisory"]) {
+			if (Object.hasOwn(bundledPort, key)) existing[key] = structuredClone(bundledPort[key]);
+		}
+	}
+	for (const key of ["areas", "gates"]) {
+		const ids = new Set(next[key].map((entry) => entry.locationId || entry.id));
+		for (const entry of bundled[key] || []) {
+			const id = entry.locationId || entry.id;
+			if (!ids.has(id)) next[key].push(structuredClone(entry));
+		}
+	}
+	return validate(next);
+}
+
 function createDefinitionStore(filename, bundled) {
 	let current;
-	try { current = validate(JSON.parse(fs.readFileSync(filename,"utf8"))); }
+	try {
+		const stored = validate(JSON.parse(fs.readFileSync(filename,"utf8")));
+		current = mergeBundledDefinitions(stored, bundled);
+		if (JSON.stringify(current) !== JSON.stringify(stored)) {
+			fs.mkdirSync(path.dirname(filename), { recursive:true });
+			const temporary = `${filename}.${process.pid}.seed.tmp`;
+			fs.writeFileSync(temporary, `${JSON.stringify(current,null,2)}\n`, { mode:0o600 });
+			fs.renameSync(temporary, filename);
+		}
+	}
 	catch (error) {
 		if (error.code !== "ENOENT") throw error;
 		current = validate({ ...structuredClone(bundled), contract:CONTRACT });
@@ -91,4 +132,4 @@ function createDefinitionStore(filename, bundled) {
 	return Object.freeze({ read, removeArea, removePort, save, setArea, setPort });
 }
 
-module.exports = { CONTRACT, createDefinitionStore, validate };
+module.exports = { CONTRACT, createDefinitionStore, mergeBundledDefinitions, validate };

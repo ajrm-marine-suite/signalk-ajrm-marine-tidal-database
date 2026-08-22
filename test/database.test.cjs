@@ -94,3 +94,11 @@ test("memory-only providers do not recover forbidden disk records", async (t) =>
 	const restarted = createTidalDatabase({ directory:value.directory, providers:memoryOnly });
 	await assert.rejects(restarted.stationData(station, { now:"2026-08-21T01:00:00Z" }), /no network/);
 });
+
+test("station inspection reports when a provider supplies high water only", async (t) => {
+	const value = await fixture(t, { async fetchEvents() { return { events:[{ at:"2026-08-21T06:00:00Z",type:"high",heightM:4 }] }; } });
+	const station = { providerId:"test",stationId:"high-only",stationName:"High only" };
+	await value.db.stationData(station,{ now:"2026-08-21T00:00:00Z" });
+	const inspected = await value.db.inspectStation(station,{ now:"2026-08-21T00:00:00Z" });
+	assert.deepEqual(inspected.eventCapabilities,{ highWater:true,lowWater:false,completeExtrema:false,curve:false });
+});
