@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.15 — 2026-08-22
+
+- Add distinct native-v2 reference-only records for Loch Feochan and a fresh
+  Firth of Lorn representative, preserving the imported legacy Firth identity
+  and v1 gate byte-for-byte.
+- Retain regime-neutral/approximate HW Oban timings only in unavailable
+  reasons; keep Loch Feochan's asymmetric duration context and every general or
+  localized rate statement outside operational turn-rate fields.
+- Leave bearings, slack and calculation models unavailable, keep the effective
+  operational allow-list empty and add focused source-index, locality, join,
+  unavailable-semantics and prior-record hash tests.
+
 ## 0.1.14 — 2026-08-22
 
 - Add separate native-v2 reference-only records for Caolas nan Con and Lynn of

@@ -1,8 +1,8 @@
 {
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
-  "generatedAt": "2026-08-22T16:22:30.000Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.45",
+  "generatedAt": "2026-08-22T16:59:44.000Z",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.46",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -5828,6 +5828,416 @@
           "localized-springs-ebb-rate-not-passage-turn-regime-exact",
           "localized-springs-ebb-overfalls",
           "legacy-sound-of-mull-conflict",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "98553f02-f25a-4789-9f9a-ee41395e1e8c",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5394-loch-feochan-tides"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "flood-in-going",
+          "name": "Flood begins to enter Loch Feochan",
+          "direction": {
+            "label": "Flood / in-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the stream as flood entering the loch and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (-235 min) and says the asymmetric entrance effect is less pronounced at neaps; it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5394-loch-feochan-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (-235 min) and says the asymmetric entrance effect is less pronounced at neaps; it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5394-loch-feochan-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the flood begins but gives no slack interval around that beginning."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the flood begins but gives no slack interval around that beginning."
+            }
+          }
+        },
+        {
+          "id": "ebb-out-going",
+          "name": "Ebb begins",
+          "direction": {
+            "label": "Ebb / out-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the stream as ebb and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning at HW Oban (0 min) and says the asymmetric entrance effect is less pronounced at neaps; it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5394-loch-feochan-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning at HW Oban (0 min) and says the asymmetric entrance effect is less pronounced at neaps; it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5394-loch-feochan-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the ebb begins but gives no slack interval around that beginning."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the ebb begins but gives no slack interval around that beginning."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5394-loch-feochan-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5394.jpeg; Loch Feochan / Tides; complete target block; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T16:59:44.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T16:59:44.000Z",
+          "notes": "IMG_5394 gives regime-neutral nominal beginnings of -235 min flood/in-going and 0 min ebb relative to HW Oban. The entrance-shoal explanation, four-hour flood statement, ebb continuation to two hours after LW and less-pronounced neap effect establish an asymmetric cycle but not a supported flow/slack model. The terminal spring 5 kn / neap 3 kn phrase gives no direction-specific, exact-locus rate observation and remains blocking uncertainty. Water-level/depth material is not imported."
+        }
+      },
+      "cautions": [
+        {
+          "id": "entrance-shoal-delay",
+          "summary": "The source associates the entrance shoals with delayed flood entry; it supplies no exact observation position or operational depth model.",
+          "sourceIds": [
+            "img-5394-loch-feochan-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "named-tidal-water-representative-point",
+          "summary": "The joined Location is an OS Open Names representative point for the broad Loch Feochan tidal-water feature, not the shoal entrance/channel, a surveyed gate, fairway, route, safe-water point or exact stream observation.",
+          "sourceIds": [
+            "img-5394-loch-feochan-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives regime-neutral HW Oban beginnings of -235 min flood/in-going and 0 min ebb, while stating that the asymmetric entrance effect is less pronounced at neaps; no separate spring/neap beginnings are supplied.",
+          "sourceIds": [
+            "img-5394-loch-feochan-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "asymmetric-duration-not-a-flow-model",
+          "summary": "The source says the flood runs for just four hours and the ebb continues until two hours after LW, but gives no regime-complete turn/slack series or supported current curve from which to build an operational model.",
+          "sourceIds": [
+            "img-5394-loch-feochan-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "spring-neap-rates-not-turn-locus-qualified",
+          "summary": "The source prints spring 5 kn and neap 3 kn after the ebb-beginning line without explicitly assigning either rate to flood or ebb, a precise entrance locus, a peak semantic or a per-turn observation.",
+          "sourceIds": [
+            "img-5394-loch-feochan-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "named-tidal-water-representative-point-not-entrance",
+          "turn-times-not-regime-specific",
+          "asymmetric-duration-not-a-supported-flow-model",
+          "spring-neap-rates-not-turn-locus-qualified",
+          "entrance-shoal-delay-not-operationally-modelled",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "c0af534c-269b-40c6-952c-c7b37aaa6a32",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5393-firth-of-lorn-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "northeast-going",
+          "name": "Progressive turn to northeast-going setting",
+          "direction": {
+            "label": "Northeast-going setting",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the setting as northeastwards and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral progressive-turn offset (+270 min) in the fairway; it cannot be treated as exact or assigned to spring.",
+              "sourceIds": [
+                "img-5393-firth-of-lorn-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral progressive-turn offset (+270 min) in the fairway; it cannot be treated as exact or assigned to neap.",
+              "sourceIds": [
+                "img-5393-firth-of-lorn-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source describes a progressive clockwise turn and gives no slack interval."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source describes a progressive clockwise turn and gives no slack interval."
+            }
+          }
+        },
+        {
+          "id": "southwest-going",
+          "name": "Progressive turn to southwest-going setting",
+          "direction": {
+            "label": "Southwest-going setting",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the setting as southwestwards and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral progressive-turn offset (-115 min) in the fairway; it cannot be treated as exact or assigned to spring.",
+              "sourceIds": [
+                "img-5393-firth-of-lorn-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral progressive-turn offset (-115 min) in the fairway; it cannot be treated as exact or assigned to neap.",
+              "sourceIds": [
+                "img-5393-firth-of-lorn-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source describes a progressive clockwise turn and gives no slack interval."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source describes a progressive clockwise turn and gives no slack interval."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5393-firth-of-lorn-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5393.jpeg; 6. Firth of Lorn / Tides; complete target paragraph; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T16:59:44.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed notation key identifies Oban stream offsets as relative to HW; not reopened for Segment 6A",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T16:59:44.000Z",
+          "notes": "IMG_5393 gives explicitly approximate regime-neutral progressive fairway turns of +270 min northeast-going and -115 min southwest-going relative to HW Oban. The general 1-1.5 kn flow and the separate spring-rate statements southeast of the Garvellachs, between Fladda and Easdale and off Loch Don are kept in distinct blocking uncertainty, never per-turn rates. Eddy and race contexts remain separately scoped cautions. The conflicting legacy Firth of Lorn v1 Location and gate remain unchanged."
+        }
+      },
+      "cautions": [
+        {
+          "id": "garvellachs-half-flood-eddy",
+          "summary": "Southeast of the Garvellachs the source describes a southwest-setting eddy after half-flood; it gives no exact boundary or operational timing model.",
+          "sourceIds": [
+            "img-5393-firth-of-lorn-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "lismore-mull-wind-tide-races",
+          "summary": "The source warns of races between Lismore and Mull, especially when wind and tide oppose; this is a separate locality warning, not a fairway turn or rate observation.",
+          "sourceIds": [
+            "img-5393-firth-of-lorn-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "broad-named-sea-representative-point",
+          "summary": "The joined Location is a broad OS Open Names representative point for Firth of Lorn, not the source fairway, a surveyed gate, route, safe-water point or local-stream position.",
+          "sourceIds": [
+            "img-5393-firth-of-lorn-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "progressive-turn-times-approximate-not-regime-specific",
+          "summary": "The fairway stream turns progressively clockwise, setting northeastwards about +270 min and southwestwards about -115 min relative to HW Oban; no exact turn instant or separate spring/neap timings are supplied.",
+          "sourceIds": [
+            "img-5393-firth-of-lorn-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "general-fairway-rate-not-turn-regime-specific",
+          "summary": "The general 1 to 1.5 kn statement is not assigned to either progressive turn or to a spring/neap regime and is not a structured rate observation.",
+          "sourceIds": [
+            "img-5393-firth-of-lorn-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "garvellachs-spring-rate-localized",
+          "summary": "The spring 2 to 3 kn statement applies only southeast of the Garvellachs and is accompanied by a separately scoped eddy described only as after half-flood; it is not a fairway-wide or per-turn rate.",
+          "sourceIds": [
+            "img-5393-firth-of-lorn-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "fladda-easdale-loch-don-spring-rates-localized",
+          "summary": "The spring 3 kn statement between Fladda and Easdale and the similar rate off Loch Don are separate locality observations with no turn assignment or neap counterpart.",
+          "sourceIds": [
+            "img-5393-firth-of-lorn-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "legacy-firth-of-lorn-conflict",
+          "summary": "A preserved legacy Firth of Lorn v1 record uses the same nominal offsets but flattens 3 kn spring and 1.5 kn neap into gate-wide shared rates; it is not revised, reused or treated as the reviewed fairway record.",
+          "sourceIds": [
+            "img-5393-firth-of-lorn-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "broad-named-sea-representative-point-not-fairway",
+          "progressive-turn-times-approximate-not-regime-specific",
+          "general-fairway-rate-not-turn-regime-specific",
+          "localized-spring-rates-not-passage-turn-regime-exact",
+          "localized-eddy-and-races-not-operationally-modelled",
+          "legacy-firth-of-lorn-conflict",
           "true-bearings-not-stated",
           "slack-not-stated",
           "flow-model-not-stated",

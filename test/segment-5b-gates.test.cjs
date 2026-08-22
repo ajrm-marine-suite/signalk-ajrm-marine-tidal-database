@@ -100,9 +100,9 @@ test("Segment 5B appends records without changing any prior or conflicting recor
 });
 
 test("Segment 5B joins are one-to-one and have zero effective operational exposure", () => {
-	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.45");
+	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.46");
 	assert.equal(new Set(expected.map((entry) => entry.locationId)).size,2);
-	assert.equal(new Set(definitions.gates.map((entry) => entry.locationId)).size,25);
+	assert.equal(new Set(definitions.gates.map((entry) => entry.locationId)).size,27);
 	const gates = definitions.gates.map(normalizeGate);
 	const locations = [
 		...definitions.ports.map((entry) => ({
@@ -114,11 +114,11 @@ test("Segment 5B joins are one-to-one and have zero effective operational exposu
 	];
 	const diagnostics = catalogueDiagnostics({ ...definitions,gates },locations);
 	assert.equal(gates.filter((entry) => entry.legacy?.fromContract === "ajrm-tidal-gate-constants-v1").length,15);
-	assert.equal(gates.filter((entry) => !entry.legacy).length,10);
+	assert.equal(gates.filter((entry) => !entry.legacy).length,12);
 	assert.equal(diagnostics.valid,true);
 	assert.deepEqual(diagnostics.operationalLocationIds,[]);
-	assert.equal(diagnostics.summary.gateCount,25);
-	assert.equal(diagnostics.summary.nonOperationalCount,25);
+	assert.equal(diagnostics.summary.gateCount,27);
+	assert.equal(diagnostics.summary.nonOperationalCount,27);
 	for (const item of expected) {
 		assert.equal(definitions.gates.filter((entry) => entry.locationId === item.locationId).length,1);
 		assert.ok(diagnostics.issues.some((entry) => entry.code === "gate-not-operational" && entry.locationId === item.locationId));

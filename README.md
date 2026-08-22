@@ -2,14 +2,14 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.14 adds distinct photo-verified native v2 reference records for
-Caolas nan Con and Lynn of Morvern. Regime-neutral stream beginnings remain
-visible only in sourced unavailable reasons. The Loch Leven shared more-than
-5 kn lower bound and Lynn's passage/local flow figures remain separately scoped
-blocking uncertainty, never turn/regime rate fields. Missing exact rates,
-bearings, slack and supported models keep both out of Planning's operational
-allow-list. Candidate 10 and the conflicting legacy Sound of Mull record remain
-byte-for-byte unchanged.
+Version 0.1.15 adds distinct photo-verified native v2 reference records for
+Loch Feochan and the Firth of Lorn. Regime-neutral and explicitly approximate
+progressive-turn timings remain visible only in sourced unavailable reasons.
+Loch Feochan's asymmetric duration evidence and unqualified spring/neap rates,
+plus the Firth's general and separately localized rates, never become turn-rate
+or calculation fields. Missing exact rates, bearings, slack and supported
+models keep both out of Planning's operational allow-list. The imported legacy
+Firth Location and v1 gate remain byte-for-byte unchanged.
 
 ## Responsibilities
 
@@ -57,6 +57,9 @@ Loch Leven narrows from Caolas nan Con and documents both fail-closed joins.
 The [Segment 5B source review](docs/tidal-gate-source-review-segment-5b.md)
 records the Caolas nan Con derivation, the complete Lynn locality split and
 the legacy Sound of Mull conflict without changing prior records.
+The [Segment 6A source review](docs/tidal-gate-source-review-segment-6a.md)
+records the corrected two-file offset, Loch Feochan's asymmetric entrance
+cycle, the Firth's progressive fairway turns and every separate rate locality.
 
 ## Offline and refresh behaviour
 
@@ -80,7 +83,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.14 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.15 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 
