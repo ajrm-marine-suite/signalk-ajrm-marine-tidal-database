@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.16 — 2026-08-22
+
+- Add distinct native-v2 Cuan Sound and Grey Dogs / Bealach a' Choin Ghlais
+  records joined to fresh OS named-channel Location IDs, preserving the legacy
+  Cuan timing/secondary-port data and prior Grey Dogs Location byte-for-byte.
+- Apply the positive operational checklist and keep both reference-only:
+  approximate beginnings, missing true bearings/models, Cuan's absent slack
+  and rate scoping, and Grey Dogs' turn-ambiguous slack and conflicting spring
+  rate prevent native-v2 operation.
+- Keep every timing and slack machine field unavailable, rate observations
+  empty and the effective operational allow-list at zero, with focused
+  source-index, preservation, direction/regime/slack/rate and join tests.
+
 ## 0.1.15 — 2026-08-22
 
 - Add distinct native-v2 reference-only records for Loch Feochan and a fresh

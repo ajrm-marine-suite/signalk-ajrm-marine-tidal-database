@@ -2,14 +2,15 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.15 adds distinct photo-verified native v2 reference records for
-Loch Feochan and the Firth of Lorn. Regime-neutral and explicitly approximate
-progressive-turn timings remain visible only in sourced unavailable reasons.
-Loch Feochan's asymmetric duration evidence and unqualified spring/neap rates,
-plus the Firth's general and separately localized rates, never become turn-rate
-or calculation fields. Missing exact rates, bearings, slack and supported
-models keep both out of Planning's operational allow-list. The imported legacy
-Firth Location and v1 gate remain byte-for-byte unchanged.
+Version 0.1.16 adds distinct photo-verified native v2 reference records for
+Cuan Sound and Grey Dogs / Bealach a' Choin Ghlais. Their separately printed
+spring/neap beginnings remain only in sourced unavailable reasons because each
+is qualified as approximate. Cuan's western-part rates and absent slack, plus
+Grey Dogs' passage-wide rates, conflicting spring wording and turn-ambiguous
+slack periods, never become operational machine fields. Missing exact offsets,
+true bearings, complete rate/slack semantics and supported models keep both out
+of Planning's operational allow-list. The legacy Cuan data and prior Grey Dogs
+Location remain byte-for-byte unchanged.
 
 ## Responsibilities
 
@@ -60,6 +61,9 @@ the legacy Sound of Mull conflict without changing prior records.
 The [Segment 6A source review](docs/tidal-gate-source-review-segment-6a.md)
 records the corrected two-file offset, Loch Feochan's asymmetric entrance
 cycle, the Firth's progressive fairway turns and every separate rate locality.
+The [Segment 6B source review](docs/tidal-gate-source-review-segment-6b.md)
+records the corrected Cuan/Grey Dogs image index, positive operational
+assessment, passage/locality rate limits and turn-ambiguous Grey Dogs slack.
 
 ## Offline and refresh behaviour
 
@@ -83,7 +87,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.15 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.16 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

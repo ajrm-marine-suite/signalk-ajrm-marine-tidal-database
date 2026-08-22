@@ -58,11 +58,11 @@ test("native Segment 3A records coexist with lossless v1 migration and remain ou
 	];
 	const diagnostics = catalogueDiagnostics({ ...definitions,gates },locations);
 	assert.equal(gates.filter((entry) => entry.legacy?.fromContract === "ajrm-tidal-gate-constants-v1").length,15);
-	assert.equal(gates.filter((entry) => !entry.legacy).length,12);
+	assert.equal(gates.filter((entry) => !entry.legacy).length,14);
 	assert.equal(diagnostics.valid,true);
 	assert.deepEqual(diagnostics.operationalLocationIds,[]);
-	assert.equal(diagnostics.summary.gateCount,27);
-	assert.equal(diagnostics.summary.nonOperationalCount,27);
+	assert.equal(diagnostics.summary.gateCount,29);
+	assert.equal(diagnostics.summary.nonOperationalCount,29);
 	for (const item of expected) {
 		assert.ok(diagnostics.issues.some((entry) => entry.code === "gate-not-operational" && entry.locationId === item.locationId));
 		assert.equal(diagnostics.issues.some((entry) => entry.severity === "error" && entry.locationId === item.locationId),false);

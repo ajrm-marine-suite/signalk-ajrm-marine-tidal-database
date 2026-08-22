@@ -1,8 +1,8 @@
 {
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
-  "generatedAt": "2026-08-22T16:59:44.000Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.46",
+  "generatedAt": "2026-08-22T17:35:34.000Z",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.47",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -6242,6 +6242,488 @@
           "slack-not-stated",
           "flow-model-not-stated",
           "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "5270b58c-5b74-4a30-92ea-e8de3050f024",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5392-cuan-sound-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "flood-west-going",
+          "name": "Flood begins westwards",
+          "direction": {
+            "label": "Flood / west-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the stream as westwards but gives no true current-towards bearing.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source says the west-going flood begins about +270 min at springs relative to HW Oban; an approximate beginning is not an exact turn offset.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source says the west-going flood begins about +315 min at neaps relative to HW Oban; an approximate beginning is not an exact turn offset.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed Cuan Sound source gives no slack duration or before/after/centred placement for this beginning.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed Cuan Sound source gives no slack duration or before/after/centred placement for this beginning.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "ebb-east-going",
+          "name": "Ebb begins eastwards",
+          "direction": {
+            "label": "Ebb / east-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the stream as eastwards but gives no true current-towards bearing.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source says the east-going ebb begins about -105 min at springs relative to HW Oban; an approximate beginning is not an exact turn offset.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source says the east-going ebb begins about -60 min at neaps relative to HW Oban; an approximate beginning is not an exact turn offset.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed Cuan Sound source gives no slack duration or before/after/centred placement for this beginning.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed Cuan Sound source gives no slack duration or before/after/centred placement for this beginning.",
+              "sourceIds": [
+                "img-5392-cuan-sound-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5392-cuan-sound-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5392.jpeg; Cuan Sound / Tides; complete target tides block; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T17:35:34.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed notation key identifies Oban stream offsets as relative to HW; not reopened for Segment 6B",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T17:35:34.000Z",
+          "notes": "IMG_5392 is headed Cuan Sound and gives explicitly approximate, regime-specific beginnings for a west-going flood (+270 spring, +315 neap) and east-going ebb (-105 spring, -60 neap) using the Oban notation already verified as HW-relative. Because every beginning is qualified as about, all four machine offsets remain unavailable. The western-part spring 7 kn statement explicitly covers both directions, but the neap up-to 5 kn statement does not repeat that direction scope; neither has an exact Location join for the western rate locus. No slack, true bearing, flow model or regime interpolation is stated. The positive v2 operational checklist therefore fails closed without weakening the contract. The legacy Cuan Location, secondary port and v1 gate remain unchanged."
+        }
+      },
+      "cautions": [
+        {
+          "id": "western-part-eddies-near-an-cleiteadh",
+          "summary": "The source warns of strong eddies on both streams, especially near An Cleiteadh (Cleit Rock); the named-channel Location does not localize or model them.",
+          "sourceIds": [
+            "img-5392-cuan-sound-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "passage-with-or-against-tide-warning",
+          "summary": "The source warns that a spring passage against the tide needs adequate engine power and that travelling with the tide can also pose problems; no safe-passage timing window is supplied.",
+          "sourceIds": [
+            "img-5392-cuan-sound-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "named-channel-representative-not-rate-locus",
+          "summary": "The joined Location is an OS Open Names naming point for the Cuan Sound Channel feature, not the narrows, a surveyed gate, fairway, safe-water point, western-part rate locus or exact stream observation.",
+          "sourceIds": [
+            "img-5392-cuan-sound-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "spring-neap-beginnings-explicitly-approximate",
+          "summary": "The source supplies distinct spring/neap west-going beginnings of about +270/+315 min and east-going beginnings of about -105/-60 min relative to HW Oban, but none is an exact turn instant.",
+          "sourceIds": [
+            "img-5392-cuan-sound-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "western-part-rates-not-complete-turn-observations",
+          "summary": "In the western part the source reports greatest strength soon after turning, a spring rate of 7 kn explicitly in both directions and a neap rate up to 5 kn without expressly repeating the both-directions scope. The new named-channel point does not identify that western locus, so these are not copied into exact gate-local per-turn rate observations.",
+          "sourceIds": [
+            "img-5392-cuan-sound-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "structured-publication-citation-incomplete",
+          "summary": "The supplied photograph shows no publication title, publisher, edition or page number, so the operational structured-source requirement is not complete.",
+          "sourceIds": [
+            "img-5392-cuan-sound-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "spring-neap-beginnings-explicitly-approximate",
+          "named-channel-point-not-western-rate-locus",
+          "west-east-labels-not-true-bearings",
+          "cuan-neap-rate-not-explicitly-per-direction",
+          "rate-observations-not-exact-gate-local-per-turn",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated",
+          "structured-publication-citation-incomplete",
+          "strong-eddies-and-passage-warning-not-operationally-modelled"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "a3df95d7-a216-476b-a10f-1d8909810c47",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5391-grey-dogs-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "flood-west-going",
+          "name": "Flood begins westwards",
+          "direction": {
+            "label": "Flood / west-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the stream as westwards but gives no true current-towards bearing.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source says the west-going flood begins about +270 min at springs relative to HW Oban and separately warns that the turn is difficult to forecast within an hour either side; this is not an exact turn offset.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source says the west-going flood begins about +315 min at neaps relative to HW Oban and separately warns that the turn is difficult to forecast within an hour either side; this is not an exact turn offset.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The source reports a passage-level 15-minute spring slack-water period but does not assign it to this turn or define centred versus before/after placement.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The source reports a passage-level 60-minute neap slack-water period but does not assign it to this turn or define centred versus before/after placement.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "ebb-east-going",
+          "name": "Ebb begins eastwards",
+          "direction": {
+            "label": "Ebb / east-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the stream as eastwards but gives no true current-towards bearing.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source says the east-going ebb begins about -105 min at springs relative to HW Oban and separately warns that the turn is difficult to forecast within an hour either side; this is not an exact turn offset.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source says the east-going ebb begins about -60 min at neaps relative to HW Oban and separately warns that the turn is difficult to forecast within an hour either side; this is not an exact turn offset.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The source reports a passage-level 15-minute spring slack-water period but does not assign it to this turn or define centred versus before/after placement.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The source reports a passage-level 60-minute neap slack-water period but does not assign it to this turn or define centred versus before/after placement.",
+              "sourceIds": [
+                "img-5391-grey-dogs-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5391-grey-dogs-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5391.jpeg; Grey Dogs / Tides and visible Directions; target timing/rate/slack text visible; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T17:35:34.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed notation key identifies Oban stream offsets as relative to HW; not reopened for Segment 6B",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T17:35:34.000Z",
+          "notes": "IMG_5391 is headed Grey Dogs, identifies the charted Bealach a' Choin Ghlais channel between Lunga and Scarba and gives explicitly approximate, regime-specific beginnings for west-going flood (+270 spring, +315 neap) and east-going ebb (-105 spring, -60 neap) using the Oban notation already verified as HW-relative. It also says turn forecasting may vary by an hour either side. The passage-level 15-minute spring and 60-minute neap slack periods have no individual-turn scope or placement and remain unavailable on every turn. Passage rates of 8.5 kn springs and 6.5 kn neaps are stated for flood and ebb, but a later line calls the spring rate about 8 kn; the contract must not duplicate passage-wide values into turn records. No true bearing, flow model or regime interpolation is stated. The positive v2 operational checklist therefore fails closed without weakening the contract. The legacy Grey Dogs Location remains unchanged."
+        }
+      },
+      "cautions": [
+        {
+          "id": "eddies-standing-waves-and-loss-of-control",
+          "summary": "The source warns of strong eddies and standing waves, particularly at springs, and says control can be very difficult except at slack; no spatial or dynamic model is supplied.",
+          "sourceIds": [
+            "img-5391-grey-dogs-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "ebb-sets-toward-islets",
+          "summary": "The source says the ebb is more dangerous because it tends to set a boat toward the islets; the representative channel point is not an islet-clearance line or route.",
+          "sourceIds": [
+            "img-5391-grey-dogs-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "quiet-weather-near-slack-only",
+          "summary": "The visible Directions advise attempting the passage only in quiet weather at or near slack and keeping close off the clean Scarba shore; the Directions continue beyond the photographed frame and are not exhaustively captured.",
+          "sourceIds": [
+            "img-5391-grey-dogs-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "named-channel-representative-not-passage-line",
+          "summary": "The joined Location is an OS Open Names naming point for Bealach a' Choin Ghlais Channel, not the narrowest part, fairway, surveyed gate, safe-water point, islet-clearance line or exact turn, slack or rate locus.",
+          "sourceIds": [
+            "img-5391-grey-dogs-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-beginnings-approximate-and-locally-unpredictable",
+          "summary": "The source supplies distinct spring/neap west-going beginnings of about +270/+315 min and east-going beginnings of about -105/-60 min relative to HW Oban, then warns that the turn may be difficult to forecast within an hour either side of the expected time.",
+          "sourceIds": [
+            "img-5391-grey-dogs-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "passage-slack-periods-not-turn-placed",
+          "summary": "The source's passage-level slack periods are 15 minutes at springs and 60 minutes at neaps, but it does not say which turn or turns they apply to or whether either period is centred on, before or after a turn.",
+          "sourceIds": [
+            "img-5391-grey-dogs-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "passage-rates-not-turn-locus-records",
+          "summary": "The passage description reports 8.5 kn at springs and 6.5 kn at neaps on flood and ebb, but these passage-wide maxima are not copied into both turn directions or assigned to the OS naming point as an exact rate locus.",
+          "sourceIds": [
+            "img-5391-grey-dogs-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "spring-rate-wording-conflict",
+          "summary": "A later Tides line says the spring rate is about 8 kn, while the passage description reports 8.5 kn springs; no exact structured spring maximum is selected from that conflict.",
+          "sourceIds": [
+            "img-5391-grey-dogs-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "structured-publication-citation-incomplete",
+          "summary": "The supplied photograph shows no publication title, publisher, edition or page number, so the operational structured-source requirement is not complete.",
+          "sourceIds": [
+            "img-5391-grey-dogs-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "turn-beginnings-explicitly-approximate-and-locally-unpredictable",
+          "named-channel-point-not-exact-turn-slack-rate-locus",
+          "west-east-labels-not-true-bearings",
+          "passage-slack-periods-not-assigned-to-individual-turns",
+          "slack-placement-before-after-centred-not-stated",
+          "passage-wide-rates-not-copied-to-turns",
+          "spring-rate-eight-versus-eight-and-a-half-conflict",
+          "rate-observations-not-exact-gate-local-per-turn",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated",
+          "structured-publication-citation-incomplete",
+          "strong-eddies-waves-islet-set-and-weather-warning-not-operationally-modelled"
         ]
       }
     }
