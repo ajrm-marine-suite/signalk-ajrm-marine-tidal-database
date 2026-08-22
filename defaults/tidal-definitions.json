@@ -1,8 +1,8 @@
 {
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
-  "generatedAt": "2026-08-22T14:06:04.000Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.41",
+  "generatedAt": "2026-08-22T14:42:36.000Z",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.42",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -4195,6 +4195,407 @@
         "reasons": [
           "turn-times-not-regime-specific",
           "shared-up-to-rate-not-turn-regime-exact",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "b4ff0772-bcba-4392-90e0-2f6d955a46f3",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5407-northwest-mull-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "north-going",
+          "name": "North-going stream begins",
+          "direction": {
+            "label": "North-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (-310 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5407-northwest-mull-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (-310 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5407-northwest-mull-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "south-going",
+          "name": "South-going stream begins",
+          "direction": {
+            "label": "South-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (+75 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5407-northwest-mull-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (+75 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5407-northwest-mull-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5407-northwest-mull-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5407.jpeg; Northwest Mull / Tides; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:42:36.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; immediately adjacent Tides block explicitly identifies the zero-offset Oban stream event as HW; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:42:36.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T14:42:36.000Z",
+          "notes": "The timing is stated under the broad Northwest Mull heading as regime-neutral nominal offsets of -310 min north-going and +75 min south-going. The up-to 2.5 kn rate applies only off Caliach Point and Rubh' a' Chaoil, while the Treshnish Isles strength is qualitative. No rate is assigned to a turn or regime; this record is reference-only."
+        }
+      },
+      "cautions": [],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "broad-heading-representative-point",
+          "summary": "The timing block is headed Northwest Mull; the joined Location is a representative Caliach Point headland marker, not a surveyed route or gate line.",
+          "sourceIds": [
+            "img-5407-northwest-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives regime-neutral HW Oban offsets of -310 min north-going and +75 min south-going, with no separate spring/neap timings.",
+          "sourceIds": [
+            "img-5407-northwest-mull-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "two-headland-up-to-rate",
+          "summary": "The up-to 2.5 kn observation is limited to off Caliach Point and Rubh' a' Chaoil and has no independent turn or spring/neap applicability.",
+          "sourceIds": [
+            "img-5407-northwest-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "treshnish-strength-unquantified",
+          "summary": "The source separately describes strong streams around the Treshnish Isles without a numeric rate and says that strength is not general elsewhere in this section.",
+          "sourceIds": [
+            "img-5407-northwest-mull-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "broad-heading-representative-point",
+          "turn-times-not-regime-specific",
+          "locality-only-up-to-rate-not-turn-regime-exact",
+          "treshnish-rate-not-stated",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "511edf0a-5ecc-419c-8f81-9a4553e559bf",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5405-outer-loch-sunart-tides",
+          "img-5406-central-loch-sunart-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "in-going",
+          "name": "In-going stream begins",
+          "direction": {
+            "label": "In-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one approximate regime-neutral nominal offset (-300 min); it cannot be treated as exact or assigned to spring.",
+              "sourceIds": [
+                "img-5405-outer-loch-sunart-tides",
+                "img-5406-central-loch-sunart-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one approximate regime-neutral nominal offset (-300 min); it cannot be treated as exact or assigned to neap.",
+              "sourceIds": [
+                "img-5405-outer-loch-sunart-tides",
+                "img-5406-central-loch-sunart-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "out-going",
+          "name": "Out-going stream begins",
+          "direction": {
+            "label": "Out-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one approximate regime-neutral nominal offset (+90 min); it cannot be treated as exact or assigned to spring.",
+              "sourceIds": [
+                "img-5405-outer-loch-sunart-tides",
+                "img-5406-central-loch-sunart-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one approximate regime-neutral nominal offset (+90 min); it cannot be treated as exact or assigned to neap.",
+              "sourceIds": [
+                "img-5405-outer-loch-sunart-tides",
+                "img-5406-central-loch-sunart-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5405-outer-loch-sunart-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5405.jpeg; Outer Loch Sunart / Tides; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:42:36.000Z"
+          },
+          {
+            "id": "img-5406-central-loch-sunart-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5406.jpeg; Central Loch Sunart / Tides; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:42:36.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; adjacent chapter Tides block explicitly identifies the zero-offset Oban stream event as HW; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:42:36.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T14:42:36.000Z",
+          "notes": "Outer and Central Loch Sunart independently repeat approximate regime-neutral offsets of -300 min in-going and +90 min out-going. Outer-loch, Carna/Loch Teacuis and Laudale rates are distinct locality statements with no turn or regime assignment. Salen's separate tidal constant statement is not used as a stream turn or rate. This record is reference-only."
+        }
+      },
+      "cautions": [],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "turn-times-explicitly-approximate",
+          "summary": "Both reviewed Loch Sunart sections explicitly qualify the -300 min in-going and +90 min out-going HW Oban offsets as approximate.",
+          "sourceIds": [
+            "img-5405-outer-loch-sunart-tides",
+            "img-5406-central-loch-sunart-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives no separate spring/neap turn timings for Loch Sunart.",
+          "sourceIds": [
+            "img-5405-outer-loch-sunart-tides",
+            "img-5406-central-loch-sunart-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "outer-loch-variable-general-rate",
+          "summary": "Outer Loch Sunart is described as generally below 1 kn, with material variation according to channel width and depth; no turn or regime is assigned.",
+          "sourceIds": [
+            "img-5405-outer-loch-sunart-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "distinct-central-loch-rate-localities",
+          "summary": "The 2.5 kn statement applies north of Carna and in the entrances to Loch Teacuis; Laudale Narrows is a separate 3-3.5 kn range. Neither has turn or spring/neap applicability.",
+          "sourceIds": [
+            "img-5406-central-loch-sunart-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "whole-loch-representative-point",
+          "summary": "The joined Loch Sunart Location is a whole-waterbody representative point and does not identify the outer fairway, Carna, Loch Teacuis entrances or Laudale Narrows.",
+          "sourceIds": [
+            "img-5405-outer-loch-sunart-tides",
+            "img-5406-central-loch-sunart-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "turn-times-explicitly-approximate",
+          "turn-times-not-regime-specific",
+          "locality-rates-not-turn-regime-exact",
+          "whole-loch-representative-point",
           "true-bearings-not-stated",
           "slack-not-stated",
           "flow-model-not-stated",

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.11 — 2026-08-22
+
+- Add photo-verified native v2 reference records for Northwest Mull and Loch
+  Sunart, preserving signed HW Oban timing evidence without assigning
+  regime-neutral or approximate values to spring/neap fields.
+- Keep Caliach Point/Rubh' a' Chaoil, Treshnish, outer-loch, Carna/Loch Teacuis
+  and Laudale Narrows rate statements distinct and outside turn/regime rate
+  observations.
+- Withhold south-end Tiree because its vague timing locus has no defensible
+  spatial join, and document the corrected photograph index.
+- Add focused catalogue, locality and effective fail-closed tests.
+
 ## 0.1.10 — 2026-08-22
 
 - Add photo-verified native v2 reference records for Sound of Iona and Gunna

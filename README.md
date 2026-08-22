@@ -2,12 +2,14 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.10 adds photo-verified native v2 reference records for Sound of
-Iona and Gunna Sound. Their nominal turn times, shared `up-to` rate bounds,
-source cautions and uncertainty remain visible, but missing exact
-turn/regime-specific rates, bearings, slack and supported models keep both out
-of Planning's operational allow-list. All 15 existing v1 records also remain
-visible as `needs-review`; none is silently promoted to operational use.
+Version 0.1.11 adds photo-verified native v2 reference records for Northwest
+Mull and Loch Sunart. Their nominal turn times and carefully separated local
+rate statements remain visible, but broad/approximate timing loci and missing
+exact turn/regime-specific rates, bearings, slack and supported models keep
+both out of Planning's operational allow-list. South-end Tiree remains
+withheld because no defensible gate point was established. All 15 existing v1
+records also remain visible as `needs-review`; none is silently promoted to
+operational use.
 
 ## Responsibilities
 
@@ -45,7 +47,9 @@ effective readiness rules and revisioned GET/PUT/DELETE boundary. Gate timing
 mutation belongs here; Location Editor continues to own spatial records only.
 The compact [Segment 3A source review](docs/tidal-gate-source-review-segment-3a.md)
 maps the reviewed photographs, imported facts and withheld southeast-Coll
-candidate without copying publication prose.
+candidate without copying publication prose. The [Segment 3B source review](docs/tidal-gate-source-review-segment-3b.md)
+records the corrected heading-to-image index, locality separation and withheld
+south-end Tiree candidate.
 
 ## Offline and refresh behaviour
 
@@ -69,7 +73,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.10 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.11 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 
