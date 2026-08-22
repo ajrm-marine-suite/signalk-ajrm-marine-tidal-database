@@ -65,6 +65,18 @@ test("bundled definitions add missing ids without replacing any durable user fie
 	assert.ok(merged.ports.some((entry)=>entry.locationId==="direct"));
 });
 
+test("the Greenock reference range backfills only the exact prior blank station record", () => {
+	const greenockId = "29910eb5-6c47-4796-8af7-592742737562";
+	const levels = {mhws:3.4,mhwn:2.8,mlwn:1,mlws:0.3};
+	const greenock = { ...port(greenockId),referenceLevels:null,prediction:{mode:"provider",providerId:"ukhoTidalEvents",stationId:"0404"} };
+	const bundledGreenock = { ...greenock,referenceLevels:levels };
+	assert.deepEqual(mergeBundledDefinitions(catalogue({ports:[greenock]}),catalogue({ports:[bundledGreenock]})).ports[0].referenceLevels,levels);
+	const custom = { ...greenock,referenceLevels:{mhws:9,mhwn:8,mlwn:7,mlws:6} };
+	assert.deepEqual(mergeBundledDefinitions(catalogue({ports:[custom]}),catalogue({ports:[bundledGreenock]})).ports[0].referenceLevels,custom.referenceLevels);
+	const differentStation = { ...greenock,prediction:{...greenock.prediction,stationId:"user-station"} };
+	assert.equal(mergeBundledDefinitions(catalogue({ports:[differentStation]}),catalogue({ports:[bundledGreenock]})).ports[0].referenceLevels,null);
+});
+
 test("durable v1 gates migrate losslessly once and bundled changes do not overwrite them", async (t) => {
 	const directory = await fsp.mkdtemp(path.join(os.tmpdir(), "ajrm-gate-store-"));
 	t.after(() => fsp.rm(directory, { recursive:true, force:true }));

@@ -2,7 +2,7 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.20 adds the final seven photographed candidates and publishes
+Version 0.1.21 adds the final seven photographed candidates and publishes
 explicit operational-with-assumptions profiles for all 24 completed
 source-reviewed records. The original evidence records
 remain preserved for inspection. The profiles turn reviewed published guidance
@@ -98,7 +98,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.20 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.21 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

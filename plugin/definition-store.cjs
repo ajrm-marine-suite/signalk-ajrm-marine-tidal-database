@@ -7,6 +7,9 @@ const { randomUUID } = require("node:crypto");
 const { normalizeGate, validateGateV2 } = require("./gate-contract.cjs");
 
 const CONTRACT = "ajrm-marine-tidal-database-definitions-v1";
+const SAFE_PORT_BACKFILLS = Object.freeze({
+	"29910eb5-6c47-4796-8af7-592742737562": { providerId:"ukhoTidalEvents", stationId:"0404" },
+});
 
 function validate(value) {
 	if (value?.contract !== CONTRACT || !Array.isArray(value.ports) || !Array.isArray(value.areas) || !Array.isArray(value.gates)) throw new Error("Tidal definition catalogue is invalid.");
@@ -87,6 +90,16 @@ function mergeBundledDefinitions(current, bundled) {
 		const existing = portById.get(bundledPort.locationId);
 		if (!existing) {
 			next.ports.push(structuredClone(bundledPort));
+		} else {
+			const backfill = SAFE_PORT_BACKFILLS[bundledPort.locationId];
+			const bundledLevels = bundledPort.referenceLevels;
+			if (backfill
+				&& existing.referenceLevels == null
+				&& existing.prediction?.providerId === backfill.providerId
+				&& existing.prediction?.stationId === backfill.stationId
+				&& ["mhws","mhwn","mlwn","mlws"].every((key) => Number.isFinite(bundledLevels?.[key]))) {
+				existing.referenceLevels = structuredClone(bundledLevels);
+			}
 		}
 	}
 	for (const key of ["areas", "gates"]) {

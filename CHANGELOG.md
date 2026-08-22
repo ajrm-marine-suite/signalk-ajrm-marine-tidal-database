@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.21 — 2026-08-22
+
+- Backfill the provisional Greenock reference range when upgrading an exact
+  prior bundled Greenock station record whose range is still blank, allowing
+  the Sanda Sound and close-west Mull profiles to become operational on
+  existing installations as well as fresh installs.
+- Preserve any user-entered Greenock reference range and refuse the backfill
+  when the provider or station identity has been changed.
+
 ## 0.1.20 — 2026-08-22
 
 - Add seven source-reviewed native-v2 records for Sound of Jura, west of
