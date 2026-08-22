@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.1.9 — 2026-08-22
+
+- Add the documented `ajrm-tidal-gate-constants-v2` contract with stable
+  Location joins, explicit HW/LW references, independently named/directed
+  turns, explicit timing/slack states, bounded qualified rate observations,
+  structured provenance/review and fail-closed readiness.
+- Migrate durable and bundled v1 gates losslessly to visible `needs-review` v2
+  records without assigning cardinal text to true bearings, shared rates to
+  directions, ambiguous slack to a placement or missing values to zero.
+- Add contract/unit/readiness validation, effective Location/reference-port
+  catalogue diagnostics and an operational allow-list that fails closed when
+  joined services or capabilities are unavailable.
+- Expose the v2 catalogue through the additive service, HTTP API and OpenAPI;
+  add revisioned gate PUT/DELETE operations to the timing-data owner.
+- Preserve every durable port, area and gate when a bundled record with the
+  same ID changes; package seeds now add missing records only.
+- Serialize definition mutations through unique atomic writes, retain durable
+  revisioned tombstones for deleted bundled gates, and leave in-memory state
+  unchanged when persistence fails.
+- Preserve invalid negative v1 rate/slack edits as explicit unknown legacy
+  values instead of failing the whole durable-catalogue migration.
+- Require meaningful citations for operational no-slack assertions and notes,
+  honour blocking cautions/hazards as well as uncertainty, and diagnose broken
+  named-locality Location joins.
+- Align OpenAPI strict unions and additional-property rules with runtime v2
+  validation, with focused parity tests.
+
 ## 0.1.8 — 2026-08-22
 
 - Add Portsmouth and correct the previously omitted/incomplete Bucklers Hard

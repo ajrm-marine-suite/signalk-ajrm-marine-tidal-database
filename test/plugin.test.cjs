@@ -14,9 +14,14 @@ async function fixture(t) {
 	const directory = await fs.mkdtemp(path.join(os.tmpdir(), "ajrm-tidal-plugin-"));
 	t.after(() => fs.rm(directory, { recursive:true, force:true }));
 	const port = definitions.ports.find((entry) => entry.prediction.mode === "provider");
+	const locations = [
+		...definitions.ports.map((entry) => ({ id:entry.locationId,name:entry.name,types:[`tidal${entry.kind === "standard" ? "Standard" : "Secondary"}Port`] })),
+		...definitions.gates.map((entry) => ({ id:entry.locationId,name:entry.name,types:["tidalGate"] })),
+	];
+	locations.find((entry) => entry.id === port.locationId).feature = { geometry:{ type:"Point",coordinates:[-5.47,56.41] } };
 	const app = {
 		getDataDirPath:() => directory, setPluginStatus(){}, handleMessage(){},
-		ajrmMarineLocations:{ list:async () => [{ id:port.locationId, name:port.name, types:["tidalStandardPort"], geometry:{ type:"Point", coordinates:[-5.47,56.41] } }] },
+		ajrmMarineLocations:{ list:async () => locations },
 	};
 	const routes = new Map(); const router = {};
 	for (const method of ["get","post","put","delete"]) router[method] = (route,handler) => routes.set(`${method.toUpperCase()} ${route}`,handler);
@@ -28,7 +33,14 @@ async function fixture(t) {
 test("the standalone service owns tidal data and exposes all seeded ports", async (t) => {
 	const { app,plugin,call,port } = await fixture(t);
 	assert.equal(app.ajrmMarineTidalDatabase.contract, "ajrm-marine-tidal-database-service-v1");
+	assert.equal(app.ajrmMarineTidalDatabase.gateContract,"ajrm-tidal-gate-constants-v2");
 	assert.equal(app.ajrmMarineTidalDatabase.listPorts().length, definitions.ports.length);
+	assert.ok(app.ajrmMarineTidalDatabase.listGates().every((entry) => entry.contract === "ajrm-tidal-gate-constants-v2"));
+	const gateCatalogue = await app.ajrmMarineTidalDatabase.getGateCatalogue();
+	assert.equal(gateCatalogue.contract,"ajrm-tidal-gate-catalogue-v2");
+	assert.equal(gateCatalogue.gates.length,definitions.gates.length);
+	assert.deepEqual(gateCatalogue.operationalLocationIds,[]);
+	assert.equal(gateCatalogue.diagnostics.summary.legacyMigrationCount,definitions.gates.length);
 	const status = await call("GET","/status");
 	assert.equal(status.body.contract, "ajrm-marine-tidal-database-status-v1");
 	assert.equal(status.body.summary.stationCount, new Set(definitions.ports.filter((entry)=>entry.prediction.mode==="provider").map((entry)=>`${entry.prediction.providerId}:${entry.prediction.stationId}`)).size);
@@ -36,6 +48,7 @@ test("the standalone service owns tidal data and exposes all seeded ports", asyn
 	assert.equal(status.body.policy.discoveryCacheUtcYearBounded, true);
 	assert.equal(status.body.policy.requestIntervalSeconds, 5);
 	assert.equal(status.body.ports.length, definitions.ports.length);
+	assert.equal(status.body.gateCatalogue.summary.operationalCount,0);
 	const projection = await call("GET","/tides/status",{ query:{ portId:port.locationId } });
 	assert.equal(projection.body.contract, "ajrm-marine-tide-resolver-v1");
 	assert.equal(projection.body.selectedPort.id, port.locationId);
@@ -59,8 +72,42 @@ test("the seed includes corrected Bucklers Hard data and explicit direct-station
 test("OpenAPI and webapp metadata are present", async (t) => {
 	const { plugin } = await fixture(t);
 	assert.equal(plugin.getOpenApi().info.title, "AJRM Marine Tidal Database");
+	assert.ok(plugin.getOpenApi().components.schemas.TidalGateV2);
 	const packageJson = require("../package.json");
 	assert.equal(packageJson.signalk.appIcon, "./icon-120.png");
+	await plugin.stop();
+});
+
+test("gate HTTP mutation is revisioned, joined and owned by Tidal Database", async (t) => {
+	const { app,plugin,call } = await fixture(t);
+	const catalogue = await call("GET","/definitions/gates");
+	const existing = catalogue.body.gates[0];
+	const replacement = { ...existing, revision:existing.revision + 1 };
+	let saved = await call("PUT","/definitions/gates/:locationId",{
+		params:{ locationId:existing.locationId },body:replacement,
+	});
+	assert.equal(saved.statusCode,200);
+	assert.equal(saved.body.gate.revision,2);
+	assert.equal(app.ajrmMarineTidalDatabase.getGate(existing.locationId).revision,2);
+	saved = await call("PUT","/definitions/gates/:locationId",{
+		params:{ locationId:existing.locationId },body:replacement,
+	});
+	assert.equal(saved.statusCode,400);
+	assert.match(saved.body.error,/revision conflict/);
+	const mismatch = await call("PUT","/definitions/gates/:locationId",{
+		params:{ locationId:existing.locationId },body:{ ...replacement,locationId:"different",revision:3 },
+	});
+	assert.equal(mismatch.statusCode,400);
+	assert.match(mismatch.body.error,/must match/);
+	const forbidden = await call("DELETE","/definitions/gates/:locationId",{
+		params:{ locationId:existing.locationId },query:{ expectedRevision:"2" },skPrincipal:{ permissions:"readonly" },
+	});
+	assert.equal(forbidden.statusCode,403);
+	const removed = await call("DELETE","/definitions/gates/:locationId",{
+		params:{ locationId:existing.locationId },query:{ expectedRevision:"2" },
+	});
+	assert.equal(removed.statusCode,200);
+	assert.equal(app.ajrmMarineTidalDatabase.getGate(existing.locationId),null);
 	await plugin.stop();
 });
 

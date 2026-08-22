@@ -4,6 +4,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
+const packageVersion = require("../package.json").version;
 
 test("webapp explains the refresh floor and exposes both station and port tables", () => {
 	const html = fs.readFileSync(path.join(__dirname,"..","public","index.html"),"utf8");
@@ -23,8 +24,9 @@ test("webapp explains the refresh floor and exposes both station and port tables
 	assert.match(html, /id="tideDetailsPane"/);
 	assert.match(html, /id="tideGraphPane"/);
 	assert.match(app, /class="view-tide"/);
-	assert.match(app, /import\("\.\/tide-curve\.mjs\?v=0\.1\.8"\)/);
-	assert.match(html, /app\.js\?v=0\.1\.8/);
+	assert.ok(app.includes(`import("./tide-curve.mjs?v=${packageVersion}")`));
+	assert.ok(html.includes(`styles.css?v=${packageVersion}`));
+	assert.ok(html.includes(`app.js?v=${packageVersion}`));
 	assert.match(html, /High-only or low-only stations cannot supply current height or a full curve/);
 	assert.match(html, /smooth estimate interpolated between UKHO-predicted high- and low-water times and heights/);
 	assert.match(app, /tideCurveSvg/);

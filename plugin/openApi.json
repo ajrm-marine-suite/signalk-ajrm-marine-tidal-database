@@ -1,20 +1,484 @@
 {
   "openapi": "3.0.3",
-  "info": { "title": "AJRM Marine Tidal Database", "version": "0.1.8" },
+  "info": {
+    "title": "AJRM Marine Tidal Database",
+    "version": "0.1.9",
+    "description": "Provider-neutral tidal predictions and the versioned ajrm-tidal-gate-constants-v2 contract. Gate timing mutations belong to Tidal Database; names, types and geometry remain owned by Location Editor."
+  },
   "paths": {
-    "/status": { "get": { "summary": "Inspect providers, cached stations and tidal ports", "responses": { "200": { "description": "Database status" } } } },
-    "/definitions": { "get": { "summary": "Read tidal prediction and correction definitions", "responses": { "200": { "description": "Definition catalogue" } } } },
+    "/status": {
+      "get": {
+        "summary": "Inspect providers, cached stations, tidal ports and effective gate-catalogue readiness",
+        "responses": { "200": { "description": "Database status" } }
+      }
+    },
+    "/definitions": {
+      "get": {
+        "summary": "Read tidal prediction, correction, area and migrated v2 gate definitions",
+        "responses": { "200": { "description": "Definition catalogue" } }
+      }
+    },
+    "/definitions/gates": {
+      "get": {
+        "summary": "Read v2 gate definitions and effective catalogue diagnostics",
+        "responses": {
+          "200": {
+            "description": "Versioned gate catalogue",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TidalGateCatalogueV2" } } }
+          }
+        }
+      }
+    },
+    "/definitions/gates/diagnostics": {
+      "get": {
+        "summary": "Read gate shape, readiness, Location join and reference-port diagnostics",
+        "responses": {
+          "200": {
+            "description": "Gate catalogue diagnostics",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GateCatalogueDiagnostics" } } }
+          }
+        }
+      }
+    },
+    "/definitions/gates/{locationId}": {
+      "parameters": [
+        { "$ref": "#/components/parameters/LocationId" }
+      ],
+      "put": {
+        "summary": "Create, replace or restore a revisioned v2 gate definition",
+        "description": "Requires Signal K read/write or admin access. A new record starts at revision 1; a replacement or tombstone restore must be exactly one revision beyond the durable record. Operational claims are rejected unless contract, review, source, Location join and reference-port checks pass.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TidalGateV2" } } }
+        },
+        "responses": {
+          "200": { "description": "Gate saved" },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      },
+      "delete": {
+        "summary": "Remove a gate timing definition while retaining its spatial Location",
+        "description": "Requires Signal K read/write or admin access and the current durable revision. Deletion consumes the next revision in a durable tombstone so bundled seeds and concurrent stale PUTs cannot recreate the gate on restart.",
+        "parameters": [
+          {
+            "name": "expectedRevision",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 },
+            "description": "Current durable gate revision used for optimistic concurrency."
+          }
+        ],
+        "responses": {
+          "200": { "description": "Gate removed" },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
     "/definitions/ports/{locationId}": {
+      "parameters": [ { "$ref": "#/components/parameters/LocationId" } ],
       "put": { "summary": "Create or replace a tidal definition for a spatial Location", "responses": { "200": { "description": "Definition saved" } } },
       "delete": { "summary": "Remove a tidal definition while retaining its spatial Location", "responses": { "200": { "description": "Definition removed" } } }
     },
     "/definitions/areas/{locationId}": {
+      "parameters": [ { "$ref": "#/components/parameters/LocationId" } ],
       "put": { "summary": "Create or replace the serving-port assignment for a tidal-region Location", "responses": { "200": { "description": "Area assignment saved" } } },
       "delete": { "summary": "Remove a tidal-region assignment while retaining its spatial Location", "responses": { "200": { "description": "Area assignment removed" } } }
     },
-    "/stations/update": { "post": { "summary": "Update stations that are more than 24 hours old", "responses": { "200": { "description": "Updated database status" } } } },
-    "/tides/status": { "get": { "summary": "Resolve a tide projection by position or port", "responses": { "200": { "description": "Tide resolver projection" } } } },
-    "/tides/pin": { "post": { "summary": "Set or clear the selected-port override", "responses": { "200": { "description": "Updated tide projection" } } } },
-    "/tides/refresh": { "post": { "summary": "Resolve and refresh if the selected station is due", "responses": { "200": { "description": "Updated tide projection" } } } }
+    "/stations/update": {
+      "post": { "summary": "Update stations that are more than 24 hours old", "responses": { "200": { "description": "Updated database status" } } }
+    },
+    "/tides/status": {
+      "get": { "summary": "Resolve a tide projection by position or stable port Location id", "responses": { "200": { "description": "Tide resolver projection" } } }
+    },
+    "/tides/pin": {
+      "post": { "summary": "Set or clear the selected-port override", "responses": { "200": { "description": "Updated tide projection" } } }
+    },
+    "/tides/refresh": {
+      "post": { "summary": "Resolve and refresh if the selected station is due", "responses": { "200": { "description": "Updated tide projection" } } }
+    }
+  },
+  "components": {
+    "parameters": {
+      "LocationId": {
+        "name": "locationId",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string", "minLength": 1 },
+        "description": "Stable Location Editor id; display names are never identifiers."
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Invalid shape, join, readiness or revision",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "Forbidden": {
+        "description": "Signal K read/write or admin access is required",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": ["error"],
+        "properties": { "error": { "type": "string" } }
+      },
+      "SourceIds": {
+        "type": "array",
+        "items": { "type": "string", "minLength": 1 },
+        "uniqueItems": true
+      },
+      "ExplicitMeasurement": {
+        "description": "A number is present only when state is known. Unknown and unavailable never imply zero.",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["state", "value"],
+            "properties": {
+              "state": { "type": "string", "enum": ["known"] },
+              "value": { "type": "number" },
+              "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["state"],
+            "properties": {
+              "state": { "type": "string", "enum": ["unknown", "unavailable"] },
+              "reason": { "type": "string", "nullable": true },
+              "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "SlackValue": {
+        "description": "Slack placement is a strict union; no missing duration becomes zero and legacy duration is never assumed symmetric. sourceIds cite the semantics-level assertion, and are required for operational none.",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["semantics", "total"],
+            "properties": {
+              "semantics": { "type": "string", "enum": ["total-centered-on-turn"] },
+              "total": { "$ref": "#/components/schemas/ExplicitMeasurement" },
+              "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["semantics", "before", "after"],
+            "properties": {
+              "semantics": { "type": "string", "enum": ["before-and-after-turn"] },
+              "before": { "$ref": "#/components/schemas/ExplicitMeasurement" },
+              "after": { "$ref": "#/components/schemas/ExplicitMeasurement" },
+              "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["semantics"],
+            "properties": {
+              "semantics": { "type": "string", "enum": ["none"] },
+              "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["semantics"],
+            "properties": {
+              "semantics": { "type": "string", "enum": ["unknown", "unavailable"] },
+              "reason": { "type": "string", "nullable": true },
+              "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["semantics", "reported"],
+            "properties": {
+              "semantics": { "type": "string", "enum": ["legacy-ambiguous"] },
+              "reported": { "$ref": "#/components/schemas/ExplicitMeasurement" },
+              "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "GateTurn": {
+        "type": "object",
+        "required": ["id", "name", "direction", "offsets", "slack"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "direction": {
+            "type": "object",
+            "required": ["label", "bearingDegreesTrue"],
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "bearingDegreesTrue": { "$ref": "#/components/schemas/ExplicitMeasurement" }
+            },
+            "additionalProperties": false
+          },
+          "offsets": {
+            "type": "object",
+            "required": ["unit", "spring", "neap"],
+            "properties": {
+              "unit": { "type": "string", "enum": ["minutes"] },
+              "spring": { "$ref": "#/components/schemas/ExplicitMeasurement" },
+              "neap": { "$ref": "#/components/schemas/ExplicitMeasurement" }
+            },
+            "additionalProperties": false
+          },
+          "slack": {
+            "type": "object",
+            "required": ["unit", "spring", "neap"],
+            "properties": {
+              "unit": { "type": "string", "enum": ["minutes"] },
+              "spring": { "$ref": "#/components/schemas/SlackValue" },
+              "neap": { "$ref": "#/components/schemas/SlackValue" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "RateObservation": {
+        "type": "object",
+        "required": ["id", "kind", "turnId", "regime", "locality", "unit", "qualifier", "reportedValue", "lowerBound", "upperBound"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": { "type": "string", "enum": ["phase-peak", "legacy-unspecified"] },
+          "turnId": { "type": "string", "nullable": true },
+          "regime": { "type": "string", "enum": ["spring", "neap", "mean", "other"] },
+          "locality": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["scope", "locationId"],
+                "properties": {
+                  "scope": { "type": "string", "enum": ["gate"] },
+                  "locationId": { "type": "string", "minLength": 1 }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": ["scope", "label"],
+                "properties": {
+                  "scope": { "type": "string", "enum": ["named"] },
+                  "locationId": { "type": "string", "minLength": 1, "nullable": true },
+                  "label": { "type": "string", "minLength": 1 }
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "unit": { "type": "string", "enum": ["kn"] },
+          "qualifier": { "type": "string", "enum": ["exact", "approximate", "range", "up-to", "more-than", "unknown", "unavailable", "legacy-unspecified"] },
+          "reportedValue": { "$ref": "#/components/schemas/ExplicitMeasurement" },
+          "lowerBound": { "$ref": "#/components/schemas/ExplicitMeasurement" },
+          "upperBound": { "$ref": "#/components/schemas/ExplicitMeasurement" }
+        },
+        "additionalProperties": false
+      },
+      "ProvenanceSource": {
+        "type": "object",
+        "oneOf": [
+          {
+            "required": ["id", "kind"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "kind": { "type": "string", "enum": ["pilot-book", "official-data", "almanac", "user-observation", "other"] },
+              "title": { "type": "string", "nullable": true },
+              "publisher": { "type": "string", "nullable": true },
+              "edition": { "type": "string", "nullable": true },
+              "page": { "type": "string", "nullable": true },
+              "imageRef": { "type": "string", "nullable": true, "description": "Evidence identifier only; page text is not embedded." },
+              "url": { "type": "string", "nullable": true },
+              "retrievedAt": { "type": "string", "nullable": true, "format": "date-time" }
+            },
+            "additionalProperties": false
+          },
+          {
+            "required": ["id", "kind"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "kind": { "type": "string", "enum": ["legacy-free-text"] },
+              "title": { "type": "string", "nullable": true },
+              "publisher": { "type": "string", "nullable": true },
+              "edition": { "type": "string", "nullable": true },
+              "page": { "type": "string", "nullable": true },
+              "imageRef": { "type": "string", "nullable": true, "description": "Evidence identifier only; page text is not embedded." },
+              "url": { "type": "string", "nullable": true },
+              "retrievedAt": { "type": "string", "nullable": true, "format": "date-time" },
+              "legacyText": { "type": "string", "nullable": true, "description": "Lossless migration-only field for an existing v1 source string." }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "GateNote": {
+        "type": "object",
+        "required": ["id", "summary", "sourceIds"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 },
+          "sourceIds": { "$ref": "#/components/schemas/SourceIds" },
+          "blocking": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "TidalGateV2": {
+        "type": "object",
+        "required": ["contract", "contractVersion", "revision", "locationId", "conventions", "reference", "flowModel", "regimeInterpolation", "turns", "rateObservations", "provenance", "cautions", "hazards", "uncertainty", "readiness"],
+        "properties": {
+          "contract": { "type": "string", "enum": ["ajrm-tidal-gate-constants-v2"] },
+          "contractVersion": { "type": "integer", "enum": [2] },
+          "revision": { "type": "integer", "minimum": 1 },
+          "locationId": { "type": "string", "minLength": 1 },
+          "conventions": {
+            "type": "object",
+            "required": ["offsetSign", "directionBearing"],
+            "properties": {
+              "offsetSign": { "type": "string", "enum": ["positive-after-reference-event"] },
+              "directionBearing": { "type": "string", "enum": ["degrees-true-current-towards"] }
+            },
+            "additionalProperties": false
+          },
+          "reference": {
+            "type": "object",
+            "required": ["portLocationId", "event", "sourceIds"],
+            "properties": {
+              "portLocationId": { "type": "string", "minLength": 1 },
+              "event": { "type": "string", "enum": ["HW", "LW"] },
+              "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+            },
+            "additionalProperties": false
+          },
+          "flowModel": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["kind", "peakTiming", "zeroAtTurns"],
+                "properties": {
+                  "kind": { "type": "string", "enum": ["sinusoidal-between-turns-v1"] },
+                  "peakTiming": { "type": "string", "enum": ["midpoint-between-turns"] },
+                  "zeroAtTurns": { "type": "boolean", "enum": [true] },
+                  "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": ["kind"],
+                "properties": {
+                  "kind": { "type": "string", "enum": ["legacy-unspecified", "unavailable"] },
+                  "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "regimeInterpolation": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["kind", "rangePairing", "outOfRange"],
+                "properties": {
+                  "kind": { "type": "string", "enum": ["linear-reference-range-v1"] },
+                  "rangePairing": { "type": "string", "enum": ["preceding-opposite-event", "following-opposite-event", "mean-adjacent-opposite-events"] },
+                  "outOfRange": { "type": "string", "enum": ["unavailable"] },
+                  "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": ["kind"],
+                "properties": {
+                  "kind": { "type": "string", "enum": ["legacy-unspecified", "unavailable"] },
+                  "sourceIds": { "$ref": "#/components/schemas/SourceIds" }
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "turns": { "type": "array", "minItems": 2, "items": { "$ref": "#/components/schemas/GateTurn" } },
+          "rateObservations": { "type": "array", "items": { "$ref": "#/components/schemas/RateObservation" } },
+          "provenance": {
+            "type": "object",
+            "required": ["sources", "review"],
+            "properties": {
+              "sources": { "type": "array", "items": { "$ref": "#/components/schemas/ProvenanceSource" } },
+              "review": {
+                "type": "object",
+                "required": ["state"],
+                "properties": {
+                  "state": { "type": "string", "enum": ["unreviewed", "needs-review", "reviewed"] },
+                  "reviewedBy": { "type": "string", "nullable": true },
+                  "reviewedAt": { "type": "string", "nullable": true, "format": "date-time" },
+                  "notes": { "type": "string", "nullable": true }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "cautions": { "type": "array", "items": { "$ref": "#/components/schemas/GateNote" } },
+          "hazards": { "type": "array", "items": { "$ref": "#/components/schemas/GateNote" } },
+          "uncertainty": { "type": "array", "items": { "$ref": "#/components/schemas/GateNote" } },
+          "readiness": {
+            "type": "object",
+            "required": ["state", "reasons"],
+            "properties": {
+              "state": { "type": "string", "enum": ["draft", "needs-review", "reference-only", "operational", "retired"] },
+              "reasons": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+            },
+            "additionalProperties": false
+          },
+          "legacy": { "type": "object", "description": "Lossless compatibility metadata. Migrated v1 records remain non-operational." }
+        },
+        "additionalProperties": false
+      },
+      "GateCatalogueIssue": {
+        "type": "object",
+        "required": ["severity", "code", "locationId", "message"],
+        "properties": {
+          "severity": { "type": "string", "enum": ["error", "warning"] },
+          "code": { "type": "string" },
+          "locationId": { "type": "string", "nullable": true },
+          "message": { "type": "string" }
+        }
+      },
+      "GateCatalogueDiagnostics": {
+        "type": "object",
+        "required": ["contract", "contractVersion", "valid", "summary", "operationalLocationIds", "issues"],
+        "properties": {
+          "contract": { "type": "string", "enum": ["ajrm-tidal-gate-catalogue-diagnostics-v1"] },
+          "contractVersion": { "type": "integer", "enum": [1] },
+          "valid": { "type": "boolean" },
+          "summary": { "type": "object" },
+          "operationalLocationIds": { "type": "array", "items": { "type": "string" } },
+          "issues": { "type": "array", "items": { "$ref": "#/components/schemas/GateCatalogueIssue" } }
+        }
+      },
+      "TidalGateCatalogueV2": {
+        "type": "object",
+        "required": ["contract", "contractVersion", "gates", "operationalLocationIds", "diagnostics"],
+        "properties": {
+          "contract": { "type": "string", "enum": ["ajrm-tidal-gate-catalogue-v2"] },
+          "contractVersion": { "type": "integer", "enum": [2] },
+          "gates": { "type": "array", "items": { "$ref": "#/components/schemas/TidalGateV2" } },
+          "operationalLocationIds": { "type": "array", "items": { "type": "string" } },
+          "diagnostics": { "$ref": "#/components/schemas/GateCatalogueDiagnostics" }
+        }
+      }
+    }
   }
 }
