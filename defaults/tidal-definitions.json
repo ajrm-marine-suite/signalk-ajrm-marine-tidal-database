@@ -1,8 +1,8 @@
 {
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
-  "generatedAt": "2026-08-22T17:35:34.000Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.47",
+  "generatedAt": "2026-08-22T18:17:10.000Z",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.48",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -6724,6 +6724,269 @@
           "regime-interpolation-not-stated",
           "structured-publication-citation-incomplete",
           "strong-eddies-waves-islet-set-and-weather-warning-not-operationally-modelled"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "2bb1ebac-58eb-41d1-8b78-ef6e4494baf4",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5389-corryvreckan-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "flood-west-going",
+          "name": "Flood begins westwards",
+          "direction": {
+            "label": "Flood / west-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source says the flood sets east to west and names the following stream west-going, but gives no true current-towards bearing.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source presents the west-going beginning as an average +270 min at springs relative to HW Oban and says prevailing strong west winds can advance timing considerably; it supplies no exact turn instant or precision bound.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source presents the west-going beginning as an average +315 min at neaps relative to HW Oban and says prevailing strong west winds can advance timing considerably; it supplies no exact turn instant or precision bound.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The source reports a passage-level 15-minute spring slack-water duration but does not assign it to this turn or define total-centred versus before/after placement.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The source reports a passage-level 60-minute neap slack-water duration but does not assign it to this turn or define total-centred versus before/after placement.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "ebb-east-going",
+          "name": "Ebb begins eastwards",
+          "direction": {
+            "label": "Ebb / east-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source says the ebb sets west to east and names the following stream east-going, but gives no true current-towards bearing.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source presents the east-going beginning as an average -105 min at springs relative to HW Oban and says prevailing strong west winds can advance timing considerably; it supplies no exact turn instant or precision bound.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source presents the east-going beginning as an average -60 min at neaps relative to HW Oban and says prevailing strong west winds can advance timing considerably; it supplies no exact turn instant or precision bound.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The source reports a passage-level 15-minute spring slack-water duration but does not assign it to this turn or define total-centred versus before/after placement.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The source reports a passage-level 60-minute neap slack-water duration but does not assign it to this turn or define total-centred versus before/after placement.",
+              "sourceIds": [
+                "img-5389-corryvreckan-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5389-corryvreckan-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": "60",
+            "imageRef": "IMG_5389.jpeg; Gulf of Corryvreckan / Tides and visible Directions; page 60; target timing, rate, slack and hazard text visible; Directions paragraph clipped at the bottom of the photograph",
+            "url": null,
+            "retrievedAt": "2026-08-22T18:17:10.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed notation key identifies Oban stream offsets as relative to HW; not reopened for Segment 7A",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T18:17:10.000Z",
+          "notes": "IMG_5389 is visibly headed Gulf of Corryvreckan on page 60. It identifies flood as west-going and ebb as east-going, then gives separate spring/neap beginnings relative to Oban. The immediately preceding sentence makes those times average, and strong west winds may advance them considerably, so all machine offsets remain unavailable. The passage-level 15-minute spring and 60-minute neap slack durations have no individual-turn scope or centred/before/after placement. A sentence applies 8.5 kn springs and 6.5 kn neaps to both flood and ebb in mid-channel, attained within the first two hours, but these passage-wide values are not duplicated into turn records or assigned to the broad OS named-sea point as an exact observation locus. No true bearing, supported flow model or reference-range interpolation is stated. IMG_5390 is headed Sound of Luing and IMG_5391 Grey Dogs; neither is Corryvreckan continuation evidence. The Corryvreckan Directions paragraph is clipped within IMG_5389. The positive v2 operational checklist therefore fails closed. The legacy Corryvreckan Location and conflicting v1 gate remain unchanged."
+        }
+      },
+      "cautions": [
+        {
+          "id": "strong-west-winds-can-advance-timing",
+          "summary": "The source says the average turn times can be advanced considerably by prevailing strong west winds; it gives no bounded correction or precision model.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "calm-weather-slack-passage-advice-incomplete",
+          "summary": "The visible Directions recommend calm weather at slack, especially neap slack, but the paragraph is clipped at the bottom of IMG_5389 and neither adjacent image continues it; the passage directions are not exhaustively captured.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [
+        {
+          "id": "current-eddy-boundaries-and-whirlpool",
+          "summary": "The source attributes the gate's hazard to very strong current, turbulence at eddy boundaries and when wind opposes stream, plus a whirlpool at a separately described 29-metre least-depth rock; the named-sea point localizes none of these.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "flood-shelf-overfalls-and-westerly-swell",
+          "summary": "For the flood, the source describes a shelf overfall southwest of Camas nam Bairneach and wider dangerous overfalls whose height and extent can increase with residual or prolonged westerly swell; no operational sea-state or locality model is supplied.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "ebb-shelf-turbulence-after-westerlies",
+          "summary": "For the ebb, the source says the shelf overfalls are less severe than on flood but turbulence and dangerous overfalls can remain after strong westerly winds, with local extent not represented by the gate point.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "uncertainty": [
+        {
+          "id": "named-sea-representative-not-passage-locus",
+          "summary": "The joined Location is an OS Open Names representative point for a roughly 4.02 by 2.76 kilometre Sea feature, not a surveyed gate, fairway, safe-water point, route or exact stream, turn, slack, rate, shelf, overfall or whirlpool locus.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-beginnings-are-average-and-wind-variable",
+          "summary": "The source gives spring/neap west-going beginnings of +270/+315 min and east-going beginnings of -105/-60 min relative to HW Oban, but frames tide changes as average and says strong west winds can advance them considerably without a precision bound.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "passage-slack-periods-not-turn-placed",
+          "summary": "The source reports passage-level slack durations of 15 minutes at springs and 60 minutes at neaps, but does not assign either to an individual turn or define centred, before or after placement.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "mid-channel-rates-not-turn-locus-records",
+          "summary": "The source says both flood and ebb reach 8.5 kn at springs and 6.5 kn at neaps in mid-channel within the first two hours of their run. These passage-wide values are not copied into both turn records or assigned to the broad OS name point as exact gate-local observations.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "structured-publication-citation-incomplete",
+          "summary": "Page 60 is visible, but the supplied photographs do not identify the publication title, publisher or edition, so the operational structured-source requirement is incomplete.",
+          "sourceIds": [
+            "img-5389-corryvreckan-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "average-turn-beginnings-have-no-exact-precision",
+          "named-sea-point-not-exact-turn-slack-rate-overfall-whirlpool-locus",
+          "west-east-labels-not-true-bearings",
+          "passage-slack-periods-not-assigned-to-individual-turns",
+          "slack-placement-before-after-centred-not-stated",
+          "mid-channel-both-direction-rates-not-copied-to-turns",
+          "rate-observations-not-exact-gate-local-per-turn",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated",
+          "structured-publication-citation-incomplete",
+          "directions-paragraph-incomplete-in-provided-photographs",
+          "flood-ebb-overfall-whirlpool-eddy-wind-hazards-not-operationally-modelled"
         ]
       }
     }

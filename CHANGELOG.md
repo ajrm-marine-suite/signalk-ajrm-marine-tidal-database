@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.17 — 2026-08-22
+
+- Add a distinct native-v2 Gulf of Corryvreckan record joined to a fresh OS
+  named-sea Location while preserving the conflicting legacy v1 object and all
+  prior gates byte-for-byte.
+- Keep the gate reference-only: average wind-variable beginnings, missing true
+  bearings, turn-ambiguous slack, broad mid-channel rates, unsupported models,
+  incomplete publication/Directions evidence and severe localized hazards
+  prevent operational use.
+- Keep every timing, bearing and slack machine field unavailable, rates empty
+  and the effective allow-list at zero, with focused heading, source-scope,
+  hazard, blocker, join and legacy-digest tests.
+
 ## 0.1.16 — 2026-08-22
 
 - Add distinct native-v2 Cuan Sound and Grey Dogs / Bealach a' Choin Ghlais

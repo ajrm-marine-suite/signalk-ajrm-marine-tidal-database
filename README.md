@@ -2,15 +2,15 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.16 adds distinct photo-verified native v2 reference records for
-Cuan Sound and Grey Dogs / Bealach a' Choin Ghlais. Their separately printed
-spring/neap beginnings remain only in sourced unavailable reasons because each
-is qualified as approximate. Cuan's western-part rates and absent slack, plus
-Grey Dogs' passage-wide rates, conflicting spring wording and turn-ambiguous
-slack periods, never become operational machine fields. Missing exact offsets,
-true bearings, complete rate/slack semantics and supported models keep both out
-of Planning's operational allow-list. The legacy Cuan data and prior Grey Dogs
-Location remain byte-for-byte unchanged.
+Version 0.1.17 adds a distinct photo-verified native v2 reference record for
+the Gulf of Corryvreckan, joined to a fresh OS named-sea Location. The source's
+average, wind-variable spring/neap beginnings, passage-level slack and broad
+mid-channel rates remain unavailable for calculation; true bearings, exact
+gate-local observations and supported models are absent. Direction-specific
+overfalls, whirlpool/eddy hazards, an incomplete Directions paragraph and an
+incomplete structured publication citation also block operational use. The
+conflicting legacy Corryvreckan Location and v1 gate remain byte-for-byte
+unchanged.
 
 ## Responsibilities
 
@@ -64,6 +64,10 @@ cycle, the Firth's progressive fairway turns and every separate rate locality.
 The [Segment 6B source review](docs/tidal-gate-source-review-segment-6b.md)
 records the corrected Cuan/Grey Dogs image index, positive operational
 assessment, passage/locality rate limits and turn-ambiguous Grey Dogs slack.
+The [Segment 7A source review](docs/tidal-gate-source-review-segment-7a.md)
+records the corrected Corryvreckan heading index, distinct OS named-sea join,
+legacy conflict, direction/regime/slack/rate scope, physical hazards and the
+complete positive operational-eligibility failure.
 
 ## Offline and refresh behaviour
 
@@ -87,7 +91,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.16 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.17 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 
