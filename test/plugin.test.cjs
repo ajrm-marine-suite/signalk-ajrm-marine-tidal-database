@@ -90,7 +90,8 @@ test("OpenAPI and webapp metadata are present", async (t) => {
 test("gate HTTP mutation is revisioned, joined and owned by Tidal Database", async (t) => {
 	const { app,plugin,call } = await fixture(t);
 	const catalogue = await call("GET","/definitions/gates");
-	const existing = catalogue.body.gates[0];
+	const projected = catalogue.body.gates[0];
+	const existing = projected.sourceReview || projected;
 	const replacement = { ...existing, revision:existing.revision + 1 };
 	let saved = await call("PUT","/definitions/gates/:locationId",{
 		params:{ locationId:existing.locationId },body:replacement,

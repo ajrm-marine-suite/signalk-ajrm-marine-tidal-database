@@ -224,14 +224,14 @@ test("Segment 7B preserves every prior gate and both legacy candidate objects by
 	assert.equal(digest(normalizedDorus),"992b14c0c9c190a6b86c8dabe09d68e3d65ef476593c29bbe4e547bbd7527a99");
 	assert.equal(digest(normalizedLuing.legacy.record),digest(legacyLuing));
 	assert.equal(digest(normalizedDorus.legacy.record),digest(legacyDorus));
-	assert.equal(digest(definitions.ports),"4832fc46950e1f5acbaf58fab9985487b88101ea03c9399570385fe02ac244f4");
+	assert.equal(digest(definitions.ports),"f505b80ae86c86caa5875be91d37de6e1cd5f41b0f8fd319038753cf86d37efb");
 	assert.equal(digest(definitions.areas),"6ee4406b43b66a39b45949a3bb8da3e6d5aa1ac1386b8b4efaf41d0d56901315");
 });
 
 test("Segment 7B joins the pinned Location export one-to-one with an empty effective allow-list", () => {
-	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.49");
+	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.50");
 	assert.equal(locationFixture.contract,"ajrm-location-editor-segment-7b-test-export-v1");
-	assert.equal(locationFixture.sourcePackage,definitions.sourcePackage);
+	assert.equal(locationFixture.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.49");
 	assert.equal(locationFixture.priorCount,309);
 	assert.equal(locationFixture.priorSha256,"108da13ca8ac25d8ceebeb0313631211aa82f4288d87502b9464d47fce068192");
 	assert.equal(locationFixture.catalogueCount,311);
@@ -245,8 +245,8 @@ test("Segment 7B joins the pinned Location export one-to-one with an empty effec
 	for (const id of [LEGACY_LUING,NATIVE_LUING,LEGACY_DORUS,NATIVE_DORUS]) {
 		assert.equal(definitions.gates.filter((entry) => entry.locationId === id).length,1,id);
 	}
-	assert.equal(definitions.gates.length,32);
-	assert.equal(new Set(definitions.gates.map((entry) => entry.locationId)).size,32);
+	assert.equal(definitions.gates.length,39);
+	assert.equal(new Set(definitions.gates.map((entry) => entry.locationId)).size,39);
 	const gates = definitions.gates.map(normalizeGate);
 	const nativeIds = new Set([NATIVE_LUING,NATIVE_DORUS]);
 	const locations = [
@@ -264,18 +264,18 @@ test("Segment 7B joins the pinned Location export one-to-one with an empty effec
 	}
 	const diagnostics = catalogueDiagnostics({ ...definitions,gates },locations);
 	assert.equal(gates.filter((entry) => entry.legacy?.fromContract === "ajrm-tidal-gate-constants-v1").length,15);
-	assert.equal(gates.filter((entry) => !entry.legacy).length,17);
+	assert.equal(gates.filter((entry) => !entry.legacy).length,24);
 	assert.equal(diagnostics.valid,true);
 	assert.deepEqual(diagnostics.operationalLocationIds,[]);
 	assert.deepEqual(diagnostics.summary,{
-		gateCount:32,
+		gateCount:39,
 		declaredOperationalCount:0,
 		operationalCount:0,
-		nonOperationalCount:32,
+		nonOperationalCount:39,
 		legacyMigrationCount:15,
-		locationGateCount:32,
+		locationGateCount:39,
 		errorCount:0,
-		warningCount:47,
+		warningCount:54,
 	});
 	for (const id of [NATIVE_LUING,NATIVE_DORUS]) {
 		assert.ok(diagnostics.issues.some((entry) => entry.code === "gate-not-operational" && entry.locationId === id));

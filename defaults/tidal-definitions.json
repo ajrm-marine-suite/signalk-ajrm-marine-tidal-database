@@ -2,7 +2,7 @@
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
   "generatedAt": "2026-08-22T18:56:19.000Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.49",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.50",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -90,16 +90,40 @@
           "timeOffsetPeriodMinutes": 1440,
           "standardPortName": "Portsmouth",
           "highWaterTimeOffsets": [
-            { "referenceTimeMinutes": 5, "offsetMinutes": -40 },
-            { "referenceTimeMinutes": 600, "offsetMinutes": -10 },
-            { "referenceTimeMinutes": 1020, "offsetMinutes": -40 },
-            { "referenceTimeMinutes": 1320, "offsetMinutes": -10 }
+            {
+              "referenceTimeMinutes": 5,
+              "offsetMinutes": -40
+            },
+            {
+              "referenceTimeMinutes": 600,
+              "offsetMinutes": -10
+            },
+            {
+              "referenceTimeMinutes": 1020,
+              "offsetMinutes": -40
+            },
+            {
+              "referenceTimeMinutes": 1320,
+              "offsetMinutes": -10
+            }
           ],
           "lowWaterTimeOffsets": [
-            { "referenceTimeMinutes": 0, "offsetMinutes": -10 },
-            { "referenceTimeMinutes": 360, "offsetMinutes": -10 },
-            { "referenceTimeMinutes": 720, "offsetMinutes": -10 },
-            { "referenceTimeMinutes": 1080, "offsetMinutes": -10 }
+            {
+              "referenceTimeMinutes": 0,
+              "offsetMinutes": -10
+            },
+            {
+              "referenceTimeMinutes": 360,
+              "offsetMinutes": -10
+            },
+            {
+              "referenceTimeMinutes": 720,
+              "offsetMinutes": -10
+            },
+            {
+              "referenceTimeMinutes": 1080,
+              "offsetMinutes": -10
+            }
           ],
           "heightDifferencesM": {
             "mhws": -1,
@@ -2650,7 +2674,12 @@
       "name": "Greenock (Admiralty API)",
       "kind": "standard",
       "datum": "Chart Datum",
-      "referenceLevels": null,
+      "referenceLevels": {
+        "mhws": 3.4,
+        "mhwn": 2.8,
+        "mlwn": 1,
+        "mlws": 0.3
+      },
       "prediction": {
         "mode": "provider",
         "providerId": "ukhoTidalEvents",
@@ -7535,6 +7564,1357 @@
           "structured-publication-citation-incomplete",
           "dorus-heading-directions-and-dangers-incomplete-in-provided-photographs",
           "wind-overfall-eddy-race-rock-and-confused-sea-hazards-not-operationally-modelled"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "513807ca-dafc-48fd-a81a-76961c645e23",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5386-sound-of-jura-tides"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "north-going",
+          "name": "North-going stream begins",
+          "direction": {
+            "label": "North-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'North-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately +345 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate +345-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "south-going",
+          "name": "South-going stream begins",
+          "direction": {
+            "label": "South-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'South-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately -15 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate -15-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5386-sound-of-jura-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5386-sound-of-jura-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5386.jpeg; user-supplied photograph; visible heading and tidal text reviewed; outer or continuation text may be clipped",
+            "url": null,
+            "retrievedAt": "2026-08-22T20:30:58.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T20:30:58.000Z",
+          "notes": "Throughout the greater part of the Sound, north-going begins about +0545 Oban and south-going about -0015 Oban. The south end is about 2 kn and the Skervuile area about 3 to 3.5 kn. Near Ruadh Sgeir the separate local beginnings are +0425 and -0155 Oban and rates can reach 4 kn each way."
+        }
+      },
+      "cautions": [
+        {
+          "id": "estimated-source-not-definitive",
+          "summary": "Every timing and rate in this record is approximate source guidance. Treat it with a pinch of salt and verify current official tidal-stream information, weather and local conditions before use.",
+          "sourceIds": [
+            "img-5386-sound-of-jura-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [
+        {
+          "id": "source-hazards-not-operationally-modelled",
+          "summary": "Near Ruadh Sgeir, submerged reefs lie about four cables NNE; the source reports strong eddies and flood overfalls, with the flood setting NNW across the reefs. Wind and pressure can alter water height by about one metre.",
+          "sourceIds": [
+            "img-5386-sound-of-jura-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "uncertainty": [
+        {
+          "id": "representative-location-not-observation-locus",
+          "summary": "The broad named-sea point does not localize the greater-sound timing, Skervuile rate, Ruadh Sgeir exception, reefs, eddies or overfalls.",
+          "sourceIds": [
+            "img-5386-sound-of-jura-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "source-values-not-exact",
+          "summary": "Throughout the greater part of the Sound, north-going begins about +0545 Oban and south-going about -0015 Oban. The south end is about 2 kn and the Skervuile area about 3 to 3.5 kn. Near Ruadh Sgeir the separate local beginnings are +0425 and -0155 Oban and rates can reach 4 kn each way.",
+          "sourceIds": [
+            "img-5386-sound-of-jura-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "broad-source-area",
+          "ruadh-sgeir-local-timing-differs",
+          "rates-vary-by-locality",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "81ce9a21-efb6-4d14-ab26-280c8bfd4035",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5383-west-of-islay-tides"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "northwest-going",
+          "name": "Northwest-going stream begins",
+          "direction": {
+            "label": "Northwest-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'Northwest-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately +330 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate +330-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "southeast-going",
+          "name": "Southeast-going stream begins",
+          "direction": {
+            "label": "Southeast-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'Southeast-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately -40 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate -40-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5383-west-of-islay-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5383-west-of-islay-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5383.jpeg; user-supplied photograph; visible heading and tidal text reviewed; outer or continuation text may be clipped",
+            "url": null,
+            "retrievedAt": "2026-08-22T20:30:58.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T20:30:58.000Z",
+          "notes": "Off the Oa and Rinns of Islay, northwest-going begins about +0530 Oban and southeast-going about -0040 Oban. Spring rates reach 8 kn off Orsay and 5 kn off the Oa; no neap rate is stated."
+        }
+      },
+      "cautions": [
+        {
+          "id": "estimated-source-not-definitive",
+          "summary": "Every timing and rate in this record is approximate source guidance. Treat it with a pinch of salt and verify current official tidal-stream information, weather and local conditions before use.",
+          "sourceIds": [
+            "img-5383-west-of-islay-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [
+        {
+          "id": "source-hazards-not-operationally-modelled",
+          "summary": "The source reports direction-dependent overfalls around the Oa and Rinns, with additional unsettled-weather overfalls over West Bank and banks farther NNW; the directions advise passing both headlands at several miles but continue beyond the photograph.",
+          "sourceIds": [
+            "img-5383-west-of-islay-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "uncertainty": [
+        {
+          "id": "representative-location-not-observation-locus",
+          "summary": "The Rinns headland point is on land and is not the offshore passage, Orsay rate station, West Bank, route or safe-water position.",
+          "sourceIds": [
+            "img-5383-west-of-islay-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "source-values-not-exact",
+          "summary": "Off the Oa and Rinns of Islay, northwest-going begins about +0530 Oban and southeast-going about -0040 Oban. Spring rates reach 8 kn off Orsay and 5 kn off the Oa; no neap rate is stated.",
+          "sourceIds": [
+            "img-5383-west-of-islay-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "offshore-passage-not-localized",
+          "neap-rate-not-stated",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "directions-clipped",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "f9c17ddc-8fcc-49bd-8000-422f715d5697",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5381-sound-of-islay-tides"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "north-going",
+          "name": "North-going stream begins",
+          "direction": {
+            "label": "North-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'North-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately +280 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate +280-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "south-going",
+          "name": "South-going stream begins",
+          "direction": {
+            "label": "South-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'South-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately -100 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate -100-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5381-sound-of-islay-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5381-sound-of-islay-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5381.jpeg; user-supplied photograph; visible heading and tidal text reviewed; outer or continuation text may be clipped",
+            "url": null,
+            "retrievedAt": "2026-08-22T20:30:58.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T20:30:58.000Z",
+          "notes": "The source says the tide must be favourable, streams reach up to 5 kn in the narrows, north-going begins about +0440 Oban and south-going about -0140 Oban. It does not state separate spring/neap values."
+        }
+      },
+      "cautions": [
+        {
+          "id": "estimated-source-not-definitive",
+          "summary": "Every timing and rate in this record is approximate source guidance. Treat it with a pinch of salt and verify current official tidal-stream information, weather and local conditions before use.",
+          "sourceIds": [
+            "img-5381-sound-of-islay-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [
+        {
+          "id": "source-hazards-not-operationally-modelled",
+          "summary": "Inshore eddies are reported and the photographed right-hand directions are incomplete; no route, fairway, exact narrows station or safe-water line is encoded.",
+          "sourceIds": [
+            "img-5381-sound-of-islay-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "uncertainty": [
+        {
+          "id": "representative-location-not-observation-locus",
+          "summary": "The broad named-sea point spans much of the Sound and is not the narrows or exact timing/rate locus.",
+          "sourceIds": [
+            "img-5381-sound-of-islay-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "source-values-not-exact",
+          "summary": "The source says the tide must be favourable, streams reach up to 5 kn in the narrows, north-going begins about +0440 Oban and south-going about -0140 Oban. It does not state separate spring/neap values.",
+          "sourceIds": [
+            "img-5381-sound-of-islay-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "narrows-rate-locus-not-localized",
+          "regime-specific-rates-not-stated",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "directions-clipped",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "f8a16397-5b14-46be-b769-555b3300af72",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5378-west-loch-tarbert-jura-tides"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "in-going",
+          "name": "In-going stream begins",
+          "direction": {
+            "label": "In-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'In-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately +270 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate +270-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "out-going",
+          "name": "Out-going stream begins",
+          "direction": {
+            "label": "Out-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'Out-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately -120 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate -120-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5378-west-loch-tarbert-jura-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5378-west-loch-tarbert-jura-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5378.jpeg; user-supplied photograph; visible heading and tidal text reviewed; outer or continuation text may be clipped",
+            "url": null,
+            "retrievedAt": "2026-08-22T20:30:58.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T20:30:58.000Z",
+          "notes": "The source gives approximate in-going +0430 Oban and out-going -0200 Oban beginnings. It gives a spring-to-neap secondary-port constant range but no stream rate."
+        }
+      },
+      "cautions": [
+        {
+          "id": "estimated-source-not-definitive",
+          "summary": "Every timing and rate in this record is approximate source guidance. Treat it with a pinch of salt and verify current official tidal-stream information, weather and local conditions before use.",
+          "sourceIds": [
+            "img-5378-west-loch-tarbert-jura-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [
+        {
+          "id": "source-hazards-not-operationally-modelled",
+          "summary": "The visible directions identify Dun Skeig, Eilean Traighe beacon and Corran Point beacon, but the right column is clipped; none is converted into a route or clearance instruction.",
+          "sourceIds": [
+            "img-5378-west-loch-tarbert-jura-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "uncertainty": [
+        {
+          "id": "representative-location-not-observation-locus",
+          "summary": "The broad tidal-water point is not the entrance, beacon-clearance line, fairway, exact turn observation or safe-water position.",
+          "sourceIds": [
+            "img-5378-west-loch-tarbert-jura-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "source-values-not-exact",
+          "summary": "The source gives approximate in-going +0430 Oban and out-going -0200 Oban beginnings. It gives a spring-to-neap secondary-port constant range but no stream rate.",
+          "sourceIds": [
+            "img-5378-west-loch-tarbert-jura-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "stream-rate-not-stated",
+          "entrance-turn-locus-not-localized",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "directions-clipped",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "7c0e9a0d-4e6f-46e7-ac72-1b355f7a7e5d",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5377-sound-of-gigha-tides"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "north-going",
+          "name": "North-going stream begins",
+          "direction": {
+            "label": "North-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'North-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately +270 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate +270-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "south-going",
+          "name": "South-going stream begins",
+          "direction": {
+            "label": "South-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'South-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately -120 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate -120-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5377-sound-of-gigha-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5377-sound-of-gigha-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5377.jpeg; user-supplied photograph; visible heading and tidal text reviewed; outer or continuation text may be clipped",
+            "url": null,
+            "retrievedAt": "2026-08-22T20:30:58.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T20:30:58.000Z",
+          "notes": "The source gives north-going +0430 Oban and south-going -0200 Oban beginnings. It gives a spring-to-neap secondary-port constant range but no stream rate."
+        }
+      },
+      "cautions": [
+        {
+          "id": "estimated-source-not-definitive",
+          "summary": "Every timing and rate in this record is approximate source guidance. Treat it with a pinch of salt and verify current official tidal-stream information, weather and local conditions before use.",
+          "sourceIds": [
+            "img-5377-sound-of-gigha-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [
+        {
+          "id": "source-hazards-not-operationally-modelled",
+          "summary": "The visible passage text mentions Sgeir an Truidh drying rock southeast of Cara and continues beyond the photograph; no route, clearance distance or safe-water position is encoded.",
+          "sourceIds": [
+            "img-5377-sound-of-gigha-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "uncertainty": [
+        {
+          "id": "representative-location-not-observation-locus",
+          "summary": "The broad named-sea point is not an exact turn station, entrance rock clearance, fairway, route or safe-water position.",
+          "sourceIds": [
+            "img-5377-sound-of-gigha-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "source-values-not-exact",
+          "summary": "The source gives north-going +0430 Oban and south-going -0200 Oban beginnings. It gives a spring-to-neap secondary-port constant range but no stream rate.",
+          "sourceIds": [
+            "img-5377-sound-of-gigha-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "stream-rate-not-stated",
+          "turn-locus-not-localized",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "directions-clipped",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "b1b21e35-0cb5-4ab9-b8ac-1bb3795f2e17",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "29910eb5-6c47-4796-8af7-592742737562",
+        "event": "HW",
+        "sourceIds": [
+          "img-5376-sanda-sound-mid-channel-tides"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "west-going",
+          "name": "West-going stream begins",
+          "direction": {
+            "label": "West-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'West-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately -150 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate -150-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "east-going",
+          "name": "East-going stream begins",
+          "direction": {
+            "label": "East-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'East-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately +220 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate +220-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5376-sanda-sound-mid-channel-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5376-sanda-sound-mid-channel-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5376.jpeg; user-supplied photograph; visible heading and tidal text reviewed; outer or continuation text may be clipped",
+            "url": null,
+            "retrievedAt": "2026-08-22T20:30:58.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T20:30:58.000Z",
+          "notes": "For Sanda Sound mid-channel the source gives west-going -0230 HW Greenock and east-going +0340 HW Greenock, with 5 kn at springs in either direction. No neap rate is stated."
+        }
+      },
+      "cautions": [
+        {
+          "id": "estimated-source-not-definitive",
+          "summary": "Every timing and rate in this record is approximate source guidance. Treat it with a pinch of salt and verify current official tidal-stream information, weather and local conditions before use.",
+          "sourceIds": [
+            "img-5376-sanda-sound-mid-channel-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [
+        {
+          "id": "source-hazards-not-operationally-modelled",
+          "summary": "The Mull of Kintyre section warns of strong streams, overfalls, eddies, a turbulent boundary between inshore and offshore streams, wind-against-tide danger and rapidly deteriorating conditions; small craft should not attempt the passage in unsettled weather.",
+          "sourceIds": [
+            "img-5376-sanda-sound-mid-channel-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "uncertainty": [
+        {
+          "id": "representative-location-not-observation-locus",
+          "summary": "Sanda Roads is a nearby named-channel representative, not the source's surveyed mid-channel timing/rate station or a race boundary.",
+          "sourceIds": [
+            "img-5376-sanda-sound-mid-channel-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "source-values-not-exact",
+          "summary": "For Sanda Sound mid-channel the source gives west-going -0230 HW Greenock and east-going +0340 HW Greenock, with 5 kn at springs in either direction. No neap rate is stated.",
+          "sourceIds": [
+            "img-5376-sanda-sound-mid-channel-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "sanda-roads-name-not-exact-sanda-sound-mid-channel-locus",
+          "neap-rate-not-stated",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "directions-clipped",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "9221ab63-c01f-4461-bf49-b7f566941013",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "29910eb5-6c47-4796-8af7-592742737562",
+        "event": "HW",
+        "sourceIds": [
+          "img-5376-close-west-mull-of-kintyre-tides"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "north-going",
+          "name": "North-going stream begins",
+          "direction": {
+            "label": "North-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'North-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately -170 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate -170-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            }
+          }
+        },
+        {
+          "id": "south-going",
+          "name": "South-going stream begins",
+          "direction": {
+            "label": "South-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The source supplies the named direction 'South-going stream' but no true current-towards bearing.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports approximately +190 minutes relative to HW, without an exact observation precision.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The same regime-neutral approximate +190-minute beginning is reported without a separate neap turn or precision.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The supplied source states no turn-specific slack duration or placement.",
+              "sourceIds": [
+                "img-5376-close-west-mull-of-kintyre-tides"
+              ]
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5376-close-west-mull-of-kintyre-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5376.jpeg; user-supplied photograph; visible heading and tidal text reviewed; outer or continuation text may be clipped",
+            "url": null,
+            "retrievedAt": "2026-08-22T20:30:58.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T20:30:58.000Z",
+          "notes": "Close west of the Mull of Kintyre the source gives north-going -0250 HW Greenock and south-going +0310 HW Greenock, with 5 kn at springs in either direction. No neap rate is stated."
+        }
+      },
+      "cautions": [
+        {
+          "id": "estimated-source-not-definitive",
+          "summary": "Every timing and rate in this record is approximate source guidance. Treat it with a pinch of salt and verify current official tidal-stream information, weather and local conditions before use.",
+          "sourceIds": [
+            "img-5376-close-west-mull-of-kintyre-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "hazards": [
+        {
+          "id": "source-hazards-not-operationally-modelled",
+          "summary": "The section warns of strong streams, races, overfalls and eddies. The offshore west-going stream creates a dangerous race off Sron Uamha during its last two hours and can become violent in fresh or strong southerly winds; conditions can deteriorate rapidly.",
+          "sourceIds": [
+            "img-5376-close-west-mull-of-kintyre-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "uncertainty": [
+        {
+          "id": "representative-location-not-observation-locus",
+          "summary": "The lighthouse point is on land and is not the source's close-west stream observation, race, overfall, route or safe-water position.",
+          "sourceIds": [
+            "img-5376-close-west-mull-of-kintyre-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "source-values-not-exact",
+          "summary": "Close west of the Mull of Kintyre the source gives north-going -0250 HW Greenock and south-going +0310 HW Greenock, with 5 kn at springs in either direction. No neap rate is stated.",
+          "sourceIds": [
+            "img-5376-close-west-mull-of-kintyre-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "lighthouse-not-close-west-stream-locus",
+          "neap-rate-not-stated",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "directions-clipped",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
         ]
       }
     }

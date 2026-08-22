@@ -2,8 +2,9 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.19 adds explicit operational-with-assumptions profiles for all 17
-completed source-reviewed named-channel records. The original evidence records
+Version 0.1.20 adds the final seven photographed candidates and publishes
+explicit operational-with-assumptions profiles for all 24 completed
+source-reviewed records. The original evidence records
 remain preserved for inspection. The profiles turn reviewed published guidance
 into estimated planning inputs with visible assumptions for bearings, regime
 copying, slack placement, rate scope and the sine/interpolation model. None of
@@ -71,6 +72,9 @@ The [Segment 7B source review](docs/tidal-gate-source-review-segment-7b.md)
 records the Sound of Luing column boundary, the incomplete Dorus Mòr heading
 and continuation index, distinct OS joins, exact direction/regime/slack/rate
 scope, structured hazards and both complete positive eligibility failures.
+The [Segment 8 source review](docs/tidal-gate-source-review-segment-8.md)
+records the final seven candidates, the distinct Greenock reference used by
+the two Mull of Kintyre localities and every provisional rate/model assumption.
 
 ## Offline and refresh behaviour
 
@@ -94,7 +98,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.19 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.20 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

@@ -163,16 +163,16 @@ test("Segment 7A preserves every prior gate and the conflicting Corryvreckan v1 
 	const normalizedLegacy = normalizeGate(legacy);
 	assert.equal(digest(normalizedLegacy),"0525709b250e87a5fde062089500b2f5c9b471604646a4781fe03f8935ecf35b");
 	assert.equal(digest(normalizedLegacy.legacy.record),"10a0e1fd8349479e40083733ff30e621af11f8295f1e499c04e688f6104cf5b8");
-	assert.equal(digest(definitions.ports),"4832fc46950e1f5acbaf58fab9985487b88101ea03c9399570385fe02ac244f4");
+	assert.equal(digest(definitions.ports),"f505b80ae86c86caa5875be91d37de6e1cd5f41b0f8fd319038753cf86d37efb");
 	assert.equal(digest(definitions.areas),"6ee4406b43b66a39b45949a3bb8da3e6d5aa1ac1386b8b4efaf41d0d56901315");
 });
 
 test("Corryvreckan joins one-to-one with zero unsafe operational exposure", () => {
-	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.49");
+	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.50");
 	assert.equal(new Set([LEGACY_CORRYVRECKAN,NATIVE_CORRYVRECKAN]).size,2);
 	assert.equal(definitions.gates.filter((entry) => entry.locationId === LEGACY_CORRYVRECKAN).length,1);
 	assert.equal(definitions.gates.filter((entry) => entry.locationId === NATIVE_CORRYVRECKAN).length,1);
-	assert.equal(new Set(definitions.gates.map((entry) => entry.locationId)).size,32);
+	assert.equal(new Set(definitions.gates.map((entry) => entry.locationId)).size,39);
 	const gates = definitions.gates.map(normalizeGate);
 	const locations = [
 		...definitions.ports.map((entry) => ({
@@ -184,18 +184,18 @@ test("Corryvreckan joins one-to-one with zero unsafe operational exposure", () =
 	];
 	const diagnostics = catalogueDiagnostics({ ...definitions,gates },locations);
 	assert.equal(gates.filter((entry) => entry.legacy?.fromContract === "ajrm-tidal-gate-constants-v1").length,15);
-	assert.equal(gates.filter((entry) => !entry.legacy).length,17);
+	assert.equal(gates.filter((entry) => !entry.legacy).length,24);
 	assert.equal(diagnostics.valid,true);
 	assert.deepEqual(diagnostics.operationalLocationIds,[]);
 	assert.deepEqual(diagnostics.summary,{
-		gateCount:32,
+		gateCount:39,
 		declaredOperationalCount:0,
 		operationalCount:0,
-		nonOperationalCount:32,
+		nonOperationalCount:39,
 		legacyMigrationCount:15,
-		locationGateCount:32,
+		locationGateCount:39,
 		errorCount:0,
-		warningCount:47,
+		warningCount:54,
 	});
 	assert.ok(diagnostics.issues.some((entry) => entry.code === "gate-not-operational" && entry.locationId === NATIVE_CORRYVRECKAN));
 	assert.equal(diagnostics.issues.some((entry) => entry.severity === "error" && entry.locationId === NATIVE_CORRYVRECKAN),false);

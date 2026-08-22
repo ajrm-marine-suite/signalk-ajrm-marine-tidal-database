@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.20 — 2026-08-22
+
+- Add seven source-reviewed native-v2 records for Sound of Jura, west of
+  Islay, Sound of Islay, West Loch Tarbert on Jura, Sound of Gigha, Sanda
+  Sound and close west of the Mull of Kintyre.
+- Make all seven immediately calculable through visible estimated profiles,
+  including explicit provisional rate assumptions where the source supplies
+  no neap rate or no rate at all; every calculation warns users to take it
+  with a pinch of salt.
+- Use Greenock as the stated reference for the two Mull of Kintyre localities
+  and add a provisional Greenock reference range so the interpolation model
+  can operate, while retaining the raw evidence and all safety hazards for
+  inspection.
+- Preserve the legacy Mull of Kintyre and Sound of Islay records unchanged and
+  raise the completed operational-with-assumptions set from 17 to 24 gates.
+
 ## 0.1.19 — 2026-08-22
 
 - Add explicit operational-with-assumptions profiles for all 17 completed

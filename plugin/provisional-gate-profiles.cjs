@@ -27,6 +27,13 @@ const profiles = Object.freeze({
 	"2bb1ebac-58eb-41d1-8b78-ef6e4494baf4": { bearings:[270,90], offsets:[[270,315],[-105,-60]], rates:[[8.5,6.5],[8.5,6.5]], slack:[15,60], basis:"Average wind-variable beginnings are used as turn instants; passage-level slack is centred on both turns and mid-channel values are shared across directions." },
 	"53ae1e7e-ec00-40f7-ab23-784644740f0b": { bearings:[0,180], offsets:[[270,315],[-105,-60]], rates:[[7,5],[7,5]], slack:[15,60], basis:"Average beginnings are used as turn instants; passage-level slack is centred on both turns and Fladda maxima are shared across directions." },
 	"83192cc1-65da-4abc-b4ae-51c6c4ab54ad": { bearings:[270,90], offsets:[[270,315],[-105,-60]], rates:[[8,6],[8,6]], slack:[15,60], basis:"Wind-variable beginnings are used as turn instants; passage-level slack is centred on both turns and passage rates are shared across directions. Strong west winds can materially advance the turn." },
+	"513807ca-dafc-48fd-a81a-76961c645e23": { bearings:[0,180], offsets:[[345,345],[-15,-15]], rates:[[3.5,3.5],[3.5,3.5]], slack:[0,0], basis:"Greater-Sound regime-neutral beginnings and the Skervuile-area 3 to 3.5 kn upper value are used as a broad estimate. The separate Ruadh Sgeir timing and 4 kn locality remain cautions, not silently merged inputs." },
+	"81ce9a21-efb6-4d14-ab26-280c8bfd4035": { bearings:[315,135], offsets:[[330,330],[-40,-40]], rates:[[8,4],[8,4]], slack:[0,0], basis:"Approximate regime-neutral beginnings and the 8 kn Orsay spring maximum are used for both directions. With no neap rate in the source, 4 kn is an explicit half-spring planning estimate." },
+	"f9c17ddc-8fcc-49bd-8000-422f715d5697": { bearings:[0,180], offsets:[[280,280],[-100,-100]], rates:[[5,5],[5,5]], slack:[0,0], basis:"Approximate regime-neutral beginnings and the source's up-to 5 kn narrows value are used for both regimes and directions as a deliberately broad envelope." },
+	"f8a16397-5b14-46be-b769-555b3300af72": { bearings:[90,270], offsets:[[270,270],[-120,-120]], rates:[[1,1],[1,1]], slack:[0,0], basis:"Approximate regime-neutral in/out beginnings are used. The source states no stream rate, so 1 kn is a conspicuous provisional planning estimate; east/west in/out bearings are assumptions." },
+	"7c0e9a0d-4e6f-46e7-ac72-1b355f7a7e5d": { bearings:[0,180], offsets:[[270,270],[-120,-120]], rates:[[1,1],[1,1]], slack:[0,0], basis:"Approximate regime-neutral beginnings are used. The source states no stream rate, so 1 kn is a conspicuous provisional planning estimate." },
+	"b1b21e35-0cb5-4ab9-b8ac-1bb3795f2e17": { bearings:[270,90], offsets:[[-150,-150],[220,220]], rates:[[5,2.5],[5,2.5]], slack:[0,0], basis:"Approximate Greenock-referenced beginnings and the source's 5 kn spring value are used for both directions. With no neap rate, 2.5 kn is an explicit half-spring planning estimate." },
+	"9221ab63-c01f-4461-bf49-b7f566941013": { bearings:[0,180], offsets:[[-170,-170],[190,190]], rates:[[5,2.5],[5,2.5]], slack:[0,0], basis:"Approximate Greenock-referenced beginnings and the source's 5 kn spring value are used for both directions. With no neap rate, 2.5 kn is an explicit half-spring planning estimate." },
 });
 
 function known(value) {
@@ -66,7 +73,7 @@ function operationalProfile(record) {
 		readiness:{ state:"operational", reasons:["operational-with-explicit-assumptions"] },
 		calculationBasis:{
 			contract:CONTRACT, contractVersion:1, mode:"operational-with-assumptions", sourceReadiness:record.readiness?.state || null,
-			warning:"For passage planning assistance only. Values include explicit assumptions and do not replace current official tidal-stream publications, local observations, weather assessment or safe navigation judgement.",
+			warning:"For passage planning assistance only. Every value is an estimate: take it with a pinch of salt. Explicit assumptions do not replace current official tidal-stream publications, local observations, weather assessment or safe navigation judgement.",
 			assumptions:[profile.basis,"A sinusoidal flow between named turns is assumed.","Linear interpolation between published or assumed spring/neap inputs uses the mean of adjacent opposite tidal extrema.",...(profile.slack[0] === 0 ? ["No sourced slack duration is available, so the model uses a zero-duration slack window."] : [])],
 		},
 		sourceReview:structuredClone(record),
