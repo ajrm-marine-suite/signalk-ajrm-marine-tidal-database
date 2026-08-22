@@ -168,11 +168,11 @@ test("Segment 7A preserves every prior gate and the conflicting Corryvreckan v1 
 });
 
 test("Corryvreckan joins one-to-one with zero unsafe operational exposure", () => {
-	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.48");
+	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.49");
 	assert.equal(new Set([LEGACY_CORRYVRECKAN,NATIVE_CORRYVRECKAN]).size,2);
 	assert.equal(definitions.gates.filter((entry) => entry.locationId === LEGACY_CORRYVRECKAN).length,1);
 	assert.equal(definitions.gates.filter((entry) => entry.locationId === NATIVE_CORRYVRECKAN).length,1);
-	assert.equal(new Set(definitions.gates.map((entry) => entry.locationId)).size,30);
+	assert.equal(new Set(definitions.gates.map((entry) => entry.locationId)).size,32);
 	const gates = definitions.gates.map(normalizeGate);
 	const locations = [
 		...definitions.ports.map((entry) => ({
@@ -184,18 +184,18 @@ test("Corryvreckan joins one-to-one with zero unsafe operational exposure", () =
 	];
 	const diagnostics = catalogueDiagnostics({ ...definitions,gates },locations);
 	assert.equal(gates.filter((entry) => entry.legacy?.fromContract === "ajrm-tidal-gate-constants-v1").length,15);
-	assert.equal(gates.filter((entry) => !entry.legacy).length,15);
+	assert.equal(gates.filter((entry) => !entry.legacy).length,17);
 	assert.equal(diagnostics.valid,true);
 	assert.deepEqual(diagnostics.operationalLocationIds,[]);
 	assert.deepEqual(diagnostics.summary,{
-		gateCount:30,
+		gateCount:32,
 		declaredOperationalCount:0,
 		operationalCount:0,
-		nonOperationalCount:30,
+		nonOperationalCount:32,
 		legacyMigrationCount:15,
-		locationGateCount:30,
+		locationGateCount:32,
 		errorCount:0,
-		warningCount:45,
+		warningCount:47,
 	});
 	assert.ok(diagnostics.issues.some((entry) => entry.code === "gate-not-operational" && entry.locationId === NATIVE_CORRYVRECKAN));
 	assert.equal(diagnostics.issues.some((entry) => entry.severity === "error" && entry.locationId === NATIVE_CORRYVRECKAN),false);

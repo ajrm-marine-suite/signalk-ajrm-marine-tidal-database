@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.18 — 2026-08-22
+
+- Add distinct native-v2 reference records for Sound of Luing and Dorus Mòr,
+  joined to fresh OS named-sea and named-channel Location IDs while preserving
+  both legacy v1 objects and every prior gate byte-for-byte.
+- Apply the full positive operational checklist and keep both fail-closed:
+  average or unbounded wind-variable beginnings, no true bearings, per-turn
+  slack placement, exact gate-local turn rates, supported flow/interpolation
+  models or complete structured publication/hazard evidence.
+- Encode thirteen stable blockers per candidate, keep all machine timing,
+  bearing and slack values unavailable, retain empty rate observations and
+  prove the effective Planning allow-list remains empty.
+
 ## 0.1.17 — 2026-08-22
 
 - Add a distinct native-v2 Gulf of Corryvreckan record joined to a fresh OS

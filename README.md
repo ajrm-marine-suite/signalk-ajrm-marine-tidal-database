@@ -2,15 +2,15 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.17 adds a distinct photo-verified native v2 reference record for
-the Gulf of Corryvreckan, joined to a fresh OS named-sea Location. The source's
-average, wind-variable spring/neap beginnings, passage-level slack and broad
-mid-channel rates remain unavailable for calculation; true bearings, exact
-gate-local observations and supported models are absent. Direction-specific
-overfalls, whirlpool/eddy hazards, an incomplete Directions paragraph and an
-incomplete structured publication citation also block operational use. The
-conflicting legacy Corryvreckan Location and v1 gate remain byte-for-byte
-unchanged.
+Version 0.1.18 adds distinct photo-verified native v2 reference records for
+Sound of Luing and Dorus Mòr, joined to fresh OS named-sea and named-channel
+Locations. Their attributable spring/neap beginnings, passage-level slack and
+shared or spatially varying rates remain unavailable for calculation: neither
+source supplies exact timing precision, true bearings, per-turn slack
+placement, exact gate-local turn rates or supported flow/interpolation models.
+Incomplete citation, heading/Directions and locally variable hazard evidence
+also blocks operation. Both legacy Locations and v1 gates remain byte-for-byte
+unchanged, and Planning's effective allow-list remains empty.
 
 ## Responsibilities
 
@@ -68,6 +68,10 @@ The [Segment 7A source review](docs/tidal-gate-source-review-segment-7a.md)
 records the corrected Corryvreckan heading index, distinct OS named-sea join,
 legacy conflict, direction/regime/slack/rate scope, physical hazards and the
 complete positive operational-eligibility failure.
+The [Segment 7B source review](docs/tidal-gate-source-review-segment-7b.md)
+records the Sound of Luing column boundary, the incomplete Dorus Mòr heading
+and continuation index, distinct OS joins, exact direction/regime/slack/rate
+scope, structured hazards and both complete positive eligibility failures.
 
 ## Offline and refresh behaviour
 
@@ -91,7 +95,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.17 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.18 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 
