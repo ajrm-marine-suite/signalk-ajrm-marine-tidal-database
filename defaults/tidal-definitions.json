@@ -1,8 +1,8 @@
 {
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
-  "generatedAt": "2026-08-22T14:42:36.000Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.42",
+  "generatedAt": "2026-08-22T15:13:09.000Z",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.43",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -4596,6 +4596,429 @@
           "turn-times-not-regime-specific",
           "locality-rates-not-turn-regime-exact",
           "whole-loch-representative-point",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "c37604e9-f6e7-442f-91c3-c3135fc2e215",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5404-sound-of-mull-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "northwest-going",
+          "name": "Northwest-going stream begins",
+          "direction": {
+            "label": "Northwest-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral nominal offset (-360 min); it cannot be treated as exact or assigned to spring.",
+              "sourceIds": [
+                "img-5404-sound-of-mull-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral nominal offset (-360 min); it cannot be treated as exact or assigned to neap.",
+              "sourceIds": [
+                "img-5404-sound-of-mull-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "southeast-going",
+          "name": "Southeast-going stream begins",
+          "direction": {
+            "label": "Southeast-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral nominal offset (-45 min); it cannot be treated as exact or assigned to spring.",
+              "sourceIds": [
+                "img-5404-sound-of-mull-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral nominal offset (-45 min); it cannot be treated as exact or assigned to neap.",
+              "sourceIds": [
+                "img-5404-sound-of-mull-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5404-sound-of-mull-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5404.jpeg; Sound of Mull / Tides; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T15:13:09.000Z"
+          },
+          {
+            "id": "img-5403-southeast-entrance",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5403.jpeg; Lismore to the Sound of Mull; southeast-entrance endpoints; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T15:13:09.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed adjacent chapter Tides block explicitly identifies the zero-offset Oban stream event as HW; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:42:36.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T15:13:09.000Z",
+          "notes": "IMG_5404 gives approximate regime-neutral turns at the southeast end, while IMG_5403 separately defines the southeast entrance by named endpoints. The up-to 2 kn entrance ceiling and about 5.25-hour northwest-going duration are retained only as uncertainty, not as turn/regime rate or slack fields. The photos do not name Duart Point, so this fresh Location join does not reuse that conflicting legacy identity."
+        }
+      },
+      "cautions": [],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "turn-times-explicitly-approximate",
+          "summary": "Both southeast-end stream starts are stated as about -360 min northwest-going and -45 min southeast-going relative to HW Oban.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives no separate spring/neap turn timings for the southeast end of the Sound of Mull.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "entrance-endpoint-representative",
+          "summary": "The joined Location is the Rubha an Ridire land-point anchor for one named endpoint of the southeast entrance; the timing text applies to the southeast end and does not establish a surveyed gate line, fairway or exact observation point.",
+          "sourceIds": [
+            "img-5403-southeast-entrance",
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "entrance-up-to-rate",
+          "summary": "The source gives one regional ceiling of up to 2 kn at the southeast entrance without independent turn or spring/neap rate observations.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "northwest-duration-incomplete",
+          "summary": "The northwest-going stream is described as lasting about 5.25 hours at the southeast end; no southeast-going duration or slack duration is stated, so the duration is not mapped into operational slack or a flow model.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "duart-identity-unproved",
+          "summary": "The reviewed photographs do not name Duart Point; this source-checked record deliberately does not reuse the legacy Duart Point Location or timing record.",
+          "sourceIds": [
+            "img-5403-southeast-entrance",
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "turn-times-explicitly-approximate",
+          "turn-times-not-regime-specific",
+          "entrance-endpoint-only-representative",
+          "shared-up-to-rate-not-turn-regime-exact",
+          "one-direction-duration-only",
+          "duart-identity-unproved",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "74846a1d-67f1-4176-b74b-b7956df2386e",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5404-sound-of-mull-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "northwest-going",
+          "name": "Northwest-going stream begins",
+          "direction": {
+            "label": "Northwest-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral nominal offset (+300 min); it cannot be treated as exact or assigned to spring.",
+              "sourceIds": [
+                "img-5404-sound-of-mull-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral nominal offset (+300 min); it cannot be treated as exact or assigned to neap.",
+              "sourceIds": [
+                "img-5404-sound-of-mull-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "southeast-going",
+          "name": "Southeast-going stream begins",
+          "direction": {
+            "label": "Southeast-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral nominal offset (-45 min); it cannot be treated as exact or assigned to spring.",
+              "sourceIds": [
+                "img-5404-sound-of-mull-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one explicitly approximate, regime-neutral nominal offset (-45 min); it cannot be treated as exact or assigned to neap.",
+              "sourceIds": [
+                "img-5404-sound-of-mull-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5404-sound-of-mull-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5404.jpeg; Sound of Mull / Tides; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T15:13:09.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed adjacent chapter Tides block explicitly identifies the zero-offset Oban stream event as HW; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:42:36.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T15:13:09.000Z",
+          "notes": "IMG_5404 states this timing locus as three miles southeast of Calve Island and gives approximate regime-neutral turns. The Location join is deliberately the named Calve Island land anchor because no authoritative offshore coordinate was established; it is not a generated three-mile southeast waypoint. The generic elsewhere up-to 1 kn ceiling and contextual northwest-end duration remain only as uncertainty."
+        }
+      },
+      "cautions": [],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "turn-times-explicitly-approximate",
+          "summary": "Both Calve-locus stream starts are stated as about +300 min northwest-going and -45 min southeast-going relative to HW Oban.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives no separate spring/neap turn timings for the locus three miles southeast of Calve Island.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "calve-island-anchor-not-offshore-locus",
+          "summary": "The joined Location is a representative land point on Calve Island, not the source locus three miles southeast; no exact offshore bearing, origin point or coordinate is asserted.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "elsewhere-up-to-rate",
+          "summary": "The page gives a generic ceiling of up to 1 kn elsewhere in the Sound, not a Calve-locus, turn-specific or spring/neap rate observation.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "northwest-end-duration-contextual",
+          "summary": "The northwest-going stream is described as lasting about 6.75 hours at the northwest end, but the sentence does not explicitly restate the Calve timing locus; no southeast-going duration or slack duration is stated.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "generic-sound-record-conflicts",
+          "summary": "The existing generic Sound of Mull v1 record has different timings, rates and modelled zero slack; this reviewed Calve-locus record uses a fresh identity and does not overwrite or reinterpret it.",
+          "sourceIds": [
+            "img-5404-sound-of-mull-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "turn-times-explicitly-approximate",
+          "turn-times-not-regime-specific",
+          "calve-island-anchor-not-offshore-locus",
+          "generic-elsewhere-rate-not-locus-turn-regime-exact",
+          "northwest-duration-only-contextual",
+          "generic-sound-record-conflicts",
           "true-bearings-not-stated",
           "slack-not-stated",
           "flow-model-not-stated",

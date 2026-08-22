@@ -2,14 +2,14 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.11 adds photo-verified native v2 reference records for Northwest
-Mull and Loch Sunart. Their nominal turn times and carefully separated local
-rate statements remain visible, but broad/approximate timing loci and missing
-exact turn/regime-specific rates, bearings, slack and supported models keep
-both out of Planning's operational allow-list. South-end Tiree remains
-withheld because no defensible gate point was established. All 15 existing v1
-records also remain visible as `needs-review`; none is silently promoted to
-operational use.
+Version 0.1.12 adds two distinct photo-verified native v2 reference records for
+the Sound of Mull: its southeast end and the separate locus three miles
+southeast of Calve Island. Approximate regime-neutral turns, regional rate
+ceilings and one-direction duration notes remain visible only as sourced
+uncertainty. Missing exact turn/regime-specific rates, bearings, slack and
+supported models keep both out of Planning's operational allow-list. The old
+Duart Point and generic Sound of Mull v1 records remain unchanged and visible
+as `needs-review`; neither is silently reinterpreted or promoted.
 
 ## Responsibilities
 
@@ -49,7 +49,9 @@ The compact [Segment 3A source review](docs/tidal-gate-source-review-segment-3a.
 maps the reviewed photographs, imported facts and withheld southeast-Coll
 candidate without copying publication prose. The [Segment 3B source review](docs/tidal-gate-source-review-segment-3b.md)
 records the corrected heading-to-image index, locality separation and withheld
-south-end Tiree candidate.
+south-end Tiree candidate. The [Segment 4 source review](docs/tidal-gate-source-review-segment-4.md)
+separates the two Sound of Mull timing regimes, their spatial anchors and the
+conflicting legacy records.
 
 ## Offline and refresh behaviour
 
@@ -73,7 +75,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.11 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.12 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

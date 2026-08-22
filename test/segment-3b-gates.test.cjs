@@ -68,7 +68,7 @@ test("candidate 4 remains documented as spatially withheld and image headings ar
 });
 
 test("Segment 3B joins coexist with prior records and leave the effective allow-list empty", () => {
-	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.42");
+	assert.equal(definitions.sourcePackage,"signalk-ajrm-marine-location-editor@0.6.43");
 	const gates = definitions.gates.map(normalizeGate);
 	const locations = [
 		...definitions.ports.map((entry) => ({
@@ -80,11 +80,11 @@ test("Segment 3B joins coexist with prior records and leave the effective allow-
 	];
 	const diagnostics = catalogueDiagnostics({ ...definitions,gates },locations);
 	assert.equal(gates.filter((entry) => entry.legacy?.fromContract === "ajrm-tidal-gate-constants-v1").length,15);
-	assert.equal(gates.filter((entry) => !entry.legacy).length,4);
+	assert.equal(gates.filter((entry) => !entry.legacy).length,6);
 	assert.equal(diagnostics.valid,true);
 	assert.deepEqual(diagnostics.operationalLocationIds,[]);
-	assert.equal(diagnostics.summary.gateCount,19);
-	assert.equal(diagnostics.summary.nonOperationalCount,19);
+	assert.equal(diagnostics.summary.gateCount,21);
+	assert.equal(diagnostics.summary.nonOperationalCount,21);
 	for (const item of expected) {
 		assert.ok(diagnostics.issues.some((entry) => entry.code === "gate-not-operational" && entry.locationId === item.locationId));
 		assert.equal(diagnostics.issues.some((entry) => entry.severity === "error" && entry.locationId === item.locationId),false);

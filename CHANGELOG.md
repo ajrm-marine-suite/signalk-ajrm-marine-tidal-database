@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.12 — 2026-08-22
+
+- Add distinct native v2 reference-only records for the Sound of Mull
+  southeast end and the source locus three miles southeast of Calve Island.
+- Preserve approximate regime-neutral HW Oban offsets only in unavailable
+  spring/neap reasons; retain regional up-to rate ceilings and incomplete
+  duration evidence only as blocking uncertainty.
+- Keep the conflicting legacy Duart Point and generic Sound of Mull records
+  unchanged, using fresh Location joins instead of silently reinterpreting
+  either identity.
+- Add focused source-index, locality, rate/duration and effective fail-closed
+  tests.
+
 ## 0.1.11 — 2026-08-22
 
 - Add photo-verified native v2 reference records for Northwest Mull and Loch
