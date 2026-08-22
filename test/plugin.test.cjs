@@ -40,7 +40,7 @@ test("the standalone service owns tidal data and exposes all seeded ports", asyn
 	assert.equal(gateCatalogue.contract,"ajrm-tidal-gate-catalogue-v2");
 	assert.equal(gateCatalogue.gates.length,definitions.gates.length);
 	assert.deepEqual(gateCatalogue.operationalLocationIds,[]);
-	assert.equal(gateCatalogue.diagnostics.summary.legacyMigrationCount,definitions.gates.length);
+	assert.equal(gateCatalogue.diagnostics.summary.legacyMigrationCount,definitions.gates.filter((entry) => entry.contract === "ajrm-tidal-gate-constants-v1").length);
 	const status = await call("GET","/status");
 	assert.equal(status.body.contract, "ajrm-marine-tidal-database-status-v1");
 	assert.equal(status.body.summary.stationCount, new Set(definitions.ports.filter((entry)=>entry.prediction.mode==="provider").map((entry)=>`${entry.prediction.providerId}:${entry.prediction.stationId}`)).size);

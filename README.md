@@ -2,10 +2,12 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.9 adds the documented `ajrm-tidal-gate-constants-v2` foundation,
-lossless fail-closed v1 migration, effective catalogue diagnostics and
-revisioned gate mutation. All 15 existing v1 records remain visible but become
-`needs-review`; none is silently promoted to operational use.
+Version 0.1.10 adds photo-verified native v2 reference records for Sound of
+Iona and Gunna Sound. Their nominal turn times, shared `up-to` rate bounds,
+source cautions and uncertainty remain visible, but missing exact
+turn/regime-specific rates, bearings, slack and supported models keep both out
+of Planning's operational allow-list. All 15 existing v1 records also remain
+visible as `needs-review`; none is silently promoted to operational use.
 
 ## Responsibilities
 
@@ -41,6 +43,9 @@ See [AJRM tidal-gate constants v2](docs/tidal-gate-contract-v2.md) and the
 plugin's OpenAPI document for the full representation, migration semantics,
 effective readiness rules and revisioned GET/PUT/DELETE boundary. Gate timing
 mutation belongs here; Location Editor continues to own spatial records only.
+The compact [Segment 3A source review](docs/tidal-gate-source-review-segment-3a.md)
+maps the reviewed photographs, imported facts and withheld southeast-Coll
+candidate without copying publication prose.
 
 ## Offline and refresh behaviour
 
@@ -64,7 +69,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.9 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.10 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

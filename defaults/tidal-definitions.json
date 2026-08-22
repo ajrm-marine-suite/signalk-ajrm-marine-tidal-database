@@ -1,8 +1,8 @@
 {
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
-  "generatedAt": "2026-08-21T11:39:17.906Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.38",
+  "generatedAt": "2026-08-22T14:06:04.000Z",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.41",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -3838,6 +3838,369 @@
       "ebbSpringSlack": "",
       "ebbNeapSlack": "",
       "source": "British Place Names coordinates; no complete tidal stream timing/slack/neap source yet"
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "1957fe61-93dd-4eb2-a27b-e8f7fa958270",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5410-iona-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "north-going",
+          "name": "North-going stream begins",
+          "direction": {
+            "label": "North-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (+315 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5410-iona-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (+315 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5410-iona-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "south-going",
+          "name": "South-going stream begins",
+          "direction": {
+            "label": "South-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (-15 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5410-iona-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (-15 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5410-iona-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5410-iona-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5410.jpeg; Sound of Iona / Tides; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; adjacent Tides block explicitly identifies the zero-offset Oban event as HW; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T14:06:04.000Z",
+          "notes": "The source gives regime-neutral nominal offsets of +315 min north-going and -15 min south-going. They remain in sourced unavailable reasons and are not assigned to spring or neap. Its gate-wide up-to 2.5 kn statement is retained in sourced uncertainty only because v2 has no turn-neutral rate observation; the record is reference-only."
+        }
+      },
+      "cautions": [
+        {
+          "id": "rough-sea-conditions",
+          "summary": "The source warns that strong flow can produce rough sea conditions.",
+          "sourceIds": [
+            "img-5410-iona-tides"
+          ],
+          "blocking": false
+        }
+      ],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "turn-times-explicitly-guidance",
+          "summary": "The publication explicitly describes the turn times as uncertain guidance.",
+          "sourceIds": [
+            "img-5410-iona-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives regime-neutral HW Oban offsets of +315 min north-going and -15 min south-going, with no separate spring/neap timings.",
+          "sourceIds": [
+            "img-5410-iona-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "shared-up-to-rate",
+          "summary": "The source gives one gate-wide up-to 2.5 kn bound without independent turn or spring/neap rate observations.",
+          "sourceIds": [
+            "img-5410-iona-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "turn-times-explicitly-uncertain",
+          "turn-times-not-regime-specific",
+          "shared-up-to-rate-not-turn-regime-exact",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "6211fb34-5f92-4ea9-887c-201ddb550792",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5409-gunna-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "northwest-going",
+          "name": "Northwest-going stream begins",
+          "direction": {
+            "label": "Northwest-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (+335 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5409-gunna-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (+335 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5409-gunna-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "southeast-going",
+          "name": "Southeast-going stream begins",
+          "direction": {
+            "label": "Southeast-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction but gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (-80 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5409-gunna-tides"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal offset (-80 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5409-gunna-tides"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5409-gunna-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5409.jpeg; Gunna Sound / Tides; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; adjacent Tides block explicitly identifies the zero-offset Oban event as HW; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T14:06:04.000Z",
+          "notes": "The source gives regime-neutral nominal offsets of +335 min northwest-going and -80 min southeast-going. They remain in sourced unavailable reasons and are not assigned to spring or neap. Its gate-wide up-to 3 kn statement is retained in sourced uncertainty only because v2 has no turn-neutral rate observation; the record is reference-only."
+        }
+      },
+      "cautions": [
+        {
+          "id": "wind-against-tide-overfalls",
+          "summary": "The source warns of heavy overfalls at the windward end when tide opposes wind.",
+          "sourceIds": [
+            "img-5409-gunna-tides"
+          ],
+          "blocking": false
+        }
+      ],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives regime-neutral HW Oban offsets of +335 min northwest-going and -80 min southeast-going, with no separate spring/neap timings.",
+          "sourceIds": [
+            "img-5409-gunna-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "shared-up-to-rate",
+          "summary": "The source gives one gate-wide up-to 3 kn bound without independent turn or spring/neap rate observations.",
+          "sourceIds": [
+            "img-5409-gunna-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "turn-times-not-regime-specific",
+          "shared-up-to-rate-not-turn-regime-exact",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
     }
   ]
 }

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.10 — 2026-08-22
+
+- Add photo-verified native v2 reference records for Sound of Iona and Gunna
+  Sound, preserving signed HW Oban timing evidence, independent direction
+  names, shared up-to bounds, source cautions and uncertainty without assigning
+  regime-neutral facts to unsupported spring/neap or turn-specific fields.
+- Keep both gates display-only: the photographs do not supply exact
+  turn/regime rates, true bearings, slack or supported calculation models, and
+  Iona's turn times are explicitly only guidance.
+- Add focused catalogue, v1-coexistence, Location-join and effective
+  fail-closed tests.
+- Record compact photograph and spatial provenance, including why the
+  southeast-Coll Passage of Tiree candidate was withheld.
+
 ## 0.1.9 — 2026-08-22
 
 - Add the documented `ajrm-tidal-gate-constants-v2` contract with stable
