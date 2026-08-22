@@ -2,14 +2,13 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.12 adds two distinct photo-verified native v2 reference records for
-the Sound of Mull: its southeast end and the separate locus three miles
-southeast of Calve Island. Approximate regime-neutral turns, regional rate
-ceilings and one-direction duration notes remain visible only as sourced
-uncertainty. Missing exact turn/regime-specific rates, bearings, slack and
-supported models keep both out of Planning's operational allow-list. The old
-Duart Point and generic Sound of Mull v1 records remain unchanged and visible
-as `needs-review`; neither is silently reinterpreted or promoted.
+Version 0.1.13 adds distinct photo-verified native v2 reference records for
+Corran Narrows and the Loch Leven narrows at Caolas Mhic Phadruig. Printed
+regime-neutral stream beginnings remain visible only in sourced unavailable
+reasons. Gate-wide and multi-locality more-than 5 kn lower bounds remain
+blocking uncertainty, never turn/regime rate fields. Missing exact rates,
+bearings, slack and supported models keep both out of Planning's operational
+allow-list while every prior gate remains unchanged.
 
 ## Responsibilities
 
@@ -51,7 +50,9 @@ candidate without copying publication prose. The [Segment 3B source review](docs
 records the corrected heading-to-image index, locality separation and withheld
 south-end Tiree candidate. The [Segment 4 source review](docs/tidal-gate-source-review-segment-4.md)
 separates the two Sound of Mull timing regimes, their spatial anchors and the
-conflicting legacy records.
+conflicting legacy records. The [Segment 5A source review](docs/tidal-gate-source-review-segment-5a.md)
+records the corrected Corran/Loch Eil/Loch Leven image index, separates the
+Loch Leven narrows from Caolas nan Con and documents both fail-closed joins.
 
 ## Offline and refresh behaviour
 
@@ -75,7 +76,7 @@ their complete raw record under compatibility metadata.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.12 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.13 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

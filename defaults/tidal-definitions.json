@@ -1,8 +1,8 @@
 {
   "contract": "ajrm-marine-tidal-database-seed-v1",
   "contractVersion": 1,
-  "generatedAt": "2026-08-22T15:13:09.000Z",
-  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.43",
+  "generatedAt": "2026-08-22T15:48:00.000Z",
+  "sourcePackage": "signalk-ajrm-marine-location-editor@0.6.44",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
@@ -5019,6 +5019,397 @@
           "generic-elsewhere-rate-not-locus-turn-regime-exact",
           "northwest-duration-only-contextual",
           "generic-sound-record-conflicts",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "55187907-2b6d-4c9b-9073-3848e2679a07",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5401-corran-narrows-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "in-going",
+          "name": "In-going stream begins",
+          "direction": {
+            "label": "In-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction only as in-going and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (-360 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5401-corran-narrows-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (-360 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5401-corran-narrows-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "out-going",
+          "name": "Out-going stream begins",
+          "direction": {
+            "label": "Out-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction only as out-going and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (+5 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5401-corran-narrows-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (+5 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5401-corran-narrows-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5401-corran-narrows-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5401.jpeg; Corran Narrows / Tides; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T15:48:00.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed notation key identifies Oban stream offsets as relative to HW; not reopened for Segment 5A",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T15:48:00.000Z",
+          "notes": "IMG_5401 gives regime-neutral nominal beginning offsets of -360 min in-going and +5 min out-going relative to Oban. The source's more-than 5 kn at springs statement applies to the stream in the narrows generally, not independently to either turn, so it remains only as blocking uncertainty. No duration is derived from the two beginnings."
+        }
+      },
+      "cautions": [
+        {
+          "id": "localized-eddies",
+          "summary": "The source describes eddies on both sides of the narrows and localizes them differently on flood and ebb.",
+          "sourceIds": [
+            "img-5401-corran-narrows-tides"
+          ],
+          "blocking": false
+        }
+      ],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "named-channel-representative-point",
+          "summary": "The joined Location is an OS Open Names representative point for Corran Narrows, not a surveyed gate line, fairway, safe-water point or ferry track.",
+          "sourceIds": [
+            "img-5401-corran-narrows-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives regime-neutral HW Oban beginning offsets of -360 min in-going and +5 min out-going, with no separate spring/neap timings.",
+          "sourceIds": [
+            "img-5401-corran-narrows-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "shared-more-than-spring-rate",
+          "summary": "The source gives one gate-wide lower-bound statement of more than 5 kn at springs without independent in-going/out-going exact rate observations.",
+          "sourceIds": [
+            "img-5401-corran-narrows-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "named-channel-representative-point",
+          "turn-times-not-regime-specific",
+          "shared-more-than-spring-rate-not-turn-exact",
+          "true-bearings-not-stated",
+          "slack-not-stated",
+          "flow-model-not-stated",
+          "regime-interpolation-not-stated"
+        ]
+      }
+    },
+    {
+      "contract": "ajrm-tidal-gate-constants-v2",
+      "contractVersion": 2,
+      "revision": 1,
+      "locationId": "47683dc5-1b7e-477c-95fb-4e7a54244995",
+      "conventions": {
+        "offsetSign": "positive-after-reference-event",
+        "directionBearing": "degrees-true-current-towards"
+      },
+      "reference": {
+        "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
+        "event": "HW",
+        "sourceIds": [
+          "img-5400-loch-leven-tides",
+          "img-5408-hw-notation"
+        ]
+      },
+      "flowModel": {
+        "kind": "unavailable"
+      },
+      "regimeInterpolation": {
+        "kind": "unavailable"
+      },
+      "turns": [
+        {
+          "id": "in-going",
+          "name": "In-going stream begins",
+          "direction": {
+            "label": "In-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction only as in-going and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (-315 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5400-loch-leven-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (-315 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5400-loch-leven-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            }
+          }
+        },
+        {
+          "id": "out-going",
+          "name": "Out-going stream begins",
+          "direction": {
+            "label": "Out-going stream",
+            "bearingDegreesTrue": {
+              "state": "unavailable",
+              "reason": "The reviewed source names the direction only as out-going and gives no true bearing."
+            }
+          },
+          "offsets": {
+            "unit": "minutes",
+            "spring": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (+60 min); it cannot be assigned to spring.",
+              "sourceIds": [
+                "img-5400-loch-leven-tides",
+                "img-5408-hw-notation"
+              ]
+            },
+            "neap": {
+              "state": "unavailable",
+              "reason": "The source reports one regime-neutral nominal beginning offset (+60 min); it cannot be assigned to neap.",
+              "sourceIds": [
+                "img-5400-loch-leven-tides",
+                "img-5408-hw-notation"
+              ]
+            }
+          },
+          "slack": {
+            "unit": "minutes",
+            "spring": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            },
+            "neap": {
+              "semantics": "unavailable",
+              "reason": "The reviewed source says when the stream begins but gives no slack duration."
+            }
+          }
+        }
+      ],
+      "rateObservations": [],
+      "provenance": {
+        "sources": [
+          {
+            "id": "img-5400-loch-leven-tides",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5400.jpeg; Loch Leven / Tides / At the narrows; page number not visible",
+            "url": null,
+            "retrievedAt": "2026-08-22T15:48:00.000Z"
+          },
+          {
+            "id": "img-5408-hw-notation",
+            "kind": "pilot-book",
+            "title": null,
+            "publisher": null,
+            "edition": null,
+            "page": null,
+            "imageRef": "IMG_5408.jpeg; previously reviewed notation key identifies Oban stream offsets as relative to HW; not reopened for Segment 5A",
+            "url": null,
+            "retrievedAt": "2026-08-22T14:06:04.000Z"
+          }
+        ],
+        "review": {
+          "state": "reviewed",
+          "reviewedBy": "OpenAI Codex for Anthony McDonald",
+          "reviewedAt": "2026-08-22T15:48:00.000Z",
+          "notes": "IMG_5400 gives regime-neutral nominal beginning offsets of -315 min in-going and +60 min out-going at the Loch Leven narrows relative to Oban. Its more-than 5 kn statement applies jointly to the narrows and Caolas nan Con, without turn or regime assignment, so it remains only as blocking uncertainty. The separately stated Caolas nan Con timings are not merged."
+        }
+      },
+      "cautions": [
+        {
+          "id": "wind-against-ebb-overfalls",
+          "summary": "The source reports moderate overfalls west of the narrows when a westerly wind opposes the ebb.",
+          "sourceIds": [
+            "img-5400-loch-leven-tides"
+          ],
+          "blocking": false
+        }
+      ],
+      "hazards": [],
+      "uncertainty": [
+        {
+          "id": "named-channel-representative-point",
+          "summary": "The joined Location is an OS Open Names representative point for Caolas Mhic Phadruig at the officially documented Ballachulish Bridge locus, not a surveyed gate line, bridge-clearance point, fairway or safe-water point.",
+          "sourceIds": [
+            "img-5400-loch-leven-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "turn-times-not-regime-specific",
+          "summary": "The source gives regime-neutral HW Oban beginning offsets of -315 min in-going and +60 min out-going at the narrows, with no separate spring/neap timings.",
+          "sourceIds": [
+            "img-5400-loch-leven-tides",
+            "img-5408-hw-notation"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "shared-multi-locality-more-than-rate",
+          "summary": "The source gives one lower-bound statement of more than 5 kn jointly for the narrows and Caolas nan Con, with no turn-specific or spring/neap rate observations.",
+          "sourceIds": [
+            "img-5400-loch-leven-tides"
+          ],
+          "blocking": true
+        },
+        {
+          "id": "caolas-nan-con-timing-separate",
+          "summary": "Caolas nan Con has separately scoped stream timing; it is not merged into the Loch Leven narrows turns or joined Location.",
+          "sourceIds": [
+            "img-5400-loch-leven-tides"
+          ],
+          "blocking": true
+        }
+      ],
+      "readiness": {
+        "state": "reference-only",
+        "reasons": [
+          "named-channel-representative-point",
+          "turn-times-not-regime-specific",
+          "shared-multi-locality-more-than-rate-not-turn-regime-exact",
+          "caolas-nan-con-timing-separate",
           "true-bearings-not-stated",
           "slack-not-stated",
           "flow-model-not-stated",

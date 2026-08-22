@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.13 — 2026-08-22
+
+- Add distinct native v2 reference-only timing records for Corran Narrows and
+  the Loch Leven narrows at Caolas Mhic Phadruig.
+- Preserve printed regime-neutral HW Oban stream beginnings only in sourced
+  unavailable reasons; do not assign them to spring or neap numeric fields.
+- Keep each more-than 5 kn lower bound outside turn/regime rate observations,
+  leave all calculation models unavailable and expose neither record through
+  the effective operational allow-list.
+- Add focused heading-index, locality-separation, one-to-one join, legacy-byte
+  preservation and zero-operational-exposure tests.
+
 ## 0.1.12 — 2026-08-22
 
 - Add distinct native v2 reference-only records for the Sound of Mull

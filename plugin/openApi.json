@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "AJRM Marine Tidal Database",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "description": "Provider-neutral tidal predictions and the versioned ajrm-tidal-gate-constants-v2 contract. Gate timing mutations belong to Tidal Database; names, types and geometry remain owned by Location Editor."
   },
   "paths": {
