@@ -35,11 +35,32 @@ function uniqueProviderStations(definitions) {
 	return [...values.values()];
 }
 
-function normalizePortDefinition(locationId, value = {}) {
+function portKindFromLocation(location) {
+	const standard = location?.types?.includes("tidalStandardPort");
+	const secondary = location?.types?.includes("tidalSecondaryPort");
+	if (standard === secondary) {
+		throw new Error("The selected Location must have exactly one tidal standard-port or tidal secondary-port classification.");
+	}
+	return standard ? "standard" : "secondary";
+}
+
+function assertLocationName(value, location) {
+	const supplied = String(value?.name || "").trim();
+	if (supplied && supplied !== location.name) {
+		throw new Error(`The supplied name does not match the Location-owned name for ${location.id}. Refresh Location Editor data and try again.`);
+	}
+}
+
+function normalizePortDefinition(locationId, value = {}, location) {
+	if (!location || location.id !== String(locationId || "")) throw new Error("The selected tidal-port Location does not exist.");
+	assertLocationName(value, location);
+	const kind = portKindFromLocation(location);
+	if (value.kind && value.kind !== kind) throw new Error(`Port class is owned by Location Editor and must be ${kind}.`);
 	const mode = String(value.prediction?.mode || "unavailable");
+	if (mode === "corrections" && kind !== "secondary") throw new Error("Entered corrections require a Location classified as a tidal secondary port.");
 	const port = {
-		locationId:String(locationId || ""), name:String(value.name || "").trim(),
-		kind:value.kind === "standard" ? "standard" : "secondary",
+		locationId:String(locationId || ""), cachedLocationName:String(location.name || "").trim(),
+		kind,
 		datum:String(value.datum || "").trim() || null,
 		referenceLevels:value.referenceLevels || null,
 		automaticPreferredPortLocationId:String(value.automaticPreferredPortLocationId || "").trim() || null,
@@ -49,10 +70,10 @@ function normalizePortDefinition(locationId, value = {}) {
 		} : null,
 		prediction:{ mode },
 	};
-	if (!port.locationId || !port.name) throw new Error("A tidal definition needs a Location id and name.");
+	if (!port.locationId || !port.cachedLocationName) throw new Error("A tidal definition needs a valid named Location.");
 	if (mode === "provider") Object.assign(port.prediction,{
 		providerId:String(value.prediction.providerId || "").trim(), stationId:String(value.prediction.stationId || "").trim(),
-		stationName:String(value.prediction.stationName || port.name).trim(),
+		stationName:String(value.prediction.stationName || port.cachedLocationName).trim(),
 	});
 	if (mode === "corrections") Object.assign(port.prediction,{
 		parentLocationId:String(value.prediction.parentLocationId || "").trim(),
@@ -61,15 +82,18 @@ function normalizePortDefinition(locationId, value = {}) {
 	return port;
 }
 
-function normalizeAreaDefinition(locationId, value = {}) {
+function normalizeAreaDefinition(locationId, value = {}, location) {
+	if (!location || location.id !== String(locationId || "")) throw new Error("The selected tidal-region Location does not exist.");
+	if (!location.types?.includes("tidalRegion")) throw new Error("The selected Location is not classified as a tidal region.");
+	assertLocationName(value, location);
 	const area = {
 		locationId: String(locationId || ""),
-		name: String(value.name || "").trim(),
+		cachedLocationName: String(location.name || "").trim(),
 		portLocationId: String(value.portLocationId || "").trim(),
 		parentAreaLocationId: String(value.parentAreaLocationId || "").trim() || null,
 	};
-	if (!area.locationId || !area.name || !area.portLocationId) {
-		throw new Error("A tidal-region assignment needs a Location id, name and serving tidal port.");
+	if (!area.locationId || !area.cachedLocationName || !area.portLocationId) {
+		throw new Error("A tidal-region assignment needs a valid named Location and serving tidal port.");
 	}
 	return area;
 }
@@ -142,25 +166,31 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		})]);
 		database = createTidalDatabase({ directory: path.join(dataDirectory, "stations"), providers });
 		const definitions = definitionStore.read();
-		initialized = readState(stateFile).then((state) => { pinnedPortId = state.pinnedPortId; }).catch((error) => app.error?.(error.message));
+		initialized = Promise.all([
+			readState(stateFile).then((state) => { pinnedPortId = state.pinnedPortId; }),
+			refreshLocationNameCache(),
+		]).catch((error) => app.error?.(error.message));
 		const service = Object.freeze({
-			contract: "ajrm-marine-tidal-database-service-v1",
-			contractVersion: 1,
+			contract: "ajrm-marine-tidal-database-service-v2",
+			contractVersion: 2,
 			configured: providers.list().some((provider) => provider.configured),
 			status: (request = {}) => resolve(request),
 			refresh: (request = {}) => resolve(request),
 			databaseStatus: () => databaseStatus(),
-			listPorts: () => definitionStore.read().ports,
-			listAreas: () => definitionStore.read().areas,
+			listPorts: async () => (await joinedDefinitions()).ports,
+			listAreas: async () => (await joinedDefinitions()).areas,
 			setArea: async (locationId, value) => {
-				const area = normalizeAreaDefinition(locationId, value);
+				const locations = await locationMapForWrite();
+				const area = normalizeAreaDefinition(locationId, value, locations.get(String(locationId || "")));
+				validateAreaLocationReferences(area, locations);
 				await definitionStore.setArea(area);
-				return area;
+				return (await joinedDefinitions({ locations })).areas.find((entry) => entry.locationId === area.locationId);
 			},
 			removeArea: (locationId) => definitionStore.removeArea(String(locationId || "")),
 			recommendSecondary: async (request = {}) => {
 				const locations = await listLocations();
-				const result = recommendSecondary(definitionStore.read(), locations, request.position || latestPosition);
+				const definitions = operationalDefinitions(joinDefinitions(definitionStore.read(), locations).catalogue);
+				const result = recommendSecondary(definitions, locations, request.position || latestPosition);
 				return {
 					...result,
 					port: result.port ? { id:result.port.locationId, name:result.port.name } : null,
@@ -177,9 +207,12 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		app.ajrmMarineTidalDatabase = service;
 		globalThis[SERVICE_SYMBOL] = service;
 		const diagnostics = Object.freeze({
-			contract:"ajrm-marine-tidal-database-diagnostics-v1",
-			contractVersion:1,
-			snapshot:async () => ({ ...(await databaseStatus()), definitions:definitionStore.read(), latestProjection }),
+			contract:"ajrm-marine-tidal-database-diagnostics-v2",
+			contractVersion:2,
+			snapshot:async () => {
+				const definitions = await joinedDefinitions();
+				return { ...(await databaseStatus(definitions)), definitions, latestProjection };
+			},
 		});
 		app.ajrmMarineTidalDiagnostics = diagnostics;
 		globalThis[DIAGNOSTICS_SYMBOL] = diagnostics;
@@ -213,37 +246,45 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 	};
 
 	plugin.registerWithRouter = (router) => {
-		router.get("/status", async (_req, res) => res.json(await databaseStatus()));
-		router.get("/stations", async (_req, res) => res.json(await databaseStatus()));
-		router.get("/definitions", async (_req,res) => res.json(definitionStore.read()));
-		router.put("/definitions/ports/:locationId", write(async (req,res) => {
-			const port = normalizePortDefinition(req.params.locationId,req.body);
+		const readRouter = typeof router.access === "function" ? router.access("readonly") : router;
+		const writeRouter = typeof router.access === "function" ? router.access("readwrite") : router;
+		readRouter.get("/status", async (_req, res) => res.json(await databaseStatus()));
+		readRouter.get("/stations", async (_req, res) => res.json(await databaseStatus()));
+		readRouter.get("/definitions", async (_req,res) => res.json(await joinedDefinitions()));
+		writeRouter.put("/definitions/ports/:locationId", write(async (req,res) => {
+			const locations = await locationMapForWrite();
+			const port = normalizePortDefinition(req.params.locationId,req.body,locations.get(String(req.params.locationId || "")));
+			validatePortLocationReferences(port, locations);
 			await definitionStore.setPort(port);
-			res.json({ ok:true,port,status:await databaseStatus() });
+			const definitions = await joinedDefinitions({ locations });
+			res.json({ ok:true,port:definitions.ports.find((entry) => entry.locationId === port.locationId),status:await databaseStatus(definitions) });
 		}));
-		router.delete("/definitions/ports/:locationId", write(async (req,res) => {
+		writeRouter.delete("/definitions/ports/:locationId", write(async (req,res) => {
 			await definitionStore.removePort(req.params.locationId);
 			res.json({ ok:true,status:await databaseStatus() });
 		}));
-		router.put("/definitions/areas/:locationId", write(async (req,res) => {
-			const area = normalizeAreaDefinition(req.params.locationId,req.body);
+		writeRouter.put("/definitions/areas/:locationId", write(async (req,res) => {
+			const locations = await locationMapForWrite();
+			const area = normalizeAreaDefinition(req.params.locationId,req.body,locations.get(String(req.params.locationId || "")));
+			validateAreaLocationReferences(area, locations);
 			await definitionStore.setArea(area);
-			res.json({ ok:true,area,definitions:definitionStore.read() });
+			const definitions = await joinedDefinitions({ locations });
+			res.json({ ok:true,area:definitions.areas.find((entry) => entry.locationId === area.locationId),definitions });
 		}));
-		router.delete("/definitions/areas/:locationId", write(async (req,res) => {
+		writeRouter.delete("/definitions/areas/:locationId", write(async (req,res) => {
 			await definitionStore.removeArea(req.params.locationId);
-			res.json({ ok:true,definitions:definitionStore.read() });
+			res.json({ ok:true,definitions:await joinedDefinitions() });
 		}));
-		router.post("/stations/update", write(async (_req, res) => res.json(await maintainAll())));
-		router.get("/tides/status", async (req, res) => {
+		writeRouter.post("/stations/update", write(async (_req, res) => res.json(await maintainAll())));
+		readRouter.get("/tides/status", async (req, res) => {
 			try { res.json(await resolve(tideRequest(req))); } catch (error) { res.status(400).json({ error: error.message }); }
 		});
-		router.post("/tides/pin", write(async (req, res) => {
+		writeRouter.post("/tides/pin", write(async (req, res) => {
 			pinnedPortId = req.body?.portId || null;
 			await writeState(stateFile, { pinnedPortId, updatedAt: new Date().toISOString() });
 			res.json(await resolve(tideRequest(req)));
 		}));
-		router.post("/tides/refresh", write(async (req, res) => res.json(await resolve(tideRequest(req)))));
+		writeRouter.post("/tides/refresh", write(async (req, res) => res.json(await resolve(tideRequest(req)))));
 	};
 	plugin.getOpenApi = () => JSON.parse(fs.readFileSync(path.join(__dirname, "openApi.json"), "utf8"));
 
@@ -254,7 +295,126 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 	async function listLocations() {
 		const service = locationsService();
 		if (!service?.list) throw new Error("AJRM Marine Location Editor is unavailable.");
-		return service.list({ workspace: "all" });
+		const locations = await service.list({ workspace: "all" });
+		if (!Array.isArray(locations)) throw new Error("AJRM Marine Location Editor returned an invalid Location list.");
+		return locations;
+	}
+
+	function joinDefinitions(stored, locations = null, locationError = null) {
+		const byId = locations instanceof Map
+			? locations
+			: new Map((Array.isArray(locations) ? locations : []).map((location) => [location.id,location]));
+		function typeMatches(location, expectedType) {
+			if (expectedType === "tidalStandardPort" || expectedType === "tidalSecondaryPort") {
+				try {
+					const kind = portKindFromLocation(location);
+					return expectedType === `tidal${kind === "standard" ? "Standard" : "Secondary"}Port`;
+				} catch {
+					return false;
+				}
+			}
+			return Boolean(location?.types?.includes(expectedType));
+		}
+		function joined(entry, expectedType) {
+			const { cachedLocationName, ...definition } = entry;
+			const location = byId.get(entry.locationId) || null;
+			const locationName = String(location?.name || "").trim();
+			const typeValid = typeMatches(location, expectedType);
+			return {
+				...definition,
+				name:locationName || cachedLocationName,
+				nameSource:locationName ? "location" : "cached",
+				locationJoin:locationError ? "service-unavailable" : !location ? "missing-location" : typeValid ? "valid" : "type-mismatch",
+			};
+		}
+		return {
+			catalogue:{
+				...stored,
+				nameOwnership:"ajrm-marine-locations",
+				locationJoinError:locationError?.message || null,
+				ports:stored.ports.map((port) => joined(port, `tidal${port.kind === "standard" ? "Standard" : "Secondary"}Port`)),
+				areas:stored.areas.map((area) => joined(area, "tidalRegion")),
+			},
+			byId,
+		};
+	}
+
+	async function refreshLocationNameCache(locations = null) {
+		const values = locations instanceof Map ? [...locations.values()] : locations || await listLocations();
+		const namesById = new Map(values.map((location) => [location.id,String(location.name || "").trim()]));
+		await definitionStore.cacheLocationNames(namesById);
+		return values;
+	}
+
+	async function joinedDefinitions(options = {}) {
+		let locations = options.locations || null;
+		let locationError = null;
+		if (!locations) {
+			try { locations = await listLocations(); }
+			catch (error) { locationError = error; }
+		}
+		if (locations) {
+			try { await refreshLocationNameCache(locations); }
+			catch (error) { app.error?.(`Could not refresh cached Location names: ${error.message}`); }
+		}
+		return joinDefinitions(definitionStore.read(), locations, locationError).catalogue;
+	}
+
+	async function locationMapForWrite() {
+		return new Map((await listLocations()).map((location) => [location.id,location]));
+	}
+
+	function validatePortLocationReferences(port, locations) {
+		const definitions = definitionStore.read();
+		for (const [locationId,label] of [
+			[port.prediction.parentLocationId,"parent standard port"],
+			[port.automaticPreferredPortLocationId,"automatically preferred port"],
+		]) {
+			if (!locationId) continue;
+			const referenced = definitions.ports.find((entry) => entry.locationId === locationId);
+			const location = locations.get(locationId);
+			if (!referenced || !location) throw new Error(`The ${label} must join to an existing tidal-port Location and definition.`);
+			if (portKindFromLocation(location) !== referenced.kind) throw new Error(`The ${label} classification does not match its Tidal Database definition.`);
+		}
+	}
+
+	function validateAreaLocationReferences(area, locations) {
+		const definitions = definitionStore.read();
+		const port = definitions.ports.find((entry) => entry.locationId === area.portLocationId);
+		const portLocation = locations.get(area.portLocationId);
+		if (!port || !portLocation) throw new Error("The serving tidal port must join to an existing tidal-port Location and definition.");
+		if (portKindFromLocation(portLocation) !== port.kind) throw new Error("The serving tidal-port classification does not match its Tidal Database definition.");
+		if (area.parentAreaLocationId) {
+			const parent = definitions.areas.find((entry) => entry.locationId === area.parentAreaLocationId);
+			const parentLocation = locations.get(area.parentAreaLocationId);
+			if (!parent || !parentLocation?.types?.includes("tidalRegion")) throw new Error("The parent tidal region must join to an existing tidal-region Location and definition.");
+		}
+	}
+
+	function operationalDefinitions(definitions) {
+		const joinedPorts = new Map(definitions.ports.map((port) => [port.locationId,port]));
+		function hasOperationalCorrectionSource(port, seen = new Set()) {
+			if (!port || port.locationJoin !== "valid" || seen.has(port.locationId)) return false;
+			if (port.prediction.mode === "provider") return port.kind === "standard";
+			if (port.prediction.mode !== "corrections") return false;
+			return hasOperationalCorrectionSource(
+				joinedPorts.get(port.prediction.parentLocationId),
+				new Set(seen).add(port.locationId),
+			);
+		}
+		const ports = definitions.ports.filter((port) =>
+			port.locationJoin === "valid" &&
+			(port.prediction.mode !== "corrections" || hasOperationalCorrectionSource(
+				joinedPorts.get(port.prediction.parentLocationId),
+				new Set([port.locationId]),
+			)),
+		);
+		const portIds = new Set(ports.map((port) => port.locationId));
+		return {
+			...definitions,
+			ports,
+			areas:definitions.areas.filter((area) => area.locationJoin === "valid" && portIds.has(area.portLocationId)),
+		};
 	}
 
 	async function resolve(request = {}) {
@@ -262,7 +422,21 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		const now = new Date(request.now || Date.now());
 		let locations;
 		try { locations = await listLocations(); } catch (error) { return emptyProjection(error.message, now); }
-		const definitions = definitionStore.read();
+		const joined = joinDefinitions(definitionStore.read(), locations).catalogue;
+		const definitions = operationalDefinitions(joined);
+		const requestedDefinitionId = request.portId || pinnedPortId;
+		const requestedDefinition = requestedDefinitionId
+			? joined.ports.find((port) => port.locationId === requestedDefinitionId)
+			: null;
+		if (requestedDefinitionId && !requestedDefinition) {
+			return emptyProjection("The selected tidal-port definition does not exist. Clear or replace the selected port before requesting predictions.", now);
+		}
+		if (requestedDefinition && requestedDefinition.locationJoin !== "valid") {
+			return emptyProjection(`The selected tidal-port definition has a ${requestedDefinition.locationJoin} Location join. Repair it in Location Editor before requesting predictions.`, now);
+		}
+		if (requestedDefinition && !definitions.ports.some((port) => port.locationId === requestedDefinition.locationId)) {
+			return emptyProjection("The selected secondary port has an invalid or unavailable reference-port chain. Repair its reference port in Location Editor before requesting predictions.", now);
+		}
 		const selection = selectPort(definitions, locations, {
 			...request,
 			position: request.position || latestPosition,
@@ -332,10 +506,12 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		};
 	}
 
-	async function databaseStatus() {
-		const definitions = definitionStore.read();
+	async function databaseStatus(definitions = null) {
+		definitions ||= await joinedDefinitions();
+		const operational = operationalDefinitions(definitions);
+		const operationalPortById = new Map(operational.ports.map((port) => [port.locationId,port]));
 		const stations = [];
-		for (const station of uniqueProviderStations(definitions)) {
+		for (const station of uniqueProviderStations(operational)) {
 			const status = await database.inspectStation(station);
 			stations.push({ ...status, ports: station.ports });
 		}
@@ -346,8 +522,17 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 			dueCount: stations.filter((station) => station.due).length,
 			errorCount: stations.filter((station) => station.lastError).length,
 		};
+		const joins = [...definitions.ports,...definitions.areas];
+		const locationJoins = {
+			state:joins.every((entry) => entry.locationJoin === "valid") ? "ready" : "degraded",
+			validCount:joins.filter((entry) => entry.locationJoin === "valid").length,
+			degradedCount:joins.filter((entry) => entry.locationJoin !== "valid").length,
+			missingCount:joins.filter((entry) => entry.locationJoin === "missing-location").length,
+			typeMismatchCount:joins.filter((entry) => entry.locationJoin === "type-mismatch").length,
+			serviceUnavailableCount:joins.filter((entry) => entry.locationJoin === "service-unavailable").length,
+			error:definitions.locationJoinError,
+		};
 		const stationByKey = new Map(stations.map((station) => [`${station.providerId}:${station.stationId}`, station]));
-		const portById = new Map(definitions.ports.map((port) => [port.locationId, port]));
 		function sourceFor(port, seen = new Set()) {
 			if (!port || seen.has(port.locationId)) return null;
 			if (port.prediction.mode === "provider") return {
@@ -355,16 +540,16 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 				station: stationByKey.get(`${port.prediction.providerId}:${port.prediction.stationId}`) || null,
 			};
 			if (port.prediction.mode === "corrections") {
-				const parent = portById.get(port.prediction.parentLocationId);
+				const parent = operationalPortById.get(port.prediction.parentLocationId);
 				const root = sourceFor(parent, new Set(seen).add(port.locationId));
 				return root ? { ...root, mode: "corrections", parent: parent ? { id: parent.locationId, name: parent.name } : null } : null;
 			}
 			return null;
 		}
 		const ports = definitions.ports.map((port) => {
-			const source = sourceFor(port);
+			const source = sourceFor(operationalPortById.get(port.locationId));
 			return {
-				locationId: port.locationId, name: port.name, kind: port.kind,
+				locationId: port.locationId, name: port.name, nameSource:port.nameSource, locationJoin:port.locationJoin, kind: port.kind,
 				predictionMode: port.prediction.mode,
 				parent: source?.parent || null,
 				providerId: source?.providerId || null,
@@ -379,9 +564,9 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 			};
 		});
 		return {
-			contract: "ajrm-marine-tidal-database-status-v1", contractVersion: 1,
+			contract: "ajrm-marine-tidal-database-status-v2", contractVersion: 2,
 			plugin: plugin.id, version: packageJson.version, enabled: running,
-			providers: providers?.list() || [], summary, maintenance: lastMaintenance,
+			providers: providers?.list() || [], summary, locationJoins, maintenance: lastMaintenance,
 			policy:{ refreshFloorHours:24, offlineRetryHours:1, discoveryCacheUtcYearBounded:true, requestIntervalSeconds:(providers?.list()?.[0]?.requestIntervalMs || 5000) / 1000 },
 			latestProjection: latestProjection ? { valid: latestProjection.valid, selectedPort: latestProjection.selectedPort, freshness: latestProjection.freshness, error: latestProjection.error } : null,
 			stations, ports,
@@ -420,7 +605,8 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		maintenancePromise = (async () => {
 			const startedAt = new Date().toISOString();
 			lastMaintenance = { running: true, startedAt, completedAt: null, updated: 0, cached: 0, failed: 0, error: "" };
-			for (const station of uniqueProviderStations(definitionStore.read())) {
+			const definitions = operationalDefinitions(await joinedDefinitions());
+			for (const station of uniqueProviderStations(definitions)) {
 				try {
 					const result = await database.stationData(station);
 					if (result.cache === "network") lastMaintenance.updated += 1;

@@ -5,14 +5,14 @@ const API_BASE = "/plugins/signalk-ajrm-marine-tidal-database";
 const LOCATION_API = "/plugins/signalk-ajrm-marine-location-editor";
 const TIDE_GRAPH_DAYS_KEY = "ajrmMarineTidalDatabase.tideGraphDays";
 const TIDE_DIALOG_SIZE_KEY = "ajrmMarineTidalDatabase.tideDialogSize";
-const tideCurveTools = import("./tide-curve.mjs?v=0.7.2");
+const tideCurveTools = import("./tide-curve.mjs?v=0.8.0");
 const byId = (id) => document.getElementById(id);
 const sortLocationsByName = (entries) => globalThis.AJRMLocationOrder.sortLocationsByName(entries);
 
 function text(value) { return value == null || value === "" ? "—" : String(value); }
 function time(value) { return value ? new Date(value).toLocaleString() : "Never"; }
 function escapeHtml(value) { return text(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]); }
-function stateBadge(value) { return `<span class="state ${escapeHtml(value)}">${escapeHtml(value).replaceAll("-", " ")}</span>`; }
+function stateBadge(value,label=value) { return `<span class="state ${escapeHtml(value)}">${escapeHtml(label).replaceAll("-", " ")}</span>`; }
 
 function render() {
 	const status = state.status;
@@ -20,7 +20,7 @@ function render() {
 	const summary = status.summary;
 	byId("summary").innerHTML = [
 		["Provider stations", summary.stationCount], ["Cached", summary.cachedCount], ["Covering now", summary.coveredCount],
-		["Due", summary.dueCount], ["Errors", summary.errorCount], ["Refresh floor", "24 hours"],
+		["Due", summary.dueCount], ["Errors", summary.errorCount], ["Location joins", status.locationJoins?.state || "unknown"], ["Refresh floor", "24 hours"],
 	].map(([label, value]) => `<article class="card"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></article>`).join("");
 	renderStations();
 	renderPorts();
@@ -39,7 +39,13 @@ function renderStations() {
 function renderPorts() {
 	const query = byId("portFilter").value.trim().toLowerCase();
 	const ports = sortLocationsByName(state.status.ports.filter((entry) => JSON.stringify(entry).toLowerCase().includes(query)));
-	byId("ports").innerHTML = ports.map((entry) => `<tr><td><button type="button" class="view-tide" data-location-id="${escapeHtml(entry.locationId)}" title="View and validate the tidal prediction for ${escapeHtml(entry.name)}" aria-label="View tidal prediction for ${escapeHtml(entry.name)}">≈</button></td><td><strong>${escapeHtml(entry.name)}</strong>${entry.advisory ? `<br><span class="state caution">${escapeHtml(entry.advisory.status)}</span> <span class="muted">${escapeHtml(entry.advisory.message)}</span>` : ""}<br><span class="muted">${escapeHtml(entry.locationId)}</span></td><td>${escapeHtml(entry.kind)}</td><td>${escapeHtml(entry.predictionMode === "corrections" ? "Entered corrections" : entry.predictionMode === "provider" ? "Provider events" : "Not configured")}</td><td>${escapeHtml(entry.providerId)} ${escapeHtml(entry.stationId)}</td><td>${escapeHtml(entry.parent?.name)}</td><td>${stateBadge(entry.status)}</td><td><button type="button" class="edit-port" data-location-id="${escapeHtml(entry.locationId)}">Edit</button></td></tr>`).join("");
+	byId("ports").innerHTML = ports.map((entry) => {
+		const joined = entry.locationJoin === "valid";
+		const joinLabel = `Location ${entry.locationJoin || "join unknown"}`;
+		const displayedStatus = joined ? stateBadge(entry.status) : `${stateBadge("error",joinLabel)}<br><span class="muted">Prediction disabled</span>`;
+		const cachedName = entry.nameSource === "cached" ? `<br><span class="state caution">cached Location name</span>` : "";
+		return `<tr><td><button type="button" class="view-tide" data-location-id="${escapeHtml(entry.locationId)}" title="View and validate the tidal prediction for ${escapeHtml(entry.name)}" aria-label="View tidal prediction for ${escapeHtml(entry.name)}">≈</button></td><td><strong>${escapeHtml(entry.name)}</strong>${cachedName}${entry.advisory ? `<br><span class="state caution">${escapeHtml(entry.advisory.status)}</span> <span class="muted">${escapeHtml(entry.advisory.message)}</span>` : ""}<br><span class="muted">${escapeHtml(entry.locationId)}</span></td><td>${escapeHtml(entry.kind)}</td><td>${escapeHtml(entry.predictionMode === "corrections" ? "Entered corrections" : entry.predictionMode === "provider" ? "Provider events" : "Not configured")}</td><td>${escapeHtml(entry.providerId)} ${escapeHtml(entry.stationId)}</td><td>${escapeHtml(entry.parent?.name)}</td><td>${displayedStatus}</td><td><button type="button" class="edit-port" data-location-id="${escapeHtml(entry.locationId)}">Edit</button></td></tr>`;
+	}).join("");
 	for (const button of document.querySelectorAll(".view-tide")) button.addEventListener("click", () => openTide(button.dataset.locationId));
 	for (const button of document.querySelectorAll(".edit-port")) button.addEventListener("click", () => openDefinition(button.dataset.locationId));
 }
@@ -149,7 +155,7 @@ function setValue(id,value) { byId(id).value = value == null ? "" : value; }
 function renderDefinitionChoices(selectedId = "") {
 	const existing = new Set((state.definitions?.ports || []).map((entry) => entry.locationId));
 	const locationsById = new Map(state.locations.map((entry) => [entry.id,entry]));
-	for (const port of state.definitions?.ports || []) if (!locationsById.has(port.locationId)) locationsById.set(port.locationId,{ id:port.locationId,name:port.name });
+	for (const port of state.definitions?.ports || []) if (!locationsById.has(port.locationId)) locationsById.set(port.locationId,{ id:port.locationId,name:port.name,types:[`tidal${port.kind === "standard" ? "Standard" : "Secondary"}Port`] });
 	const locations = sortLocationsByName(locationsById.values());
 	byId("definitionLocation").innerHTML = locations.map((entry) => `<option value="${escapeHtml(entry.id)}" ${entry.id === selectedId ? "selected" : ""}>${escapeHtml(entry.name)}${existing.has(entry.id) && entry.id !== selectedId ? " (configured)" : ""}</option>`).join("");
 	const standardPorts = sortLocationsByName((state.definitions?.ports || []).filter((entry) => entry.kind === "standard" && entry.prediction.mode === "provider"));
@@ -158,22 +164,29 @@ function renderDefinitionChoices(selectedId = "") {
 
 function updateDefinitionFields() {
 	const mode = byId("definitionMode").value;
-	if (mode === "corrections") byId("definitionKind").value = "secondary";
 	const secondary = byId("definitionKind").value === "secondary";
 	byId("providerFields").hidden = mode !== "provider";
 	byId("correctionFields").hidden = mode !== "corrections";
 	byId("heightDifferenceFields").hidden = mode !== "corrections";
 	byId("absoluteReferenceFields").hidden = secondary;
-	byId("definitionKind").disabled = mode === "corrections";
+	byId("definitionKind").disabled = true;
+}
+
+function updateLocationOwnedFields() {
+	const locationId = byId("definitionLocation").value;
+	const location = state.locations.find((entry) => entry.id === locationId);
+	const definition = (state.definitions?.ports || []).find((entry) => entry.locationId === locationId);
+	const standard = location?.types?.includes("tidalStandardPort");
+	const secondary = location?.types?.includes("tidalSecondaryPort");
+	setValue("definitionLocationName",location?.name || definition?.name || "");
+	setValue("definitionKind",standard && !secondary ? "standard" : secondary && !standard ? "secondary" : definition?.kind || "secondary");
+	updateDefinitionFields();
 }
 
 function openDefinition(locationId = "") {
 	const definition = (state.definitions?.ports || []).find((entry) => entry.locationId === locationId) || null;
 	renderDefinitionChoices(locationId);
-	const location = state.locations.find((entry) => entry.id === locationId);
 	setValue("definitionLocation",locationId || state.locations.find((entry) => !(state.definitions?.ports || []).some((port) => port.locationId === entry.id))?.id || "");
-	setValue("definitionLocationName",location?.name || definition?.name || "");
-	setValue("definitionName",definition?.name || location?.name || "");
 	setValue("definitionKind",definition?.kind || "secondary");
 	setValue("definitionMode",definition?.prediction?.mode || "unavailable");
 	setValue("providerId",definition?.prediction?.providerId || "ukhoTidalEvents");
@@ -194,7 +207,7 @@ function openDefinition(locationId = "") {
 	byId("definitionLocation").disabled = Boolean(definition);
 	byId("definitionLocationChoice").hidden = Boolean(definition);
 	byId("definitionLocationReadOnly").hidden = !definition;
-	updateDefinitionFields();
+	updateLocationOwnedFields();
 	byId("definitionDialog").showModal();
 }
 
@@ -202,10 +215,10 @@ function buildDefinition() {
 	const locationId = byId("definitionLocation").value;
 	const mode = byId("definitionMode").value;
 	const referenceLevels = Object.fromEntries([["mhws","mhws"],["mhwn","mhwn"],["mlwn","mlwn"],["mlws","mlws"]].map(([key,id]) => [key,numberOrNull(id)]));
-	const definition = { locationId, name:byId("definitionName").value.trim(), kind:byId("definitionKind").value, datum:byId("definitionDatum").value.trim() || null, referenceLevels, prediction:{ mode } };
-	if (mode === "provider") Object.assign(definition.prediction,{ providerId:byId("providerId").value, stationId:byId("stationId").value.trim(), stationName:byId("stationName").value.trim() || definition.name });
+	const location = state.locations.find((entry) => entry.id === locationId);
+	const definition = { locationId, datum:byId("definitionDatum").value.trim() || null, referenceLevels, prediction:{ mode } };
+	if (mode === "provider") Object.assign(definition.prediction,{ providerId:byId("providerId").value, stationId:byId("stationId").value.trim(), stationName:byId("stationName").value.trim() || location?.name || "" });
 	if (mode === "corrections") {
-		definition.kind = "secondary";
 		definition.datum = null;
 		definition.referenceLevels = null;
 		Object.assign(definition.prediction,{ parentLocationId:byId("parentPortId").value, corrections:{
@@ -238,8 +251,7 @@ byId("stationFilter").addEventListener("input", renderStations);
 byId("portFilter").addEventListener("input", renderPorts);
 byId("newDefinition").addEventListener("click", () => openDefinition());
 byId("definitionMode").addEventListener("change", updateDefinitionFields);
-byId("definitionKind").addEventListener("change", updateDefinitionFields);
-byId("definitionLocation").addEventListener("change", () => { const location=state.locations.find((entry)=>entry.id===byId("definitionLocation").value); if(location) setValue("definitionName",location.name); });
+byId("definitionLocation").addEventListener("change", updateLocationOwnedFields);
 for (const id of ["closeDefinition","cancelDefinition"]) byId(id).addEventListener("click", () => byId("definitionDialog").close());
 for (const id of ["closeTide","closeTideBottom"]) byId(id).addEventListener("click", () => byId("tideDialog").close());
 byId("tideDialog").addEventListener("close",()=>{ saveTideDialogSize(); state.tideHover?.destroy(); state.tideHover=null; });
@@ -260,7 +272,8 @@ byId("definitionForm").addEventListener("submit", (event) => {
 });
 byId("deleteDefinition").addEventListener("click", () => {
 	const locationId=byId("definitionLocation").value;
-	if(!confirm(`Remove the tidal prediction definition for ${byId("definitionName").value}? The spatial Location is retained.`)) return;
+	const name=state.definitions?.ports?.find((entry)=>entry.locationId===locationId)?.name || byId("definitionLocationName").value || "this Location";
+	if(!confirm(`Remove the tidal prediction definition for ${name}? The spatial Location is retained.`)) return;
 	busy(byId("deleteDefinition"),async () => {
 		const response=await fetch(`${API_BASE}/definitions/ports/${encodeURIComponent(locationId)}`,{ method:"DELETE",credentials:"include" });
 		if(!response.ok) throw new Error((await response.json().catch(()=>null))?.error || `Remove failed (${response.status}).`);

@@ -18,7 +18,11 @@ test("webapp explains the refresh floor and exposes both station and port tables
 	assert.match(html, /id="absoluteReferenceFields"[\s\S]*Standard-port datum and reference levels/);
 	assert.match(app, /absoluteReferenceFields"\)\.hidden = secondary/);
 	assert.match(app, /definition\.datum = null;[\s\S]*definition\.referenceLevels = null/);
-	assert.match(app, /definitionKind"\)\.addEventListener\("change", updateDefinitionFields\)/);
+	assert.doesNotMatch(html, /id="definitionName"/);
+	assert.match(html, /name and class are edited in Location Editor/);
+	assert.match(html, /id="definitionKind" disabled/);
+	assert.doesNotMatch(app, /name:byId\("definitionName"\)/);
+	assert.match(app, /location\?\.types\?\.includes\("tidalStandardPort"\)/);
 	assert.match(html, /id="definitionLocationReadOnly" hidden/);
 	assert.match(html, /class="tide-dialog"/);
 	assert.match(html, /id="tideDetailsPane"/);
@@ -35,6 +39,10 @@ test("webapp explains the refresh floor and exposes both station and port tables
 	assert.match(app, /attachTideCurveHover/);
 	assert.match(app, /TIDE_DIALOG_SIZE_KEY/);
 	assert.match(app, /saveTideDialogSize/);
+	assert.match(app, /\["Location joins", status\.locationJoins\?\.state \|\| "unknown"\]/);
+	assert.match(app, /entry\.locationJoin === "valid"/);
+	assert.match(app, /stateBadge\("error",joinLabel\)[\s\S]*Prediction disabled/);
+	assert.match(app, /entry\.nameSource === "cached"[\s\S]*cached Location name/);
 	assert.match(styles, /\[hidden\] \{ display:none !important; \}/);
 });
 

@@ -6,7 +6,8 @@ const path = require("node:path");
 const { randomUUID } = require("node:crypto");
 
 const LEGACY_CONTRACT = "ajrm-marine-tidal-database-definitions-v1";
-const CONTRACT = "ajrm-marine-tidal-database-definitions-v2";
+const PREVIOUS_CONTRACT = "ajrm-marine-tidal-database-definitions-v2";
+const CONTRACT = "ajrm-marine-tidal-database-definitions-v3";
 const MIGRATION_CONTRACT = "ajrm-marine-tidal-to-planning-gate-migration-v1";
 const SAFE_PORT_BACKFILLS = Object.freeze({
 	"29910eb5-6c47-4796-8af7-592742737562": { providerId:"ukhoTidalEvents", stationId:"0404" },
@@ -18,55 +19,82 @@ const SAFE_NAME_RENAMES = Object.freeze({
 
 function activeCatalogue(value) {
 	if (!value || !Array.isArray(value.ports) || !Array.isArray(value.areas)) throw new Error("Tidal definition catalogue is invalid.");
+	const supported = new Map([
+		[LEGACY_CONTRACT,1],
+		[PREVIOUS_CONTRACT,2],
+		[CONTRACT,3],
+		["ajrm-marine-tidal-database-seed-v2",2],
+		["ajrm-marine-tidal-database-seed-v3",3],
+	]);
+	if (supported.get(value.contract) !== value.contractVersion) throw new Error("Tidal definition catalogue contract and version are not supported.");
+	const migratesLegacyNames = [LEGACY_CONTRACT,PREVIOUS_CONTRACT,"ajrm-marine-tidal-database-seed-v2"].includes(value.contract);
 	const { gates: _gates, gateTombstones: _gateTombstones, ...tidal } = structuredClone(value);
-	return { ...tidal, contract:CONTRACT, contractVersion:2 };
+	function withCachedLocationName(entry) {
+		if (!migratesLegacyNames && Object.hasOwn(entry || {},"name")) {
+			throw new Error("Current tidal definitions cannot contain an editable Location name.");
+		}
+		const { name, cachedLocationName, ...definition } = entry || {};
+		return {
+			...definition,
+			cachedLocationName:String(cachedLocationName || name || "").trim(),
+		};
+	}
+	return {
+		...tidal,
+		contract:CONTRACT,
+		contractVersion:3,
+		ports:tidal.ports.map(withCachedLocationName),
+		areas:tidal.areas.map(withCachedLocationName),
+	};
 }
 
 function validate(value) {
-	if (value?.contract !== CONTRACT || value?.contractVersion !== 2 || !Array.isArray(value.ports) || !Array.isArray(value.areas)) throw new Error("Tidal definition catalogue is invalid.");
+	if (value?.contract !== CONTRACT || value?.contractVersion !== 3 || !Array.isArray(value.ports) || !Array.isArray(value.areas)) throw new Error("Tidal definition catalogue is invalid.");
 	if (Object.hasOwn(value,"gates") || Object.hasOwn(value,"gateTombstones")) throw new Error("Tidal definition catalogue cannot contain Planning-owned gate data.");
 	value = structuredClone(value);
 	const ids = new Set();
 	for (const port of value.ports) {
 		if (!port?.locationId || ids.has(port.locationId)) throw new Error("Each tidal port needs one unique Location id.");
+		if (Object.hasOwn(port,"name") || !String(port.cachedLocationName || "").trim()) throw new Error(`${port.locationId} needs an explicit cached Location name.`);
 		ids.add(port.locationId);
-		if (!["standard","secondary"].includes(port.kind)) throw new Error(`${port.name || port.locationId} has an invalid port kind.`);
-		if (!["provider","corrections","unavailable"].includes(port.prediction?.mode)) throw new Error(`${port.name || port.locationId} has an invalid prediction mode.`);
-		if (port.prediction.mode === "provider" && (!port.prediction.providerId || !port.prediction.stationId)) throw new Error(`${port.name} needs a provider and station id.`);
-		if (port.automaticPreferredPortLocationId === port.locationId) throw new Error(`${port.name} cannot prefer itself for automatic selection.`);
+		if (!["standard","secondary"].includes(port.kind)) throw new Error(`${port.cachedLocationName || port.locationId} has an invalid port kind.`);
+		if (!["provider","corrections","unavailable"].includes(port.prediction?.mode)) throw new Error(`${port.cachedLocationName || port.locationId} has an invalid prediction mode.`);
+		if (port.prediction.mode === "provider" && (!port.prediction.providerId || !port.prediction.stationId)) throw new Error(`${port.cachedLocationName} needs a provider and station id.`);
+		if (port.automaticPreferredPortLocationId === port.locationId) throw new Error(`${port.cachedLocationName} cannot prefer itself for automatic selection.`);
 		if (port.prediction.mode === "corrections") {
-			if (!port.prediction.parentLocationId || port.prediction.parentLocationId === port.locationId) throw new Error(`${port.name} needs a different parent standard port.`);
+			if (!port.prediction.parentLocationId || port.prediction.parentLocationId === port.locationId) throw new Error(`${port.cachedLocationName} needs a different parent standard port.`);
 			const correction = port.prediction.corrections;
-			if (!correction || !Array.isArray(correction.highWaterTimeOffsets) || !Array.isArray(correction.lowWaterTimeOffsets)) throw new Error(`${port.name} needs complete entered corrections.`);
+			if (!correction || !Array.isArray(correction.highWaterTimeOffsets) || !Array.isArray(correction.lowWaterTimeOffsets)) throw new Error(`${port.cachedLocationName} needs complete entered corrections.`);
 			for (const point of [...correction.highWaterTimeOffsets,...correction.lowWaterTimeOffsets]) {
-				if (!Number.isFinite(point?.referenceTimeMinutes) || !Number.isFinite(point?.offsetMinutes)) throw new Error(`${port.name} needs numeric times and differences in all four time-correction columns.`);
+				if (!Number.isFinite(point?.referenceTimeMinutes) || !Number.isFinite(point?.offsetMinutes)) throw new Error(`${port.cachedLocationName} needs numeric times and differences in all four time-correction columns.`);
 			}
-			for (const key of ["mhws","mhwn","mlwn","mlws"]) if (!Number.isFinite(correction.heightDifferencesM?.[key])) throw new Error(`${port.name} needs all four height differences.`);
+			for (const key of ["mhws","mhwn","mlwn","mlws"]) if (!Number.isFinite(correction.heightDifferencesM?.[key])) throw new Error(`${port.cachedLocationName} needs all four height differences.`);
 		}
 	}
 	for (const port of value.ports.filter((entry) => entry.prediction.mode === "corrections")) {
 		const parent = value.ports.find((entry) => entry.locationId === port.prediction.parentLocationId);
-		if (!parent || parent.kind !== "standard" || parent.prediction.mode !== "provider") throw new Error(`${port.name} must use a provider-backed standard port as its parent.`);
+		if (!parent || parent.kind !== "standard" || parent.prediction.mode !== "provider") throw new Error(`${port.cachedLocationName} must use a provider-backed standard port as its parent.`);
 	}
 	for (const port of value.ports.filter((entry) => entry.automaticPreferredPortLocationId)) {
 		const preferred = value.ports.find((entry) => entry.locationId === port.automaticPreferredPortLocationId);
 		if (!preferred || preferred.prediction.mode !== "provider") {
-			throw new Error(`${port.name} must prefer an existing provider-backed port.`);
+				throw new Error(`${port.cachedLocationName} must prefer an existing provider-backed port.`);
 		}
 	}
 	const areaIds = new Set();
 	for (const area of value.areas) {
 		if (!area?.locationId || areaIds.has(area.locationId)) throw new Error("Each tidal area needs one unique Location id.");
+		if (Object.hasOwn(area,"name") || !String(area.cachedLocationName || "").trim()) throw new Error(`${area.locationId} needs an explicit cached Location name.`);
 		areaIds.add(area.locationId);
-		if (!area.name || !ids.has(area.portLocationId)) throw new Error(`${area.name || area.locationId} needs a valid serving tidal port.`);
-		if (area.parentAreaLocationId === area.locationId) throw new Error(`${area.name} cannot be its own parent tidal region.`);
+		if (!ids.has(area.portLocationId)) throw new Error(`${area.cachedLocationName || area.locationId} needs a valid serving tidal port.`);
+		if (area.parentAreaLocationId === area.locationId) throw new Error(`${area.cachedLocationName} cannot be its own parent tidal region.`);
 	}
 	for (const area of value.areas) {
-		if (area.parentAreaLocationId && !areaIds.has(area.parentAreaLocationId)) throw new Error(`${area.name} refers to an unknown parent tidal region.`);
+		if (area.parentAreaLocationId && !areaIds.has(area.parentAreaLocationId)) throw new Error(`${area.cachedLocationName} refers to an unknown parent tidal region.`);
 		const seen = new Set([area.locationId]);
 		let parentId = area.parentAreaLocationId;
 		while (parentId) {
-			if (seen.has(parentId)) throw new Error(`${area.name} creates a cycle in the tidal-region hierarchy.`);
+			if (seen.has(parentId)) throw new Error(`${area.cachedLocationName} creates a cycle in the tidal-region hierarchy.`);
 			seen.add(parentId);
 			parentId = value.areas.find((entry) => entry.locationId === parentId)?.parentAreaLocationId || null;
 		}
@@ -90,6 +118,23 @@ function migrationSnapshot(value) {
 	};
 }
 
+function pendingMigrationCatalogue(value, migration) {
+	const legacy = structuredClone(value);
+	function withLegacyName(entry) {
+		const { cachedLocationName, name: _name, ...definition } = entry;
+		return { ...definition, name:cachedLocationName };
+	}
+	return {
+		...legacy,
+		contract:LEGACY_CONTRACT,
+		contractVersion:1,
+		ports:legacy.ports.map(withLegacyName),
+		areas:legacy.areas.map(withLegacyName),
+		gates:structuredClone(migration.gates),
+		gateTombstones:structuredClone(migration.gateTombstones),
+	};
+}
+
 function mergeBundledDefinitions(current, bundled) {
 	const next = validate(activeCatalogue(current));
 	const incoming = validate(activeCatalogue(bundled));
@@ -100,7 +145,7 @@ function mergeBundledDefinitions(current, bundled) {
 			next.ports.push(structuredClone(bundledPort));
 		} else {
 			const rename = SAFE_NAME_RENAMES[bundledPort.locationId];
-			if (rename && existing.name === rename.from && bundledPort.name === rename.to) existing.name = rename.to;
+			if (rename && existing.cachedLocationName === rename.from && bundledPort.cachedLocationName === rename.to) existing.cachedLocationName = rename.to;
 			const backfill = SAFE_PORT_BACKFILLS[bundledPort.locationId];
 			const bundledLevels = bundledPort.referenceLevels;
 			if (backfill
@@ -120,7 +165,7 @@ function mergeBundledDefinitions(current, bundled) {
 			continue;
 		}
 		const rename = SAFE_NAME_RENAMES[area.locationId];
-		if (rename && existing.name === rename.from && area.name === rename.to) existing.name = rename.to;
+		if (rename && existing.cachedLocationName === rename.from && area.cachedLocationName === rename.to) existing.cachedLocationName = rename.to;
 	}
 	return validate(next);
 }
@@ -139,7 +184,6 @@ function createDefinitionStore(filename, bundled) {
 
 	try {
 		const storedSource = JSON.parse(fs.readFileSync(filename,"utf8"));
-		if (![LEGACY_CONTRACT,CONTRACT].includes(storedSource?.contract)) throw new Error("Tidal definition catalogue is invalid.");
 		pendingMigration = migrationSnapshot(storedSource);
 		const stored = validate(activeCatalogue(storedSource));
 		current = mergeBundledDefinitions(stored, bundled);
@@ -163,9 +207,9 @@ function createDefinitionStore(filename, bundled) {
 	}
 
 	async function persist(next) {
-		const validated = validate({ ...structuredClone(next), contract:CONTRACT, contractVersion:2, updatedAt:new Date().toISOString() });
+		const validated = validate({ ...structuredClone(next), contract:CONTRACT, contractVersion:3, updatedAt:new Date().toISOString() });
 		const stored = pendingMigration
-			? { ...structuredClone(validated), contract:LEGACY_CONTRACT, contractVersion:1, gates:structuredClone(pendingMigration.gates), gateTombstones:structuredClone(pendingMigration.gateTombstones) }
+			? pendingMigrationCatalogue(validated, pendingMigration)
 			: validated;
 		await writeAtomic(stored);
 		current = validated;
@@ -175,7 +219,8 @@ function createDefinitionStore(filename, bundled) {
 	function mutate(change) {
 		const operation = mutationQueue.then(() => {
 			const next = read();
-			change(next);
+			const changed = change(next);
+			if (changed === false) return read();
 			return persist(next);
 		});
 		mutationQueue = operation.catch(() => {});
@@ -219,13 +264,26 @@ function createDefinitionStore(filename, bundled) {
 			if(index<0) next.areas.push(area); else next.areas[index]=area;
 		});
 	}
+	async function cacheLocationNames(namesById) {
+		return mutate((next) => {
+			let changed = false;
+			for (const entry of [...next.ports,...next.areas]) {
+				const name = String(namesById.get(entry.locationId) || "").trim();
+				if (name && name !== entry.cachedLocationName) {
+					entry.cachedLocationName = name;
+					changed = true;
+				}
+			}
+			return changed;
+		});
+	}
 	async function removeArea(locationId) {
 		return mutate((next) => {
 			if(next.areas.some((entry)=>entry.parentAreaLocationId===locationId)) throw new Error("This tidal region is the parent of one or more smaller regions.");
 			next.areas=next.areas.filter((entry)=>entry.locationId!==locationId);
 		});
 	}
-	return Object.freeze({ completeGateMigration, read, readGateMigration, removeArea, removePort, setArea, setPort });
+	return Object.freeze({ cacheLocationNames, completeGateMigration, read, readGateMigration, removeArea, removePort, setArea, setPort });
 }
 
-module.exports = { CONTRACT, LEGACY_CONTRACT, MIGRATION_CONTRACT, createDefinitionStore, mergeBundledDefinitions, validate };
+module.exports = { CONTRACT, LEGACY_CONTRACT, MIGRATION_CONTRACT, PREVIOUS_CONTRACT, createDefinitionStore, mergeBundledDefinitions, validate };

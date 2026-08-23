@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.8.0 — 2026-08-23
+
+- Advance the intentionally breaking in-process service, published/HTTP status
+  and diagnostic snapshot surfaces to explicit v2 contracts after gate
+  ownership was removed; retain the unchanged tide resolver v1 projection.
+- Advance durable definitions to v3, migrate v1/v2 `name` values losslessly to
+  explicit `cachedLocationName` fallbacks, and expose current Location-owned
+  names as read-only joined values with their source and join health.
+- Make service port/area lists asynchronous, validate Location ids, names and
+  exactly one standard/secondary classification before writes, report missing
+  or mismatched joins as degraded, and recursively exclude corrected
+  secondaries whose Location-valid parent chain does not end at a
+  provider-backed standard port from status provenance, recommendations and
+  resolution.
+- Keep a pending gate-migration file genuinely v1 and rollback-compatible after
+  name-cache, port or area writes by serializing legacy `name` fields until
+  Planning acknowledges the complete migration.
+- Remove duplicate name and port-class editing from the webapp, complete the
+  OpenAPI operation/request/response/error/auth schemas including `/stations`,
+  register reads with Signal K `readonly` and mutations with `readwrite`, and
+  verify scopes plus documented HTTP method/path parity in tests.
+- Move the Map Core development dependency and lock entry to public HTTPS and
+  bundle Map Core v0.7.15.
+
 ## 0.7.2 — 2026-08-23
 
 - List tidal-port Locations alphabetically in the port table, spatial Location

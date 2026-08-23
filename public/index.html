@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AJRM Marine Tidal Database</title>
   <link rel="icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css?v=0.7.2">
+  <link rel="stylesheet" href="styles.css?v=0.8.0">
 </head>
 <body>
   <header>
@@ -30,10 +30,9 @@
   <dialog id="definitionDialog">
     <form id="definitionForm" method="dialog">
       <div class="dialog-heading"><div><h2>Tidal port definition</h2><p>Location and geometry remain in Location Editor.</p></div><button id="closeDefinition" type="button">×</button></div>
-      <label id="definitionLocationChoice">Spatial location<select id="definitionLocation" required></select></label>
-      <label id="definitionLocationReadOnly" hidden>Spatial location<input id="definitionLocationName" readonly></label>
-      <label>Name<input id="definitionName" required maxlength="200"></label>
-      <div class="form-grid"><label>Port class<select id="definitionKind"><option value="standard">Standard port</option><option value="secondary">Secondary port</option></select></label><label>Prediction source<select id="definitionMode"><option value="provider">Provider station</option><option value="corrections">Entered secondary-port differences</option><option value="unavailable">Not yet configured</option></select></label></div>
+	      <label id="definitionLocationChoice">Spatial Location (name and class are edited in Location Editor)<select id="definitionLocation" required></select></label>
+	      <label id="definitionLocationReadOnly" hidden>Spatial Location (name owned by Location Editor)<input id="definitionLocationName" readonly></label>
+	      <div class="form-grid"><label>Port class (from Location Editor)<select id="definitionKind" disabled><option value="standard">Standard port</option><option value="secondary">Secondary port</option></select></label><label>Prediction source<select id="definitionMode"><option value="provider">Provider station</option><option value="corrections">Entered secondary-port differences</option><option value="unavailable">Not yet configured</option></select></label></div>
       <section id="providerFields"><div class="form-grid"><label>Provider<select id="providerId"><option value="ukhoTidalEvents">UK Hydrographic Office Tidal API</option></select></label><label>Station identifier<input id="stationId"></label></div><label>Station name<input id="stationName"></label></section>
       <section id="correctionFields" hidden><label>Parent standard port<select id="parentPortId"></select></label><p class="muted">Enter signed minute differences at the two Reeds reference columns. The pair repeats 12 hours later.</p><div class="correction-grid"><strong></strong><strong>Reference 1</strong><strong>Difference 1</strong><strong>Reference 2</strong><strong>Difference 2</strong><strong>High water</strong><input id="hwTime1" type="time"><input id="hwOffset1" type="number"><input id="hwTime2" type="time"><input id="hwOffset2" type="number"><strong>Low water</strong><input id="lwTime1" type="time"><input id="lwOffset1" type="number"><input id="lwTime2" type="time"><input id="lwOffset2" type="number"></div></section>
       <section id="absoluteReferenceFields"><h3>Standard-port datum and reference levels</h3><label>Datum<input id="definitionDatum" placeholder="Chart Datum"></label><div class="form-grid four"><label>MHWS<input id="mhws" type="number" step="0.1"></label><label>MHWN<input id="mhwn" type="number" step="0.1"></label><label>MLWN<input id="mlwn" type="number" step="0.1"></label><label>MLWS<input id="mlws" type="number" step="0.1"></label></div></section>
@@ -74,7 +73,7 @@
       <div class="dialog-actions"><button id="refreshTide" type="button" class="primary">Refresh if due</button><span></span><button id="closeTideBottom" type="button">Close</button></div>
     </div>
   </dialog>
-  <script src="location-order.js?v=0.7.2"></script>
-  <script src="app.js?v=0.7.2"></script>
+  <script src="location-order.js?v=0.8.0"></script>
+  <script src="app.js?v=0.8.0"></script>
 </body>
 </html>

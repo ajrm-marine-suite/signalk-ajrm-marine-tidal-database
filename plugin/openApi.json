@@ -2,118 +2,281 @@
   "openapi": "3.0.3",
   "info": {
     "title": "AJRM Marine Tidal Database",
-    "version": "0.7.2",
-    "description": "Provider-neutral tidal predictions, provider-station mappings, secondary-port corrections, tidal-region relationships and persistent event caches. Spatial Locations remain owned by Location Editor."
+    "version": "0.8.0",
+    "description": "Provider-neutral tidal predictions, provider-station mappings, secondary-port corrections, tidal-region relationships and persistent event caches. Location Editor owns spatial ids, classifications, geometry and names. Tidal definitions expose joined read-only names and identify any explicit cached-name fallback."
   },
   "paths": {
     "/status": {
       "get": {
-        "summary": "Inspect providers, cached stations and tidal ports",
+        "summary": "Inspect providers, cached stations, Location joins and tidal ports",
         "responses": {
           "200": {
-            "description": "Database status"
+            "description": "Current v2 database status",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TidalDatabaseStatus" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stations": {
+      "get": {
+        "summary": "Inspect provider stations and their persistent cache state",
+        "description": "Compatibility alias for the complete database status response.",
+        "responses": {
+          "200": {
+            "description": "Current v2 database status",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TidalDatabaseStatus" }
+              }
+            }
           }
         }
       }
     },
     "/definitions": {
       "get": {
-        "summary": "Read tidal prediction, correction and area definitions",
+        "summary": "Read joined tidal prediction, correction and area definitions",
         "responses": {
           "200": {
-            "description": "Definition catalogue"
+            "description": "Version 3 definition catalogue with read-only Location-owned names",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DefinitionsResponse" }
+              }
+            }
           }
         }
       }
     },
     "/definitions/ports/{locationId}": {
       "parameters": [
-        {
-          "$ref": "#/components/parameters/LocationId"
-        }
+        { "$ref": "#/components/parameters/LocationId" }
       ],
       "put": {
-        "summary": "Create or replace a tidal definition for a spatial Location",
+        "summary": "Create or replace tidal settings for an existing tidal-port Location",
+        "description": "The Location must exist and have exactly one tidalStandardPort or tidalSecondaryPort classification. Name and class are derived from Location Editor and cannot be changed here.",
+        "security": [
+          { "SignalKAuth": [] }
+        ],
+		"x-signalk-access": "readwrite",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PortDefinitionWrite" }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Definition saved"
-          }
+            "description": "Definition saved",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PortSaveResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
         }
       },
       "delete": {
-        "summary": "Remove a tidal definition while retaining its spatial Location",
+        "summary": "Remove tidal settings while retaining the spatial Location",
+        "security": [
+          { "SignalKAuth": [] }
+        ],
+		"x-signalk-access": "readwrite",
         "responses": {
           "200": {
-            "description": "Definition removed"
-          }
+            "description": "Definition removed",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PortDeleteResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
         }
       }
     },
     "/definitions/areas/{locationId}": {
       "parameters": [
-        {
-          "$ref": "#/components/parameters/LocationId"
-        }
+        { "$ref": "#/components/parameters/LocationId" }
       ],
       "put": {
-        "summary": "Create or replace the serving-port assignment for a tidal-region Location",
+        "summary": "Create or replace a serving-port assignment for an existing tidal-region Location",
+        "description": "The target and optional parent must be Location Editor tidalRegion records. The serving port must join to a matching tidal-port Location and Tidal Database definition.",
+        "security": [
+          { "SignalKAuth": [] }
+        ],
+		"x-signalk-access": "readwrite",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AreaDefinitionWrite" }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Area assignment saved"
-          }
+            "description": "Area assignment saved",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AreaSaveResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
         }
       },
       "delete": {
         "summary": "Remove a tidal-region assignment while retaining its spatial Location",
+        "security": [
+          { "SignalKAuth": [] }
+        ],
+		"x-signalk-access": "readwrite",
         "responses": {
           "200": {
-            "description": "Area assignment removed"
-          }
+            "description": "Area assignment removed",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AreaDeleteResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
         }
       }
     },
     "/stations/update": {
       "post": {
-        "summary": "Update stations that are more than 24 hours old",
+        "summary": "Update provider stations that are more than 24 hours old",
+        "security": [
+          { "SignalKAuth": [] }
+        ],
+		"x-signalk-access": "readwrite",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Updated database status"
-          }
+            "description": "Updated database status",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TidalDatabaseStatus" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
         }
       }
     },
     "/tides/status": {
       "get": {
         "summary": "Resolve a tide projection by position or stable port Location id",
+        "parameters": [
+          { "$ref": "#/components/parameters/PortIdQuery" },
+          { "$ref": "#/components/parameters/LatitudeQuery" },
+          { "$ref": "#/components/parameters/LongitudeQuery" }
+        ],
         "responses": {
           "200": {
-            "description": "Tide resolver projection"
-          }
+            "description": "Tide resolver v1 projection; availability and error fields describe unusable data without changing the HTTP status",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TideResolverProjection" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" }
         }
       }
     },
     "/tides/pin": {
       "post": {
         "summary": "Set or clear the selected-port override",
+        "security": [
+          { "SignalKAuth": [] }
+        ],
+		"x-signalk-access": "readwrite",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PinRequest" }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Updated tide projection"
-          }
+            "description": "Updated tide resolver v1 projection",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TideResolverProjection" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
         }
       }
     },
     "/tides/refresh": {
       "post": {
-        "summary": "Resolve and refresh if the selected station is due",
+        "summary": "Resolve a tide projection and refresh its provider station only if due",
+        "security": [
+          { "SignalKAuth": [] }
+        ],
+		"x-signalk-access": "readwrite",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TideRequest" }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Updated tide projection"
-          }
+            "description": "Updated tide resolver v1 projection",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TideResolverProjection" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
         }
       }
     }
   },
   "components": {
+    "securitySchemes": {
+      "SignalKAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Signal K bearer token with read/write or admin permission. An authenticated Signal K browser session is also accepted by the running server."
+      }
+    },
     "parameters": {
       "LocationId": {
         "name": "locationId",
@@ -121,21 +284,501 @@
         "required": true,
         "schema": {
           "type": "string",
-          "minLength": 1
+          "format": "uuid"
         },
-        "description": "Stable Location Editor id; display names are never identifiers."
+        "description": "Stable Location Editor UUID; display names are never identifiers."
+      },
+      "PortIdQuery": {
+        "name": "portId",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "description": "Explicit tidal-port Location UUID."
+      },
+      "LatitudeQuery": {
+        "name": "latitude",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        }
+      },
+      "LongitudeQuery": {
+        "name": "longitude",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Invalid request, relationship or Location join",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Signal K read/write or admin permission is required",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
       }
     },
     "schemas": {
       "Error": {
         "type": "object",
-        "required": [
-          "error"
-        ],
+        "required": ["error"],
+        "additionalProperties": false,
         "properties": {
-          "error": {
-            "type": "string"
+          "error": { "type": "string" }
+        }
+      },
+      "NameSource": {
+        "type": "string",
+        "enum": ["location", "cached"],
+        "description": "location means the current name was joined from Location Editor. cached is an explicit last-known fallback used only when that Location name is unavailable."
+      },
+      "LocationJoin": {
+        "type": "string",
+        "enum": ["valid", "missing-location", "type-mismatch", "service-unavailable"]
+      },
+      "ReferenceLevels": {
+        "type": "object",
+        "nullable": true,
+        "required": ["mhws", "mhwn", "mlwn", "mlws"],
+        "properties": {
+          "mhws": { "type": "number", "nullable": true },
+          "mhwn": { "type": "number", "nullable": true },
+          "mlwn": { "type": "number", "nullable": true },
+          "mlws": { "type": "number", "nullable": true }
+        }
+      },
+      "Advisory": {
+        "type": "object",
+        "nullable": true,
+        "required": ["status", "message"],
+        "properties": {
+          "status": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      },
+      "CorrectionPoint": {
+        "type": "object",
+        "required": ["referenceTimeMinutes", "offsetMinutes"],
+        "properties": {
+          "referenceTimeMinutes": { "type": "number" },
+          "offsetMinutes": { "type": "number" }
+        }
+      },
+      "HeightDifferences": {
+        "type": "object",
+        "required": ["mhws", "mhwn", "mlwn", "mlws"],
+        "properties": {
+          "mhws": { "type": "number" },
+          "mhwn": { "type": "number" },
+          "mlwn": { "type": "number" },
+          "mlws": { "type": "number" }
+        }
+      },
+      "SecondaryCorrections": {
+        "type": "object",
+        "required": ["highWaterTimeOffsets", "lowWaterTimeOffsets", "heightDifferencesM"],
+        "properties": {
+          "contract": { "type": "string", "example": "ajrm-secondary-port-corrections-v4" },
+          "timeOffsetPeriodMinutes": { "type": "number", "example": 720 },
+          "highWaterTimeOffsets": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CorrectionPoint" }
+          },
+          "lowWaterTimeOffsets": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CorrectionPoint" }
+          },
+          "heightDifferencesM": { "$ref": "#/components/schemas/HeightDifferences" }
+        }
+      },
+      "ProviderPrediction": {
+        "type": "object",
+        "required": ["mode", "providerId", "stationId"],
+        "properties": {
+          "mode": { "type": "string", "enum": ["provider"] },
+          "providerId": { "type": "string" },
+          "stationId": { "type": "string" },
+          "stationName": { "type": "string" }
+        }
+      },
+      "CorrectionsPrediction": {
+        "type": "object",
+        "required": ["mode", "parentLocationId", "corrections"],
+        "properties": {
+          "mode": { "type": "string", "enum": ["corrections"] },
+          "parentLocationId": { "type": "string", "format": "uuid" },
+          "corrections": { "$ref": "#/components/schemas/SecondaryCorrections" }
+        }
+      },
+      "UnavailablePrediction": {
+        "type": "object",
+        "required": ["mode"],
+        "properties": {
+          "mode": { "type": "string", "enum": ["unavailable"] }
+        }
+      },
+      "PredictionDefinition": {
+        "oneOf": [
+          { "$ref": "#/components/schemas/ProviderPrediction" },
+          { "$ref": "#/components/schemas/CorrectionsPrediction" },
+          { "$ref": "#/components/schemas/UnavailablePrediction" }
+        ]
+      },
+      "PortDefinitionWrite": {
+        "type": "object",
+        "required": ["prediction"],
+        "description": "Location id comes from the path. Location-owned name and port class are intentionally absent.",
+        "properties": {
+          "datum": { "type": "string", "nullable": true },
+          "referenceLevels": { "$ref": "#/components/schemas/ReferenceLevels" },
+          "automaticPreferredPortLocationId": { "type": "string", "format": "uuid", "nullable": true },
+          "advisory": { "$ref": "#/components/schemas/Advisory" },
+          "prediction": { "$ref": "#/components/schemas/PredictionDefinition" }
+        }
+      },
+      "PortDefinition": {
+        "allOf": [
+          { "$ref": "#/components/schemas/PortDefinitionWrite" },
+          {
+            "type": "object",
+            "required": ["locationId", "name", "nameSource", "locationJoin", "kind"],
+            "properties": {
+              "locationId": { "type": "string", "format": "uuid", "readOnly": true },
+              "name": { "type": "string", "readOnly": true },
+              "nameSource": { "$ref": "#/components/schemas/NameSource" },
+              "locationJoin": { "$ref": "#/components/schemas/LocationJoin" },
+              "kind": { "type": "string", "enum": ["standard", "secondary"], "readOnly": true }
+            }
           }
+        ]
+      },
+      "AreaDefinitionWrite": {
+        "type": "object",
+        "required": ["portLocationId"],
+        "description": "Location id comes from the path. The Location-owned name is intentionally absent.",
+        "additionalProperties": false,
+        "properties": {
+          "portLocationId": { "type": "string", "format": "uuid" },
+          "parentAreaLocationId": { "type": "string", "format": "uuid", "nullable": true }
+        }
+      },
+      "AreaDefinition": {
+        "allOf": [
+          { "$ref": "#/components/schemas/AreaDefinitionWrite" },
+          {
+            "type": "object",
+            "required": ["locationId", "name", "nameSource", "locationJoin"],
+            "properties": {
+              "locationId": { "type": "string", "format": "uuid", "readOnly": true },
+              "name": { "type": "string", "readOnly": true },
+              "nameSource": { "$ref": "#/components/schemas/NameSource" },
+              "locationJoin": { "$ref": "#/components/schemas/LocationJoin" }
+            }
+          }
+        ]
+      },
+      "DefinitionsResponse": {
+        "type": "object",
+        "required": ["contract", "contractVersion", "nameOwnership", "locationJoinError", "ports", "areas"],
+        "properties": {
+          "contract": { "type": "string", "enum": ["ajrm-marine-tidal-database-definitions-v3"] },
+          "contractVersion": { "type": "integer", "enum": [3] },
+          "nameOwnership": { "type": "string", "enum": ["ajrm-marine-locations"] },
+          "locationJoinError": { "type": "string", "nullable": true },
+          "generatedAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "sourcePackage": { "type": "string" },
+          "ports": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PortDefinition" }
+          },
+          "areas": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AreaDefinition" }
+          }
+        }
+      },
+      "EventCapabilities": {
+        "type": "object",
+        "properties": {
+          "highWater": { "type": "boolean" },
+          "lowWater": { "type": "boolean" },
+          "completeExtrema": { "type": "boolean" },
+          "curve": { "type": "boolean" }
+        }
+      },
+      "StationPort": {
+        "type": "object",
+        "required": ["locationId", "name", "kind"],
+        "properties": {
+          "locationId": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "kind": { "type": "string", "enum": ["standard", "secondary"] }
+        }
+      },
+      "StationStatus": {
+        "type": "object",
+        "required": ["providerId", "providerName", "stationId", "stationName", "configured", "persistent", "coveredNow", "due", "eventCount", "ports"],
+        "properties": {
+          "providerId": { "type": "string" },
+          "providerName": { "type": "string" },
+          "stationId": { "type": "string" },
+          "stationName": { "type": "string" },
+          "configured": { "type": "boolean" },
+          "persistent": { "type": "boolean" },
+          "fetchedAt": { "type": "string", "format": "date-time", "nullable": true },
+          "ageHours": { "type": "number", "nullable": true },
+          "due": { "type": "boolean" },
+          "coverageStartAt": { "type": "string", "format": "date-time", "nullable": true },
+          "coverageEndAt": { "type": "string", "format": "date-time", "nullable": true },
+          "coveredNow": { "type": "boolean" },
+          "eventCount": { "type": "integer" },
+          "eventCapabilities": { "$ref": "#/components/schemas/EventCapabilities" },
+          "lastError": { "type": "string", "nullable": true },
+          "ports": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/StationPort" }
+          }
+        }
+      },
+      "PortStatus": {
+        "type": "object",
+        "required": ["locationId", "name", "nameSource", "locationJoin", "kind", "predictionMode", "coveredNow", "due", "status"],
+        "properties": {
+          "locationId": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "nameSource": { "$ref": "#/components/schemas/NameSource" },
+          "locationJoin": { "$ref": "#/components/schemas/LocationJoin" },
+          "kind": { "type": "string", "enum": ["standard", "secondary"] },
+          "predictionMode": { "type": "string", "enum": ["provider", "corrections", "unavailable"] },
+          "parent": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "id": { "type": "string", "format": "uuid" },
+              "name": { "type": "string" }
+            }
+          },
+          "providerId": { "type": "string", "nullable": true },
+          "stationId": { "type": "string", "nullable": true },
+          "fetchedAt": { "type": "string", "format": "date-time", "nullable": true },
+          "coverageStartAt": { "type": "string", "format": "date-time", "nullable": true },
+          "coverageEndAt": { "type": "string", "format": "date-time", "nullable": true },
+          "coveredNow": { "type": "boolean" },
+          "due": { "type": "boolean" },
+          "advisory": { "$ref": "#/components/schemas/Advisory" },
+          "status": { "type": "string", "enum": ["unavailable", "ready", "cached-outside-coverage", "not-cached"] }
+        }
+      },
+      "StatusSummary": {
+        "type": "object",
+        "required": ["stationCount", "cachedCount", "coveredCount", "dueCount", "errorCount"],
+        "properties": {
+          "stationCount": { "type": "integer" },
+          "cachedCount": { "type": "integer" },
+          "coveredCount": { "type": "integer" },
+          "dueCount": { "type": "integer" },
+          "errorCount": { "type": "integer" }
+        }
+      },
+      "LocationJoinSummary": {
+        "type": "object",
+        "required": ["state", "validCount", "degradedCount", "missingCount", "typeMismatchCount", "serviceUnavailableCount", "error"],
+        "properties": {
+          "state": { "type": "string", "enum": ["ready", "degraded"] },
+          "validCount": { "type": "integer" },
+          "degradedCount": { "type": "integer" },
+          "missingCount": { "type": "integer" },
+          "typeMismatchCount": { "type": "integer" },
+          "serviceUnavailableCount": { "type": "integer" },
+          "error": { "type": "string", "nullable": true }
+        }
+      },
+      "MaintenanceStatus": {
+        "type": "object",
+        "required": ["running", "updated", "cached", "failed", "error"],
+        "properties": {
+          "running": { "type": "boolean" },
+          "startedAt": { "type": "string", "format": "date-time", "nullable": true },
+          "completedAt": { "type": "string", "format": "date-time", "nullable": true },
+          "updated": { "type": "integer" },
+          "cached": { "type": "integer" },
+          "failed": { "type": "integer" },
+          "error": { "type": "string" }
+        }
+      },
+      "Policy": {
+        "type": "object",
+        "required": ["refreshFloorHours", "offlineRetryHours", "discoveryCacheUtcYearBounded", "requestIntervalSeconds"],
+        "properties": {
+          "refreshFloorHours": { "type": "number" },
+          "offlineRetryHours": { "type": "number" },
+          "discoveryCacheUtcYearBounded": { "type": "boolean" },
+          "requestIntervalSeconds": { "type": "number" }
+        }
+      },
+      "TidalDatabaseStatus": {
+        "type": "object",
+        "required": ["contract", "contractVersion", "plugin", "version", "enabled", "providers", "summary", "locationJoins", "maintenance", "policy", "stations", "ports"],
+        "properties": {
+          "contract": { "type": "string", "enum": ["ajrm-marine-tidal-database-status-v2"] },
+          "contractVersion": { "type": "integer", "enum": [2] },
+          "plugin": { "type": "string" },
+          "version": { "type": "string" },
+          "enabled": { "type": "boolean" },
+          "providers": {
+            "type": "array",
+            "items": { "type": "object", "additionalProperties": true }
+          },
+          "summary": { "$ref": "#/components/schemas/StatusSummary" },
+          "locationJoins": { "$ref": "#/components/schemas/LocationJoinSummary" },
+          "maintenance": { "$ref": "#/components/schemas/MaintenanceStatus" },
+          "policy": { "$ref": "#/components/schemas/Policy" },
+          "latestProjection": { "type": "object", "nullable": true, "additionalProperties": true },
+          "stations": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/StationStatus" }
+          },
+          "ports": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PortStatus" }
+          }
+        }
+      },
+      "PortSaveResponse": {
+        "type": "object",
+        "required": ["ok", "port", "status"],
+        "properties": {
+          "ok": { "type": "boolean", "enum": [true] },
+          "port": { "$ref": "#/components/schemas/PortDefinition" },
+          "status": { "$ref": "#/components/schemas/TidalDatabaseStatus" }
+        }
+      },
+      "PortDeleteResponse": {
+        "type": "object",
+        "required": ["ok", "status"],
+        "properties": {
+          "ok": { "type": "boolean", "enum": [true] },
+          "status": { "$ref": "#/components/schemas/TidalDatabaseStatus" }
+        }
+      },
+      "AreaSaveResponse": {
+        "type": "object",
+        "required": ["ok", "area", "definitions"],
+        "properties": {
+          "ok": { "type": "boolean", "enum": [true] },
+          "area": { "$ref": "#/components/schemas/AreaDefinition" },
+          "definitions": { "$ref": "#/components/schemas/DefinitionsResponse" }
+        }
+      },
+      "AreaDeleteResponse": {
+        "type": "object",
+        "required": ["ok", "definitions"],
+        "properties": {
+          "ok": { "type": "boolean", "enum": [true] },
+          "definitions": { "$ref": "#/components/schemas/DefinitionsResponse" }
+        }
+      },
+      "TideRequest": {
+        "type": "object",
+        "properties": {
+          "portId": { "type": "string", "format": "uuid" },
+          "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+          "longitude": { "type": "number", "minimum": -180, "maximum": 180 }
+        }
+      },
+      "PinRequest": {
+        "allOf": [
+          { "$ref": "#/components/schemas/TideRequest" },
+          {
+            "type": "object",
+            "properties": {
+              "portId": { "type": "string", "format": "uuid", "nullable": true }
+            }
+          }
+        ]
+      },
+      "TideEvent": {
+        "type": "object",
+        "required": ["at", "heightM"],
+        "properties": {
+          "at": { "type": "string", "format": "date-time" },
+          "heightM": { "type": "number" },
+          "type": { "type": "string" }
+        }
+      },
+      "TideAvailability": {
+        "type": "object",
+        "required": ["highWater", "lowWater", "completeExtrema", "curve", "currentHeight", "nextHighWater", "nextLowWater"],
+        "properties": {
+          "highWater": { "type": "boolean" },
+          "lowWater": { "type": "boolean" },
+          "completeExtrema": { "type": "boolean" },
+          "curve": { "type": "boolean" },
+          "currentHeight": { "type": "boolean" },
+          "nextHighWater": { "type": "boolean" },
+          "nextLowWater": { "type": "boolean" }
+        }
+      },
+      "TideResolverProjection": {
+        "type": "object",
+        "required": ["contract", "contractVersion", "valid", "availability", "calculationReferenceAt", "selectedPort", "selection", "heightNowM", "nextHighWater", "nextLowWater", "trend", "datum", "referenceLevels", "station", "source", "freshness", "curve", "advisory", "error"],
+        "properties": {
+          "contract": { "type": "string", "enum": ["ajrm-marine-tide-resolver-v1"] },
+          "contractVersion": { "type": "integer", "enum": [1] },
+          "valid": { "type": "boolean" },
+          "availability": { "$ref": "#/components/schemas/TideAvailability" },
+          "calculationReferenceAt": { "type": "string", "format": "date-time" },
+          "selectedPort": { "type": "object", "nullable": true, "additionalProperties": true },
+          "selection": { "type": "object", "additionalProperties": true },
+          "heightNowM": { "type": "number", "nullable": true },
+          "nextHighWater": {
+            "allOf": [
+              { "$ref": "#/components/schemas/TideEvent" }
+            ],
+            "nullable": true
+          },
+          "nextLowWater": {
+            "allOf": [
+              { "$ref": "#/components/schemas/TideEvent" }
+            ],
+            "nullable": true
+          },
+          "trend": { "type": "string" },
+          "datum": { "type": "string", "nullable": true },
+          "referenceLevels": { "$ref": "#/components/schemas/ReferenceLevels" },
+          "station": { "type": "object", "nullable": true, "additionalProperties": true },
+          "source": { "type": "object", "nullable": true, "additionalProperties": true },
+          "freshness": { "type": "object", "nullable": true, "additionalProperties": true },
+          "curve": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TideEvent" }
+          },
+          "events": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TideEvent" }
+          },
+          "advisory": { "$ref": "#/components/schemas/Advisory" },
+          "error": { "type": "string" }
         }
       }
     }
