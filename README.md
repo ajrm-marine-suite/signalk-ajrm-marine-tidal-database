@@ -2,7 +2,7 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.8 adds Portsmouth and a corrected Bucklers Hard definition, and makes automatic selection prefer a matching direct provider station over entered secondary-port corrections. An explicitly selected entered definition remains available for comparison. Source-checked but anomalous definitions carry visible caution messages. Stations that publish only one kind of extreme are labelled high-only or low-only; their genuine events remain visible, but the service does not invent current height, the missing extreme, or a tidal curve.
+Version 0.6.0 keeps the v1-compatible 0.1.8 software behaviour and supplies the simplified 42-row tidal-gate catalogue for AJRM Marine Planning 0.6.0/0.5.19. Twenty-nine rows contain every field required by that Planning format; thirteen remain visible but incomplete because the reviewed spreadsheet does not contain every required timing or rate. All values remain estimates and must be checked against current official information and observed conditions.
 
 ## Responsibilities
 
@@ -27,9 +27,11 @@ Install and enable AJRM Marine Location Editor first, then this plugin. Configur
 
 Automatic preference is explicit catalogue data, not fuzzy name matching. Existing durable catalogues receive package safety fields and newly bundled ports on startup without overwriting locally edited prediction or correction data.
 
+Existing installations also retain their durable gate records. The release therefore includes `defaults/gates-v0.6.0-v1.json`, a gates-only import containing the 42 spreadsheet rows. Back up the existing `definitions.json`, then replace only its `gates` array with this file so locally configured ports and tidal regions remain intact.
+
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.8 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.6.0 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

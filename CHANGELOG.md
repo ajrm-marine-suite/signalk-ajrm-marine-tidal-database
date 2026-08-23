@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.0 — 2026-08-23
+
+- Keep the `v0.1.8` runtime behaviour and legacy v1 gate contract expected by
+  AJRM Marine Planning `v0.5.19`/`v0.6.0`.
+- Replace the bundled gate seed with all 42 rows imported from
+  `AJRM-Tidal-Gates-Simplified.xlsx`: 29 complete calculation rows and 13
+  deliberately incomplete rows where the spreadsheet lacks required values.
+- Convert explicit true bearings to the exactly equivalent 16-point cardinal
+  labels required by the legacy Planning format; do not invent missing ports,
+  rates, timings or slack durations.
+- Include a gates-only import file so an existing durable catalogue can replace
+  its gate array without discarding locally configured ports or tidal regions.
+
 ## 0.1.8 — 2026-08-22
 
 - Add Portsmouth and correct the previously omitted/incomplete Bucklers Hard
