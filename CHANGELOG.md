@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.7.0 — 2026-08-23
+
+- Move durable tidal-gate constants, source reviews, operational assumptions,
+  contracts and mutation APIs out of Tidal Database; AJRM Marine Planning now
+  owns that data and workflow, while Location Editor remains the spatial owner.
+- Advance active Tidal definitions to
+  `ajrm-marine-tidal-database-definitions-v2`, containing ports and tidal-region
+  relationships only, and remove gate data from normal service, HTTP, status,
+  diagnostics, OpenAPI and package payloads.
+- Preserve deployed gate edits and deletion tombstones in a bounded one-time
+  migration registry until Planning explicitly acknowledges a verified import;
+  acknowledgement atomically rewrites the Tidal definitions file without the
+  quarantined payload.
+
 ## 0.1.21 — 2026-08-22
 
 - Backfill the provisional Greenock reference range when upgrading an exact

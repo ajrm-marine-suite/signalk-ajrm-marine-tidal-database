@@ -7,18 +7,27 @@ const path = require("node:path");
 const test = require("node:test");
 const createPlugin = require("../plugin/index.cjs");
 const definitions = require("../defaults/tidal-definitions.json");
-const { profileLocationIds } = require("../plugin/provisional-gate-profiles.cjs");
+
+const GATE_MIGRATION_SYMBOL = Symbol.for("mcdonaldajr.ajrmMarineTidalGateMigration");
+const PLANNING_SYMBOL = Symbol.for("mcdonaldajr.ajrmMarinePlanning");
 
 function response() { return { statusCode:200, status(code){ this.statusCode=code; return this; }, json(body){ this.body=body; return this; } }; }
 
-async function fixture(t) {
+async function fixture(t, { legacyGateMigration = null } = {}) {
 	const directory = await fs.mkdtemp(path.join(os.tmpdir(), "ajrm-tidal-plugin-"));
 	t.after(() => fs.rm(directory, { recursive:true, force:true }));
+	if (legacyGateMigration) {
+		await fs.writeFile(path.join(directory,"definitions.json"),`${JSON.stringify({
+			...definitions,
+			contract:"ajrm-marine-tidal-database-definitions-v1",
+			contractVersion:1,
+			updatedAt:"2026-08-22T11:00:00.000Z",
+			gates:legacyGateMigration.gates,
+			gateTombstones:legacyGateMigration.gateTombstones,
+		},null,2)}\n`);
+	}
 	const port = definitions.ports.find((entry) => entry.prediction.mode === "provider");
-	const locations = [
-		...definitions.ports.map((entry) => ({ id:entry.locationId,name:entry.name,types:[`tidal${entry.kind === "standard" ? "Standard" : "Secondary"}Port`] })),
-		...definitions.gates.map((entry) => ({ id:entry.locationId,name:entry.name,types:["tidalGate"] })),
-	];
+	const locations = definitions.ports.map((entry) => ({ id:entry.locationId,name:entry.name,types:[`tidal${entry.kind === "standard" ? "Standard" : "Secondary"}Port`] }));
 	locations.find((entry) => entry.id === port.locationId).feature = { geometry:{ type:"Point",coordinates:[-5.47,56.41] } };
 	const app = {
 		getDataDirPath:() => directory, setPluginStatus(){}, handleMessage(){},
@@ -28,28 +37,17 @@ async function fixture(t) {
 	for (const method of ["get","post","put","delete"]) router[method] = (route,handler) => routes.set(`${method.toUpperCase()} ${route}`,handler);
 	const plugin = createPlugin(app); plugin.registerWithRouter(router); plugin.start({ automaticMaintenance:false });
 	async function call(method,route,req={}) { const res=response(); await routes.get(`${method} ${route}`)({ query:{},body:{},...req },res); return res; }
-	return { app,plugin,call,port };
+	return { app,plugin,call,port,routes };
 }
 
-test("the standalone service owns tidal data and exposes all seeded ports", async (t) => {
-	const { app,plugin,call,port } = await fixture(t);
+test("the standalone service owns only tidal-provider data and exposes all seeded ports", async (t) => {
+	const { app,plugin,call,port,routes } = await fixture(t);
 	assert.equal(app.ajrmMarineTidalDatabase.contract, "ajrm-marine-tidal-database-service-v1");
-	assert.equal(app.ajrmMarineTidalDatabase.gateContract,"ajrm-tidal-gate-constants-v2");
 	assert.equal(app.ajrmMarineTidalDatabase.listPorts().length, definitions.ports.length);
-	assert.ok(app.ajrmMarineTidalDatabase.listGates().every((entry) => entry.contract === "ajrm-tidal-gate-constants-v2"));
-	const gateCatalogue = await app.ajrmMarineTidalDatabase.getGateCatalogue();
-	assert.equal(gateCatalogue.contract,"ajrm-tidal-gate-catalogue-v2");
-	assert.equal(gateCatalogue.gates.length,definitions.gates.length);
-	assert.deepEqual(gateCatalogue.operationalLocationIds,profileLocationIds);
-	assert.equal(gateCatalogue.diagnostics.summary.operationalWithAssumptionsCount,profileLocationIds.length);
-	for (const locationId of profileLocationIds) {
-		const gate = gateCatalogue.gates.find((entry) => entry.locationId === locationId);
-		assert.equal(gate.readiness.state,"operational");
-		assert.equal(gate.calculationBasis.mode,"operational-with-assumptions");
-		assert.equal(gate.sourceReview.readiness.state,"reference-only");
-		assert.ok(gate.rateObservations.every((entry) => entry.qualifier === "approximate"));
-	}
-	assert.equal(gateCatalogue.diagnostics.summary.legacyMigrationCount,definitions.gates.filter((entry) => entry.contract === "ajrm-tidal-gate-constants-v1").length);
+	assert.equal(app.ajrmMarineTidalDatabase.listAreas().length, definitions.areas.length);
+	for (const key of ["gateContract","listGates","getGate","getGateCatalogue","gateDiagnostics","setGate","removeGate"]) assert.equal(Object.hasOwn(app.ajrmMarineTidalDatabase,key),false,key);
+	assert.ok([...routes.keys()].every((route) => !route.includes("/gates")));
+	assert.equal(globalThis[GATE_MIGRATION_SYMBOL],undefined);
 	const status = await call("GET","/status");
 	assert.equal(status.body.contract, "ajrm-marine-tidal-database-status-v1");
 	assert.equal(status.body.summary.stationCount, new Set(definitions.ports.filter((entry)=>entry.prediction.mode==="provider").map((entry)=>`${entry.prediction.providerId}:${entry.prediction.stationId}`)).size);
@@ -57,7 +55,15 @@ test("the standalone service owns tidal data and exposes all seeded ports", asyn
 	assert.equal(status.body.policy.discoveryCacheUtcYearBounded, true);
 	assert.equal(status.body.policy.requestIntervalSeconds, 5);
 	assert.equal(status.body.ports.length, definitions.ports.length);
-	assert.equal(status.body.gateCatalogue.summary.operationalCount,0);
+	assert.equal(Object.hasOwn(status.body,"gateCatalogue"),false);
+	const activeDefinitions = await call("GET","/definitions");
+	assert.equal(activeDefinitions.body.contract,"ajrm-marine-tidal-database-definitions-v2");
+	assert.equal(activeDefinitions.body.contractVersion,2);
+	assert.equal(Object.hasOwn(activeDefinitions.body,"gates"),false);
+	assert.equal(Object.hasOwn(activeDefinitions.body,"gateTombstones"),false);
+	const diagnostics = await app.ajrmMarineTidalDiagnostics.snapshot();
+	assert.equal(Object.hasOwn(diagnostics,"gateCatalogue"),false);
+	assert.equal(Object.hasOwn(diagnostics.definitions,"gates"),false);
 	const projection = await call("GET","/tides/status",{ query:{ portId:port.locationId } });
 	assert.equal(projection.body.contract, "ajrm-marine-tide-resolver-v1");
 	assert.equal(projection.body.selectedPort.id, port.locationId);
@@ -80,44 +86,39 @@ test("the seed includes corrected Bucklers Hard data and explicit direct-station
 
 test("OpenAPI and webapp metadata are present", async (t) => {
 	const { plugin } = await fixture(t);
-	assert.equal(plugin.getOpenApi().info.title, "AJRM Marine Tidal Database");
-	assert.ok(plugin.getOpenApi().components.schemas.TidalGateV2);
+	const openApi = plugin.getOpenApi();
+	assert.equal(openApi.info.title, "AJRM Marine Tidal Database");
+	assert.ok(Object.keys(openApi.paths).every((route) => !route.includes("gate")));
+	assert.ok(Object.keys(openApi.components.schemas).every((name) => !name.toLowerCase().includes("gate")));
 	const packageJson = require("../package.json");
 	assert.equal(packageJson.signalk.appIcon, "./icon-120.png");
 	await plugin.stop();
 });
 
-test("gate HTTP mutation is revisioned, joined and owned by Tidal Database", async (t) => {
-	const { app,plugin,call } = await fixture(t);
-	const catalogue = await call("GET","/definitions/gates");
-	const projected = catalogue.body.gates[0];
-	const existing = projected.sourceReview || projected;
-	const replacement = { ...existing, revision:existing.revision + 1 };
-	let saved = await call("PUT","/definitions/gates/:locationId",{
-		params:{ locationId:existing.locationId },body:replacement,
-	});
-	assert.equal(saved.statusCode,200);
-	assert.equal(saved.body.gate.revision,2);
-	assert.equal(app.ajrmMarineTidalDatabase.getGate(existing.locationId).revision,2);
-	saved = await call("PUT","/definitions/gates/:locationId",{
-		params:{ locationId:existing.locationId },body:replacement,
-	});
-	assert.equal(saved.statusCode,400);
-	assert.match(saved.body.error,/revision conflict/);
-	const mismatch = await call("PUT","/definitions/gates/:locationId",{
-		params:{ locationId:existing.locationId },body:{ ...replacement,locationId:"different",revision:3 },
-	});
-	assert.equal(mismatch.statusCode,400);
-	assert.match(mismatch.body.error,/must match/);
-	const forbidden = await call("DELETE","/definitions/gates/:locationId",{
-		params:{ locationId:existing.locationId },query:{ expectedRevision:"2" },skPrincipal:{ permissions:"readonly" },
-	});
-	assert.equal(forbidden.statusCode,403);
-	const removed = await call("DELETE","/definitions/gates/:locationId",{
-		params:{ locationId:existing.locationId },query:{ expectedRevision:"2" },
-	});
-	assert.equal(removed.statusCode,200);
-	assert.equal(app.ajrmMarineTidalDatabase.getGate(existing.locationId),null);
+test("legacy gate data is exposed only through the bounded Planning migration registry", async (t) => {
+	const gates = [{ contract:"ajrm-tidal-gate-constants-v1",locationId:"legacy-gate",name:"Legacy gate" }];
+	const gateTombstones = [{ locationId:"deleted-gate",revision:3,deletedAt:"2026-08-22T10:00:00.000Z" }];
+	let offered = null;
+	globalThis[PLANNING_SYMBOL] = { importLegacyTidalGates(registry) { offered = registry; } };
+	t.after(() => { delete globalThis[PLANNING_SYMBOL]; delete globalThis[GATE_MIGRATION_SYMBOL]; });
+	const { app,plugin,call } = await fixture(t,{ legacyGateMigration:{ gates,gateTombstones } });
+	const registry = globalThis[GATE_MIGRATION_SYMBOL];
+	assert.equal(offered,registry);
+	assert.equal(registry.contract,"ajrm-marine-tidal-to-planning-gate-migration-v1");
+	assert.equal(registry.contractVersion,1);
+	assert.deepEqual(registry.read().gates,gates);
+	assert.deepEqual((await registry.snapshot()).gateTombstones,gateTombstones);
+	const activeDefinitions = await call("GET","/definitions");
+	assert.equal(Object.hasOwn(activeDefinitions.body,"gates"),false);
+	assert.equal(Object.hasOwn((await app.ajrmMarineTidalDiagnostics.snapshot()).definitions,"gates"),false);
+	assert.equal(Object.hasOwn((await call("GET","/status")).body,"gateCatalogue"),false);
+	const completed = await registry.ack();
+	assert.deepEqual(completed,{ ok:true,completed:true,gateCount:1,tombstoneCount:1 });
+	assert.equal(globalThis[GATE_MIGRATION_SYMBOL],undefined);
+	const durable = JSON.parse(await fs.readFile(path.join(app.getDataDirPath(),"definitions.json"),"utf8"));
+	assert.equal(durable.contract,"ajrm-marine-tidal-database-definitions-v2");
+	assert.equal(Object.hasOwn(durable,"gates"),false);
+	assert.equal(Object.hasOwn(durable,"gateTombstones"),false);
 	await plugin.stop();
 });
 

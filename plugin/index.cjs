@@ -8,15 +8,15 @@ const { calculateTide } = require("./tide-calculation.cjs");
 const { createProviderRegistry } = require("./provider-registry.cjs");
 const { createUkhoProvider } = require("./providers/ukho.cjs");
 const { createTidalDatabase } = require("./database.cjs");
-const { createDefinitionStore } = require("./definition-store.cjs");
-const { GATE_CONTRACT_V2, catalogueDiagnostics, validateGateV2 } = require("./gate-contract.cjs");
-const { applyOperationalProfiles } = require("./provisional-gate-profiles.cjs");
+const { MIGRATION_CONTRACT, createDefinitionStore } = require("./definition-store.cjs");
 const { recommendSecondary, selectPort } = require("./spatial-selection.cjs");
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
 const SERVICE_SYMBOL = Symbol.for("mcdonaldajr.ajrmMarineTidalDatabase");
 const DIAGNOSTICS_SYMBOL = Symbol.for("mcdonaldajr.ajrmMarineTidalDiagnostics");
 const LOCATION_SYMBOL = Symbol.for("mcdonaldajr.ajrmMarineLocations");
+const PLANNING_SYMBOL = Symbol.for("mcdonaldajr.ajrmMarinePlanning");
+const GATE_MIGRATION_SYMBOL = Symbol.for("mcdonaldajr.ajrmMarineTidalGateMigration");
 const STATUS_PATH = "plugins.ajrmMarineTidalDatabase";
 const TIDE_PATH = "plugins.ajrmMarineTidalDatabase.tide";
 
@@ -106,6 +106,7 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 	let initialized = Promise.resolve();
 	let latestProjection = null;
 	let latestPosition = null;
+	let gateMigrationRegistry = null;
 	let lastMaintenance = { running: false, startedAt: null, completedAt: null, updated: 0, cached: 0, failed: 0, error: "" };
 	let unsubscribes = [];
 
@@ -145,20 +146,12 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		const service = Object.freeze({
 			contract: "ajrm-marine-tidal-database-service-v1",
 			contractVersion: 1,
-			gateContract: GATE_CONTRACT_V2,
-			gateContractVersion: 2,
 			configured: providers.list().some((provider) => provider.configured),
 			status: (request = {}) => resolve(request),
 			refresh: (request = {}) => resolve(request),
 			databaseStatus: () => databaseStatus(),
 			listPorts: () => definitionStore.read().ports,
 			listAreas: () => definitionStore.read().areas,
-			listGates: () => definitionStore.read().gates,
-			getGate: (locationId) => definitionStore.read().gates.find((entry) => entry.locationId === String(locationId || "")) || null,
-			getGateCatalogue: () => gateCatalogue(),
-			gateDiagnostics: () => gateCatalogueDiagnostics(),
-			setGate: (locationId, value) => saveGateDefinition(locationId, value),
-			removeGate: (locationId, expectedRevision) => definitionStore.removeGate(String(locationId || ""), Number(expectedRevision)),
 			setArea: async (locationId, value) => {
 				const area = normalizeAreaDefinition(locationId, value);
 				await definitionStore.setArea(area);
@@ -190,6 +183,7 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		});
 		app.ajrmMarineTidalDiagnostics = diagnostics;
 		globalThis[DIAGNOSTICS_SYMBOL] = diagnostics;
+		installGateMigrationRegistry();
 		subscribePosition();
 		if (configured.automaticMaintenance !== false) {
 			maintenanceDelay = setTimeout(() => maintainAll(), 5000);
@@ -209,6 +203,8 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		await Promise.allSettled([maintenancePromise].filter(Boolean));
 		if (globalThis[SERVICE_SYMBOL] === app.ajrmMarineTidalDatabase) delete globalThis[SERVICE_SYMBOL];
 		if (globalThis[DIAGNOSTICS_SYMBOL] === app.ajrmMarineTidalDiagnostics) delete globalThis[DIAGNOSTICS_SYMBOL];
+		if (globalThis[GATE_MIGRATION_SYMBOL] === gateMigrationRegistry) delete globalThis[GATE_MIGRATION_SYMBOL];
+		gateMigrationRegistry = null;
 		delete app.ajrmMarineTidalDatabase;
 		delete app.ajrmMarineTidalDiagnostics;
 		publish(STATUS_PATH, null);
@@ -220,17 +216,6 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		router.get("/status", async (_req, res) => res.json(await databaseStatus()));
 		router.get("/stations", async (_req, res) => res.json(await databaseStatus()));
 		router.get("/definitions", async (_req,res) => res.json(definitionStore.read()));
-		router.get("/definitions/gates", async (_req,res) => res.json(await gateCatalogue()));
-		router.get("/definitions/gates/diagnostics", async (_req,res) => res.json(await gateCatalogueDiagnostics()));
-		router.put("/definitions/gates/:locationId", write(async (req,res) => {
-			const gate = await saveGateDefinition(req.params.locationId, req.body);
-			res.json({ ok:true, gate, diagnostics:await gateCatalogueDiagnostics() });
-		}));
-		router.delete("/definitions/gates/:locationId", write(async (req,res) => {
-			const expectedRevision = Number(req.query?.expectedRevision ?? req.body?.expectedRevision);
-			await definitionStore.removeGate(String(req.params.locationId || ""), expectedRevision);
-			res.json({ ok:true, diagnostics:await gateCatalogueDiagnostics() });
-		}));
 		router.put("/definitions/ports/:locationId", write(async (req,res) => {
 			const port = normalizePortDefinition(req.params.locationId,req.body);
 			await definitionStore.setPort(port);
@@ -270,60 +255,6 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 		const service = locationsService();
 		if (!service?.list) throw new Error("AJRM Marine Location Editor is unavailable.");
 		return service.list({ workspace: "all" });
-	}
-
-	async function gateCatalogueDiagnostics(definitions = definitionStore.read()) {
-		try {
-			return catalogueDiagnostics(definitions, await listLocations());
-		} catch (error) {
-			return catalogueDiagnostics(definitions, [], error.message);
-		}
-	}
-
-	async function gateCatalogue() {
-		const evidenceGates = definitionStore.read().gates;
-		const diagnostics = await gateCatalogueDiagnostics({ ...definitionStore.read(), gates:evidenceGates });
-		const gates = applyOperationalProfiles(evidenceGates);
-		const catalogueBlocked = diagnostics.issues.some((entry) => entry.severity === "error" && entry.locationId === null);
-		const operationalLocationIds = gates
-			.filter((gate) => gate.readiness?.state === "operational"
-				&& !catalogueBlocked
-				&& !diagnostics.issues.some((entry) => entry.severity === "error" && entry.locationId === gate.locationId))
-			.map((gate) => gate.locationId);
-		const publishedDiagnostics = {
-			...diagnostics,
-			operationalLocationIds,
-			summary:{
-				...diagnostics.summary,
-				operationalCount:operationalLocationIds.length,
-				nonOperationalCount:gates.length - operationalLocationIds.length,
-				operationalWithAssumptionsCount:gates.filter((gate) => gate.calculationBasis?.mode === "operational-with-assumptions").length,
-			},
-		};
-		return {
-			contract:"ajrm-tidal-gate-catalogue-v2",
-			contractVersion:2,
-			gates,
-			operationalLocationIds,
-			diagnostics:publishedDiagnostics,
-		};
-	}
-
-	async function saveGateDefinition(locationId, value = {}) {
-		const pathLocationId = String(locationId || "").trim();
-		if (!pathLocationId) throw new Error("A gate mutation needs a Location id.");
-		if (value.locationId != null && String(value.locationId) !== pathLocationId) throw new Error("The gate body Location id must match the request path.");
-		const gate = validateGateV2({ ...structuredClone(value), locationId:pathLocationId });
-		const candidate = definitionStore.read();
-		const index = candidate.gates.findIndex((entry) => entry.locationId === pathLocationId);
-		if (index < 0) candidate.gates.push(gate); else candidate.gates[index] = gate;
-		const diagnostics = await gateCatalogueDiagnostics(candidate);
-		if (!diagnostics.valid) {
-			const errors = diagnostics.issues.filter((entry) => entry.severity === "error").map((entry) => entry.message);
-			throw new Error(`Gate catalogue integrity failed: ${errors.join(" ")}`);
-		}
-		await definitionStore.setGate(gate);
-		return gate;
 	}
 
 	async function resolve(request = {}) {
@@ -403,7 +334,6 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 
 	async function databaseStatus() {
 		const definitions = definitionStore.read();
-		const gateCatalogue = await gateCatalogueDiagnostics(definitions);
 		const stations = [];
 		for (const station of uniqueProviderStations(definitions)) {
 			const status = await database.inspectStation(station);
@@ -454,8 +384,35 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 			providers: providers?.list() || [], summary, maintenance: lastMaintenance,
 			policy:{ refreshFloorHours:24, offlineRetryHours:1, discoveryCacheUtcYearBounded:true, requestIntervalSeconds:(providers?.list()?.[0]?.requestIntervalMs || 5000) / 1000 },
 			latestProjection: latestProjection ? { valid: latestProjection.valid, selectedPort: latestProjection.selectedPort, freshness: latestProjection.freshness, error: latestProjection.error } : null,
-			stations, ports, gateCatalogue,
+			stations, ports,
 		};
+	}
+
+	function installGateMigrationRegistry() {
+		if (!definitionStore.readGateMigration()) return;
+		const acknowledge = async () => {
+			const result = await definitionStore.completeGateMigration();
+			if (!definitionStore.readGateMigration() && globalThis[GATE_MIGRATION_SYMBOL] === gateMigrationRegistry) {
+				delete globalThis[GATE_MIGRATION_SYMBOL];
+			}
+			return result;
+		};
+		gateMigrationRegistry = Object.freeze({
+			contract:MIGRATION_CONTRACT,
+			contractVersion:1,
+			read:() => definitionStore.readGateMigration(),
+			snapshot:() => definitionStore.readGateMigration(),
+			complete:acknowledge,
+			ack:acknowledge,
+		});
+		globalThis[GATE_MIGRATION_SYMBOL] = gateMigrationRegistry;
+		app.debug?.("Planning-owned tidal-gate migration data is available for one-time import.");
+		const planning = globalThis[PLANNING_SYMBOL];
+		if (typeof planning?.importLegacyTidalGates === "function") {
+			Promise.resolve(planning.importLegacyTidalGates(gateMigrationRegistry)).catch((error) => {
+				app.error?.(`Could not offer legacy tidal-gate data to AJRM Marine Planning: ${error.message}`);
+			});
+		}
 	}
 
 	async function maintainAll() {

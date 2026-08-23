@@ -12,7 +12,7 @@ const definitions = {
 	areas:[
 		{ locationId:"broad", name:"Broad", portLocationId:"parent" },
 		{ locationId:"small", name:"Small", portLocationId:"entered", parentAreaLocationId:"broad" },
-	], gates:[],
+	],
 };
 const locations = [
 	{ id:"broad", feature:{ geometry:{ type:"Polygon", coordinates:[[[-2,49],[2,49],[2,52],[-2,52],[-2,49]]] } } },

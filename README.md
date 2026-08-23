@@ -2,79 +2,42 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.1.21 adds the final seven photographed candidates and publishes
-explicit operational-with-assumptions profiles for all 24 completed
-source-reviewed records. The original evidence records
-remain preserved for inspection. The profiles turn reviewed published guidance
-into estimated planning inputs with visible assumptions for bearings, regime
-copying, slack placement, rate scope and the sine/interpolation model. None of
-these values is definitive; all must be taken with a pinch of salt and checked
-against current official information and observed conditions.
+The active definitions contract is `ajrm-marine-tidal-database-definitions-v2`.
+It contains tidal ports and tidal-region relationships only. Tidal-gate
+constants and their editing, calculation, import, export and merge workflow
+belong to AJRM Marine Planning.
 
 ## Responsibilities
 
-- **Location Editor** owns names, coordinates, geometry and location type, and presents joined tidal-region assignment controls.
-- **Tidal Database** owns prediction providers, credentials, station mappings, secondary-port correction tables, tidal-region serving-port and parent-region relationships, versioned gate timing/stream observations, cached events and tidal calculations.
+- **Location Editor** owns names, coordinates, geometry and location type, including the spatial records for tidal gates, and presents joined tidal-region assignment controls.
+- **Tidal Database** owns prediction providers, credentials, station mappings, secondary-port correction tables, tidal-region serving-port and parent-region relationships, cached events and tidal calculations.
+- **Marine Planning** owns tidal-gate constants, revisions, calculations and data-management operations.
 - **Display and Marine Planning** consume the Tidal Database service; they do not fetch or cache provider data themselves.
 - **Weather Database** is the peer service for weather providers, cache and forecasts.
 
-The plugin exposes `app.ajrmMarineTidalDatabase` and `Symbol.for("mcdonaldajr.ajrmMarineTidalDatabase")` with additive contract `ajrm-marine-tidal-database-service-v1`. The service advertises gate contract v2 and exposes `getGateCatalogue()`, definition-only `listGates()`, `getGate()`, revisioned `setGate()`/`removeGate()` and catalogue diagnostics. Its web API retains the `ajrm-marine-tide-resolver-v1` projection consumed by the suite.
+The plugin exposes `app.ajrmMarineTidalDatabase` and
+`Symbol.for("mcdonaldajr.ajrmMarineTidalDatabase")` with additive contract
+`ajrm-marine-tidal-database-service-v1`. It provides tide status/refresh,
+database status, port and area definitions, regional selection, maintenance and
+port pinning. Its web API retains the `ajrm-marine-tide-resolver-v1` projection
+consumed by the suite.
 
-## Tidal-gate contract
+## One-time gate migration
 
-The v2 contract uses stable gate and reference-port Location IDs, explicit HW
-or LW references, independent named turns, true current-towards bearings,
-spring/neap timing states, unambiguous slack variants and direction/regime/
-locality-specific rate observations with units, bounds and qualifiers. It also
-stores structured citation metadata, review, cautions, hazards, uncertainty and
-readiness without embedding publication page text.
+If an older durable definitions file still contains gate records or deletion
+tombstones, the plugin excludes them from its active definitions, normal service,
+HTTP API, status and diagnostics. It exposes the preserved payload only through
+the bounded process-local registry
+`globalThis[Symbol.for("mcdonaldajr.ajrmMarineTidalGateMigration")]`, contract
+`ajrm-marine-tidal-to-planning-gate-migration-v1`.
 
-Strict evidence-backed operational records retain the positive v2 eligibility
-rules. Completed reviews may additionally publish a separately identified
-`operational-with-assumptions` profile. That profile never changes the retained
-source record or turns an approximate/bounded statement into a definitive fact;
-Planning must display its warning and assumptions with the calculation.
-
-Unknown and unavailable values never become zero or the other regime's value.
-Planning must use the catalogue's computed `operationalLocationIds`; stored
-readiness alone does not bypass Location joins or reference-port capability.
-Where an estimated operational profile is present, its scalar model input is
-kept explicitly separate from the approximate, bounded, up-to, more-than or
-named-locality observation that informed it.
-
-See [AJRM tidal-gate constants v2](docs/tidal-gate-contract-v2.md) and the
-plugin's OpenAPI document for the full representation, migration semantics,
-effective readiness rules and revisioned GET/PUT/DELETE boundary. Gate timing
-mutation belongs here; Location Editor continues to own spatial records only.
-The compact [Segment 3A source review](docs/tidal-gate-source-review-segment-3a.md)
-maps the reviewed photographs, imported facts and withheld southeast-Coll
-candidate without copying publication prose. The [Segment 3B source review](docs/tidal-gate-source-review-segment-3b.md)
-records the corrected heading-to-image index, locality separation and withheld
-south-end Tiree candidate. The [Segment 4 source review](docs/tidal-gate-source-review-segment-4.md)
-separates the two Sound of Mull timing regimes, their spatial anchors and the
-conflicting legacy records. The [Segment 5A source review](docs/tidal-gate-source-review-segment-5a.md)
-records the corrected Corran/Loch Eil/Loch Leven image index, separates the
-Loch Leven narrows from Caolas nan Con and documents both fail-closed joins.
-The [Segment 5B source review](docs/tidal-gate-source-review-segment-5b.md)
-records the Caolas nan Con derivation, the complete Lynn locality split and
-the legacy Sound of Mull conflict without changing prior records.
-The [Segment 6A source review](docs/tidal-gate-source-review-segment-6a.md)
-records the corrected two-file offset, Loch Feochan's asymmetric entrance
-cycle, the Firth's progressive fairway turns and every separate rate locality.
-The [Segment 6B source review](docs/tidal-gate-source-review-segment-6b.md)
-records the corrected Cuan/Grey Dogs image index, positive operational
-assessment, passage/locality rate limits and turn-ambiguous Grey Dogs slack.
-The [Segment 7A source review](docs/tidal-gate-source-review-segment-7a.md)
-records the corrected Corryvreckan heading index, distinct OS named-sea join,
-legacy conflict, direction/regime/slack/rate scope, physical hazards and the
-complete positive operational-eligibility failure.
-The [Segment 7B source review](docs/tidal-gate-source-review-segment-7b.md)
-records the Sound of Luing column boundary, the incomplete Dorus Mòr heading
-and continuation index, distinct OS joins, exact direction/regime/slack/rate
-scope, structured hazards and both complete positive eligibility failures.
-The [Segment 8 source review](docs/tidal-gate-source-review-segment-8.md)
-records the final seven candidates, the distinct Greenock reference used by
-the two Mull of Kintyre localities and every provisional rate/model assumption.
+The registry's synchronous `read()` and `snapshot()` methods return the migration
+envelope. `complete()` and its `ack()` alias atomically rewrite the durable Tidal
+Database definitions file as v2 with no gate payload. Planning must acknowledge
+only after it has imported, persisted and verified the complete live-record and
+tombstone state. Until that acknowledgement, later port/area edits continue to
+preserve the quarantined payload durably. Fresh installations create no migration
+registry.
 
 ## Offline and refresh behaviour
 
@@ -86,19 +49,28 @@ UKHO responses are retained on disk so ordinary restarts and offline operation d
 
 ## Setup
 
-Install and enable AJRM Marine Location Editor first, then this plugin. Configure the provider key and subscription tier in Signal K **Server → Plugin Config → AJRM Marine Tidal Database**. Open the Tidal Database webapp to inspect station coverage, update due stations, and edit prediction settings for tidal-port Locations. Select the tide icon at the left of any port to inspect its current height, next high/low water, source freshness, spring/neap estimate and interactive one-to-seven-day curve. Port position and geometry continue to be edited only in Location Editor.
+For the v0.7 ownership upgrade, install Marine Location Editor first, Marine
+Planning second, then Tidal Database, and restart Signal K only after all three
+packages are installed. That provides coordinated spatial deletion and ensures
+the migration receiver is present before the retired active gate API is
+removed. Configure the provider
+key and subscription tier in Signal K **Server → Plugin Config → AJRM Marine
+Tidal Database**. Open the Tidal Database webapp to inspect station coverage,
+update due stations, and edit prediction settings for tidal-port Locations.
+Select the tide icon at the left of any port to inspect its current height, next
+high/low water, source freshness, spring/neap estimate and interactive
+one-to-seven-day curve. Port position and geometry continue to be edited only
+in Location Editor.
 
 Automatic preference is explicit catalogue data, not fuzzy name matching.
 Package catalogues add genuinely missing IDs only. Existing durable port,
-area and gate records always win, so a changed bundle cannot overwrite local
-edits. An explicit gate deletion leaves a revisioned tombstone, preventing a
-bundled seed from recreating it on restart; deletion consumes a revision and an
-explicit restore must advance that deleted revision. Existing v1 gates are migrated losslessly and retain
-their complete raw record under compatibility metadata.
+and area records always win, so a changed bundle cannot overwrite local edits.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.1.21 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-location-editor.git#v0.7.0 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-planning.git#v0.7.0 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.7.0 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

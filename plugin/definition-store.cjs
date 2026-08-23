@@ -1,21 +1,27 @@
-/** Persists editable tidal prediction, correction, area and gate definitions separately from Locations. */
+/** Persists editable tidal prediction, correction and area definitions separately from Locations. */
 
 const fs = require("node:fs");
 const fsp = require("node:fs/promises");
 const path = require("node:path");
 const { randomUUID } = require("node:crypto");
-const { normalizeGate, validateGateV2 } = require("./gate-contract.cjs");
 
-const CONTRACT = "ajrm-marine-tidal-database-definitions-v1";
+const LEGACY_CONTRACT = "ajrm-marine-tidal-database-definitions-v1";
+const CONTRACT = "ajrm-marine-tidal-database-definitions-v2";
+const MIGRATION_CONTRACT = "ajrm-marine-tidal-to-planning-gate-migration-v1";
 const SAFE_PORT_BACKFILLS = Object.freeze({
 	"29910eb5-6c47-4796-8af7-592742737562": { providerId:"ukhoTidalEvents", stationId:"0404" },
 });
 
+function activeCatalogue(value) {
+	if (!value || !Array.isArray(value.ports) || !Array.isArray(value.areas)) throw new Error("Tidal definition catalogue is invalid.");
+	const { gates: _gates, gateTombstones: _gateTombstones, ...tidal } = structuredClone(value);
+	return { ...tidal, contract:CONTRACT, contractVersion:2 };
+}
+
 function validate(value) {
-	if (value?.contract !== CONTRACT || !Array.isArray(value.ports) || !Array.isArray(value.areas) || !Array.isArray(value.gates)) throw new Error("Tidal definition catalogue is invalid.");
+	if (value?.contract !== CONTRACT || value?.contractVersion !== 2 || !Array.isArray(value.ports) || !Array.isArray(value.areas)) throw new Error("Tidal definition catalogue is invalid.");
+	if (Object.hasOwn(value,"gates") || Object.hasOwn(value,"gateTombstones")) throw new Error("Tidal definition catalogue cannot contain Planning-owned gate data.");
 	value = structuredClone(value);
-	if (value.gateTombstones === undefined) value.gateTombstones = [];
-	if (!Array.isArray(value.gateTombstones)) throw new Error("Tidal-gate tombstones must be an array.");
 	const ids = new Set();
 	for (const port of value.ports) {
 		if (!port?.locationId || ids.has(port.locationId)) throw new Error("Each tidal port needs one unique Location id.");
@@ -61,30 +67,28 @@ function validate(value) {
 			parentId = value.areas.find((entry) => entry.locationId === parentId)?.parentAreaLocationId || null;
 		}
 	}
-	const gateIds = new Set();
-	value.gates = value.gates.map((entry) => normalizeGate(entry));
-	for (const gate of value.gates) {
-		validateGateV2(gate);
-		if (gateIds.has(gate.locationId)) throw new Error(`More than one tidal gate uses Location id ${gate.locationId}.`);
-		gateIds.add(gate.locationId);
-		const referencePort = value.ports.find((entry) => entry.locationId === gate.reference.portLocationId);
-		if (!referencePort || referencePort.kind !== "standard") throw new Error(`Gate ${gate.locationId} needs an existing standard reference port.`);
-	}
-	const tombstoneIds = new Set();
-	for (const tombstone of value.gateTombstones) {
-		if (!tombstone || typeof tombstone.locationId !== "string" || !tombstone.locationId.trim()) throw new Error("Each tidal-gate tombstone needs a Location id.");
-		if (tombstoneIds.has(tombstone.locationId)) throw new Error(`More than one tidal-gate tombstone uses Location id ${tombstone.locationId}.`);
-		if (gateIds.has(tombstone.locationId)) throw new Error(`Tidal gate ${tombstone.locationId} cannot be both live and deleted.`);
-		if (!Number.isInteger(tombstone.revision) || tombstone.revision < 1) throw new Error(`Tidal-gate tombstone ${tombstone.locationId} needs the deleted positive revision.`);
-		if (typeof tombstone.deletedAt !== "string" || Number.isNaN(Date.parse(tombstone.deletedAt))) throw new Error(`Tidal-gate tombstone ${tombstone.locationId} needs a valid deletion time.`);
-		tombstoneIds.add(tombstone.locationId);
-	}
 	return value;
 }
 
+function migrationSnapshot(value) {
+	if (Object.hasOwn(value || {},"gates") && !Array.isArray(value.gates)) throw new Error("Legacy tidal-gate migration data is invalid; refusing to discard it.");
+	if (Object.hasOwn(value || {},"gateTombstones") && !Array.isArray(value.gateTombstones)) throw new Error("Legacy tidal-gate tombstone migration data is invalid; refusing to discard it.");
+	const gates = Array.isArray(value?.gates) ? structuredClone(value.gates) : [];
+	const gateTombstones = Array.isArray(value?.gateTombstones) ? structuredClone(value.gateTombstones) : [];
+	if (!gates.length && !gateTombstones.length) return null;
+	return {
+		contract:MIGRATION_CONTRACT,
+		contractVersion:1,
+		sourceDefinitionsContract:typeof value.contract === "string" ? value.contract : null,
+		sourceUpdatedAt:typeof value.updatedAt === "string" ? value.updatedAt : null,
+		gates,
+		gateTombstones,
+	};
+}
+
 function mergeBundledDefinitions(current, bundled) {
-	const next = validate(current);
-	const incoming = validate({ ...structuredClone(bundled), contract: CONTRACT });
+	const next = validate(activeCatalogue(current));
+	const incoming = validate(activeCatalogue(bundled));
 	const portById = new Map(next.ports.map((entry) => [entry.locationId, entry]));
 	for (const bundledPort of incoming.ports) {
 		const existing = portById.get(bundledPort.locationId);
@@ -102,49 +106,58 @@ function mergeBundledDefinitions(current, bundled) {
 			}
 		}
 	}
-	for (const key of ["areas", "gates"]) {
-		const ids = new Set(next[key].map((entry) => entry.locationId || entry.id));
-		for (const entry of incoming[key]) {
-			const id = entry.locationId || entry.id;
-			if (key === "gates" && next.gateTombstones.some((tombstone) => tombstone.locationId === id)) continue;
-			if (!ids.has(id)) next[key].push(structuredClone(entry));
-		}
-	}
+	const areaIds = new Set(next.areas.map((entry) => entry.locationId));
+	for (const area of incoming.areas) if (!areaIds.has(area.locationId)) next.areas.push(structuredClone(area));
 	return validate(next);
 }
 
 function createDefinitionStore(filename, bundled) {
 	let current;
+	let pendingMigration = null;
 	let mutationQueue = Promise.resolve();
+
+	function writeSync(value) {
+		fs.mkdirSync(path.dirname(filename), { recursive:true });
+		const temporary = `${filename}.${process.pid}.seed.tmp`;
+		fs.writeFileSync(temporary, `${JSON.stringify(value,null,2)}\n`, { mode:0o600 });
+		fs.renameSync(temporary, filename);
+	}
+
 	try {
 		const storedSource = JSON.parse(fs.readFileSync(filename,"utf8"));
-		const stored = validate(storedSource);
+		if (![LEGACY_CONTRACT,CONTRACT].includes(storedSource?.contract)) throw new Error("Tidal definition catalogue is invalid.");
+		pendingMigration = migrationSnapshot(storedSource);
+		const stored = validate(activeCatalogue(storedSource));
 		current = mergeBundledDefinitions(stored, bundled);
-		if (JSON.stringify(current) !== JSON.stringify(storedSource)) {
-			fs.mkdirSync(path.dirname(filename), { recursive:true });
-			const temporary = `${filename}.${process.pid}.seed.tmp`;
-			fs.writeFileSync(temporary, `${JSON.stringify(current,null,2)}\n`, { mode:0o600 });
-			fs.renameSync(temporary, filename);
-		}
+		if (!pendingMigration && JSON.stringify(current) !== JSON.stringify(storedSource)) writeSync(current);
 	}
 	catch (error) {
 		if (error.code !== "ENOENT") throw error;
-		current = validate({ ...structuredClone(bundled), contract:CONTRACT });
+		current = validate(activeCatalogue(bundled));
 	}
-	async function persist(next) {
-		const validated = validate({ ...structuredClone(next), contract:CONTRACT, updatedAt:new Date().toISOString() });
+
+	async function writeAtomic(value) {
 		await fsp.mkdir(path.dirname(filename),{ recursive:true });
 		const temporary = `${filename}.${process.pid}.${randomUUID()}.tmp`;
 		try {
-			await fsp.writeFile(temporary,`${JSON.stringify(validated,null,2)}\n`,{ mode:0o600 });
+			await fsp.writeFile(temporary,`${JSON.stringify(value,null,2)}\n`,{ mode:0o600 });
 			await fsp.rename(temporary,filename);
 		} catch (error) {
 			await fsp.rm(temporary,{ force:true }).catch(() => {});
 			throw error;
 		}
+	}
+
+	async function persist(next) {
+		const validated = validate({ ...structuredClone(next), contract:CONTRACT, contractVersion:2, updatedAt:new Date().toISOString() });
+		const stored = pendingMigration
+			? { ...structuredClone(validated), contract:LEGACY_CONTRACT, contractVersion:1, gates:structuredClone(pendingMigration.gates), gateTombstones:structuredClone(pendingMigration.gateTombstones) }
+			: validated;
+		await writeAtomic(stored);
 		current = validated;
 		return read();
 	}
+
 	function mutate(change) {
 		const operation = mutationQueue.then(() => {
 			const next = read();
@@ -154,7 +167,25 @@ function createDefinitionStore(filename, bundled) {
 		mutationQueue = operation.catch(() => {});
 		return operation;
 	}
+
 	function read() { return structuredClone(current); }
+	function readGateMigration() { return pendingMigration ? structuredClone(pendingMigration) : null; }
+
+	async function completeGateMigration() {
+		const operation = mutationQueue.then(async () => {
+			if (!pendingMigration) return { ok:true, completed:false, gateCount:0, tombstoneCount:0 };
+			const gateCount = pendingMigration.gates.length;
+			const tombstoneCount = pendingMigration.gateTombstones.length;
+			const validated = validate({ ...read(), updatedAt:new Date().toISOString() });
+			await writeAtomic(validated);
+			current = validated;
+			pendingMigration = null;
+			return { ok:true, completed:true, gateCount, tombstoneCount };
+		});
+		mutationQueue = operation.catch(() => {});
+		return operation;
+	}
+
 	async function setPort(port) {
 		return mutate((next) => {
 			const index=next.ports.findIndex((entry)=>entry.locationId===port.locationId);
@@ -180,32 +211,7 @@ function createDefinitionStore(filename, bundled) {
 			next.areas=next.areas.filter((entry)=>entry.locationId!==locationId);
 		});
 	}
-	async function setGate(gate) {
-		const normalized = validateGateV2(gate);
-		return mutate((next) => {
-			const index = next.gates.findIndex((entry) => entry.locationId === normalized.locationId);
-			const tombstoneIndex = next.gateTombstones.findIndex((entry) => entry.locationId === normalized.locationId);
-			if (index < 0) {
-				const expectedRevision = tombstoneIndex < 0 ? 1 : next.gateTombstones[tombstoneIndex].revision + 1;
-				if (normalized.revision !== expectedRevision) throw new Error(`A ${tombstoneIndex < 0 ? "new" : "restored"} tidal-gate definition must use revision ${expectedRevision}.`);
-				if (tombstoneIndex >= 0) next.gateTombstones.splice(tombstoneIndex,1);
-				next.gates.push(normalized);
-			} else {
-				if (normalized.revision !== next.gates[index].revision + 1) throw new Error(`Tidal-gate revision conflict; expected revision ${next.gates[index].revision + 1}.`);
-				next.gates[index] = normalized;
-			}
-		});
-	}
-	async function removeGate(locationId, expectedRevision) {
-		return mutate((next) => {
-			const existing = next.gates.find((entry) => entry.locationId === locationId);
-			if (!existing) throw new Error("The tidal-gate definition does not exist.");
-			if (!Number.isInteger(expectedRevision) || expectedRevision !== existing.revision) throw new Error(`Tidal-gate revision conflict; expected current revision ${existing.revision}.`);
-			next.gates = next.gates.filter((entry) => entry.locationId !== locationId);
-			next.gateTombstones.push({ locationId, revision:existing.revision + 1, deletedAt:new Date().toISOString() });
-		});
-	}
-	return Object.freeze({ read, removeArea, removeGate, removePort, setArea, setGate, setPort });
+	return Object.freeze({ completeGateMigration, read, readGateMigration, removeArea, removePort, setArea, setPort });
 }
 
-module.exports = { CONTRACT, createDefinitionStore, mergeBundledDefinitions, validate };
+module.exports = { CONTRACT, LEGACY_CONTRACT, MIGRATION_CONTRACT, createDefinitionStore, mergeBundledDefinitions, validate };
