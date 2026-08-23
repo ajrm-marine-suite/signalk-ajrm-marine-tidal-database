@@ -3,6 +3,7 @@
   "contractVersion": 1,
   "generatedAt": "2026-08-23T00:00:00.000Z",
   "sourcePackage": "AJRM-Tidal-Gates-Simplified.xlsx",
+  "gateCatalogueImport": "AJRM-Tidal-Gates-v0.6.1-v1",
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",

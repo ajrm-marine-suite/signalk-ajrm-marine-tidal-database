@@ -71,11 +71,29 @@ function mergeBundledDefinitions(current, bundled) {
 			if (Object.hasOwn(bundledPort, key)) existing[key] = structuredClone(bundledPort[key]);
 		}
 	}
-	for (const key of ["areas", "gates"]) {
-		const ids = new Set(next[key].map((entry) => entry.locationId || entry.id));
-		for (const entry of bundled[key] || []) {
+	{
+		const ids = new Set(next.areas.map((entry) => entry.locationId || entry.id));
+		for (const entry of bundled.areas || []) {
 			const id = entry.locationId || entry.id;
-			if (!ids.has(id)) next[key].push(structuredClone(entry));
+			if (!ids.has(id)) next.areas.push(structuredClone(entry));
+		}
+	}
+	const bundledGateImport = typeof bundled.gateCatalogueImport === "string" ? bundled.gateCatalogueImport : "";
+	if (bundledGateImport && next.gateCatalogueImport !== bundledGateImport) {
+		// This explicit migration replaces incompatible gate contracts once. The
+		// marker then prevents later package starts from overwriting user edits.
+		next.gates = structuredClone(bundled.gates || []);
+		next.gateCatalogueImport = bundledGateImport;
+		if (Array.isArray(next.gateTombstones)) {
+			const importedIds = new Set(next.gates.map((entry) => entry.locationId || entry.id));
+			next.gateTombstones = next.gateTombstones.filter((entry) => !importedIds.has(entry.locationId || entry.id));
+		}
+	}
+	else {
+		const ids = new Set(next.gates.map((entry) => entry.locationId || entry.id));
+		for (const entry of bundled.gates || []) {
+			const id = entry.locationId || entry.id;
+			if (!ids.has(id)) next.gates.push(structuredClone(entry));
 		}
 	}
 	return validate(next);
@@ -88,6 +106,13 @@ function createDefinitionStore(filename, bundled) {
 		current = mergeBundledDefinitions(stored, bundled);
 		if (JSON.stringify(current) !== JSON.stringify(stored)) {
 			fs.mkdirSync(path.dirname(filename), { recursive:true });
+			if (current.gateCatalogueImport && current.gateCatalogueImport !== stored.gateCatalogueImport) {
+				const backup = `${filename}.before-gate-catalogue-import.backup`;
+				if (!fs.existsSync(backup)) {
+					fs.copyFileSync(filename, backup);
+					fs.chmodSync(backup, 0o600);
+				}
+			}
 			const temporary = `${filename}.${process.pid}.seed.tmp`;
 			fs.writeFileSync(temporary, `${JSON.stringify(current,null,2)}\n`, { mode:0o600 });
 			fs.renameSync(temporary, filename);

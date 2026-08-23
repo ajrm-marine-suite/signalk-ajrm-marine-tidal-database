@@ -5,7 +5,7 @@ const API_BASE = "/plugins/signalk-ajrm-marine-tidal-database";
 const LOCATION_API = "/plugins/signalk-ajrm-marine-location-editor";
 const TIDE_GRAPH_DAYS_KEY = "ajrmMarineTidalDatabase.tideGraphDays";
 const TIDE_DIALOG_SIZE_KEY = "ajrmMarineTidalDatabase.tideDialogSize";
-const tideCurveTools = import("./tide-curve.mjs?v=0.6.0");
+const tideCurveTools = import("./tide-curve.mjs?v=0.6.1");
 const byId = (id) => document.getElementById(id);
 
 function text(value) { return value == null || value === "" ? "—" : String(value); }

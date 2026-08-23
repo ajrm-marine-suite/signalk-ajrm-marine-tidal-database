@@ -2,7 +2,7 @@
 
 Signal K tidal-data service for AJRM Marine Suite. It separates tidal provider access, station mappings, entered secondary-port corrections and cached predictions from the spatial Location Editor.
 
-Version 0.6.0 keeps the v1-compatible 0.1.8 software behaviour and supplies the simplified 42-row tidal-gate catalogue for AJRM Marine Planning 0.6.0/0.5.19. Twenty-nine rows contain every field required by that Planning format; thirteen remain visible but incomplete because the reviewed spreadsheet does not contain every required timing or rate. All values remain estimates and must be checked against current official information and observed conditions.
+Version 0.6.1 keeps the v1-compatible 0.1.8 software behaviour and supplies the simplified 42-row tidal-gate catalogue for AJRM Marine Planning 0.6.0/0.5.19. Twenty-nine rows contain every field required by that Planning format; thirteen remain visible but incomplete because the reviewed spreadsheet does not contain every required timing or rate. All values remain estimates and must be checked against current official information and observed conditions.
 
 ## Responsibilities
 
@@ -27,11 +27,11 @@ Install and enable AJRM Marine Location Editor first, then this plugin. Configur
 
 Automatic preference is explicit catalogue data, not fuzzy name matching. Existing durable catalogues receive package safety fields and newly bundled ports on startup without overwriting locally edited prediction or correction data.
 
-Existing installations also retain their durable gate records. The release therefore includes `defaults/gates-v0.6.0-v1.json`, a gates-only import containing the 42 spreadsheet rows. Back up the existing `definitions.json`, then replace only its `gates` array with this file so locally configured ports and tidal regions remain intact.
+On its first start, version 0.6.1 automatically replaces an incompatible existing gate catalogue with the 42-row v1 catalogue. It preserves configured ports and tidal regions, writes the former definitions file beside the live file as `definitions.json.before-gate-catalogue-import.backup`, and records an explicit migration marker so later restarts do not overwrite user edits. The release also retains `defaults/gates-v0.6.0-v1.json` as a gates-only reference/export.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.6.0 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.6.1 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

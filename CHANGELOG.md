@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.1 — 2026-08-23
+
+- Automatically replace incompatible durable gate records with the complete
+  42-row v1 catalogue on first start, fixing upgrades that exposed only the
+  three newly added locations to Planning.
+- Preserve locally configured ports and tidal regions, retain a recoverable
+  pre-migration definitions backup, and mark the import so later restarts do
+  not overwrite gate edits.
+
 ## 0.6.0 — 2026-08-23
 
 - Keep the `v0.1.8` runtime behaviour and legacy v1 gate contract expected by
