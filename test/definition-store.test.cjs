@@ -62,6 +62,28 @@ test("the Greenock reference range backfills only the exact prior blank station 
 	assert.equal(mergeBundledDefinitions(catalogue({ports:[differentStation]}),catalogue({ports:[bundledGreenock]})).ports[0].referenceLevels,null);
 });
 
+test("bundled merging renames only the exact prior Oban port and area names", () => {
+	const portId = "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4";
+	const areaId = "f297596a-4959-47ff-b665-18ac2cb74924";
+	const oldPort = { ...port(portId), name:"Oban tidal prediction port" };
+	const newPort = { ...oldPort, name:"Oban port" };
+	const oldArea = { locationId:areaId,name:"Oban tidal prediction port tidal area",portLocationId:portId,parentAreaLocationId:null };
+	const newArea = { ...oldArea,name:"Oban port tidal area" };
+	const merged = mergeBundledDefinitions(
+		catalogue({ ports:[oldPort],areas:[oldArea] }),
+		catalogue({ ports:[newPort],areas:[newArea] }),
+	);
+	assert.equal(merged.ports[0].name,"Oban port");
+	assert.equal(merged.areas[0].name,"Oban port tidal area");
+
+	const custom = mergeBundledDefinitions(
+		catalogue({ ports:[{ ...oldPort,name:"My Oban" }],areas:[{ ...oldArea,name:"My Oban area" }] }),
+		catalogue({ ports:[newPort],areas:[newArea] }),
+	);
+	assert.equal(custom.ports[0].name,"My Oban");
+	assert.equal(custom.areas[0].name,"My Oban area");
+});
+
 test("active v2 catalogues reject Planning-owned gate fields", () => {
 	assert.throws(() => validate({ ...catalogue(),gates:[] }),/cannot contain Planning-owned gate data/);
 	assert.throws(() => validate({ ...catalogue(),gateTombstones:[] }),/cannot contain Planning-owned gate data/);

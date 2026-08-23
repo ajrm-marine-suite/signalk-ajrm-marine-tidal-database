@@ -11,6 +11,10 @@ const MIGRATION_CONTRACT = "ajrm-marine-tidal-to-planning-gate-migration-v1";
 const SAFE_PORT_BACKFILLS = Object.freeze({
 	"29910eb5-6c47-4796-8af7-592742737562": { providerId:"ukhoTidalEvents", stationId:"0404" },
 });
+const SAFE_NAME_RENAMES = Object.freeze({
+	"e0e5661f-1675-4dbb-8fa0-ea8566c62ef4": Object.freeze({ from:"Oban tidal prediction port", to:"Oban port" }),
+	"f297596a-4959-47ff-b665-18ac2cb74924": Object.freeze({ from:"Oban tidal prediction port tidal area", to:"Oban port tidal area" }),
+});
 
 function activeCatalogue(value) {
 	if (!value || !Array.isArray(value.ports) || !Array.isArray(value.areas)) throw new Error("Tidal definition catalogue is invalid.");
@@ -95,6 +99,8 @@ function mergeBundledDefinitions(current, bundled) {
 		if (!existing) {
 			next.ports.push(structuredClone(bundledPort));
 		} else {
+			const rename = SAFE_NAME_RENAMES[bundledPort.locationId];
+			if (rename && existing.name === rename.from && bundledPort.name === rename.to) existing.name = rename.to;
 			const backfill = SAFE_PORT_BACKFILLS[bundledPort.locationId];
 			const bundledLevels = bundledPort.referenceLevels;
 			if (backfill
@@ -106,8 +112,16 @@ function mergeBundledDefinitions(current, bundled) {
 			}
 		}
 	}
-	const areaIds = new Set(next.areas.map((entry) => entry.locationId));
-	for (const area of incoming.areas) if (!areaIds.has(area.locationId)) next.areas.push(structuredClone(area));
+	const areaById = new Map(next.areas.map((entry) => [entry.locationId, entry]));
+	for (const area of incoming.areas) {
+		const existing = areaById.get(area.locationId);
+		if (!existing) {
+			next.areas.push(structuredClone(area));
+			continue;
+		}
+		const rename = SAFE_NAME_RENAMES[area.locationId];
+		if (rename && existing.name === rename.from && area.name === rename.to) existing.name = rename.to;
+	}
 	return validate(next);
 }
 

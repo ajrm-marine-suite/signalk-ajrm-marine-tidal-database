@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.1 — 2026-08-23
+
+- Rename the bundled Oban standard prediction-port definition to `Oban port`
+  and its assigned tidal area to `Oban port tidal area`, preserving their
+  Location UUID joins.
+- Upgrade only definitions that still have the exact prior bundled names, so
+  locally customised names remain untouched.
+
 ## 0.7.0 — 2026-08-23
 
 - Move durable tidal-gate constants, source reviews, operational assumptions,

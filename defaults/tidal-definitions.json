@@ -6,7 +6,7 @@
   "ports": [
     {
       "locationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
-      "name": "Oban tidal prediction port",
+      "name": "Oban port",
       "kind": "standard",
       "datum": "UKHO station datum",
       "referenceLevels": {
@@ -2983,7 +2983,7 @@
     },
     {
       "locationId": "f297596a-4959-47ff-b665-18ac2cb74924",
-      "name": "Oban tidal prediction port tidal area",
+      "name": "Oban port tidal area",
       "portLocationId": "e0e5661f-1675-4dbb-8fa0-ea8566c62ef4",
       "parentAreaLocationId": null
     },

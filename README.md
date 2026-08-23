@@ -63,14 +63,17 @@ one-to-seven-day curve. Port position and geometry continue to be edited only
 in Location Editor.
 
 Automatic preference is explicit catalogue data, not fuzzy name matching.
-Package catalogues add genuinely missing IDs only. Existing durable port,
-and area records always win, so a changed bundle cannot overwrite local edits.
+Package catalogues normally add genuinely missing IDs only, and existing
+durable port and area records win. The one bounded exception is the v0.7.1
+Oban display-name migration: it changes only the two stable Oban IDs while
+their names still exactly match the prior bundled names; customised names are
+preserved.
 
 ```sh
 cd ~/.signalk
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-location-editor.git#v0.7.0 --omit=dev --no-package-lock
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-planning.git#v0.7.0 --omit=dev --no-package-lock
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.7.0 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-location-editor.git#v0.7.1 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-planning.git#v0.10.0 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.7.1 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 
