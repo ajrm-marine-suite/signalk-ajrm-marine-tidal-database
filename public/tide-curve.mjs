@@ -176,7 +176,15 @@ export function attachTideCurveHover(container, events, { windowObject = globalT
 	readout.className = "ajrm-tide-hover-readout";
 	readout.hidden = true;
 	readout.setAttribute("role", "status");
-	documentObject.body.append(readout);
+	// A native modal <dialog> is rendered in the browser's top layer. A fixed
+	// readout appended to <body> therefore sits behind the dialog regardless of
+	// z-index. Keep the same Display hover renderer, but host its readout in the
+	// nearest open dialog when the graph is shown by a native-dialog consumer.
+	const openDialog = container.closest?.("dialog[open]");
+	const readoutHost = openDialog && typeof openDialog.append === "function"
+		? openDialog
+		: documentObject.body;
+	readoutHost.append(readout);
 
 	function hide() {
 		hover.setAttribute("visibility", "hidden");

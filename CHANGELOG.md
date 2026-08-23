@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.2 — 2026-08-23
+
+- List tidal-port Locations alphabetically in the port table, spatial Location
+  and parent-port selectors, and station Used by summaries, using
+  case-insensitive natural numeric ordering with deterministic Location-id
+  tie-breaking.
+- Keep the shared cursor time-and-height readout visible above the native tide
+  graph dialog, using the same interpolation and formatting as Display.
+
 ## 0.7.1 — 2026-08-23
 
 - Rename the bundled Oban standard prediction-port definition to `Oban port`

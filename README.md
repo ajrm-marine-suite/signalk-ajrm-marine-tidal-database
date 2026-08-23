@@ -59,8 +59,11 @@ Tidal Database**. Open the Tidal Database webapp to inspect station coverage,
 update due stations, and edit prediction settings for tidal-port Locations.
 Select the tide icon at the left of any port to inspect its current height, next
 high/low water, source freshness, spring/neap estimate and interactive
-one-to-seven-day curve. Port position and geometry continue to be edited only
-in Location Editor.
+one-to-seven-day curve. Tidal-port rows, spatial Location choices, parent-port
+choices and each station's Used by Locations are listed alphabetically by name,
+with natural numeric ordering. Moving the cursor over the graph shows the same
+interpolated time and height as Display. Port position and geometry continue to
+be edited only in Location Editor.
 
 Automatic preference is explicit catalogue data, not fuzzy name matching.
 Package catalogues normally add genuinely missing IDs only, and existing
@@ -72,8 +75,8 @@ preserved.
 ```sh
 cd ~/.signalk
 npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-location-editor.git#v0.7.1 --omit=dev --no-package-lock
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-planning.git#v0.10.0 --omit=dev --no-package-lock
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.7.1 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-planning.git#v0.10.1 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.7.2 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

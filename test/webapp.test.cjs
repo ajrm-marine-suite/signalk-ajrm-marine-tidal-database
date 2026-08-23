@@ -26,7 +26,9 @@ test("webapp explains the refresh floor and exposes both station and port tables
 	assert.match(app, /class="view-tide"/);
 	assert.ok(app.includes(`import("./tide-curve.mjs?v=${packageVersion}")`));
 	assert.ok(html.includes(`styles.css?v=${packageVersion}`));
+	assert.ok(html.includes(`location-order.js?v=${packageVersion}`));
 	assert.ok(html.includes(`app.js?v=${packageVersion}`));
+	assert.ok(html.indexOf(`location-order.js?v=${packageVersion}`) < html.indexOf(`app.js?v=${packageVersion}`));
 	assert.match(html, /High-only or low-only stations cannot supply current height or a full curve/);
 	assert.match(html, /smooth estimate interpolated between UKHO-predicted high- and low-water times and heights/);
 	assert.match(app, /tideCurveSvg/);
@@ -34,4 +36,13 @@ test("webapp explains the refresh floor and exposes both station and port tables
 	assert.match(app, /TIDE_DIALOG_SIZE_KEY/);
 	assert.match(app, /saveTideDialogSize/);
 	assert.match(styles, /\[hidden\] \{ display:none !important; \}/);
+});
+
+test("every user-visible spatial Location collection uses the shared alphabetical ordering", () => {
+	const app = fs.readFileSync(path.join(__dirname,"..","public","app.js"),"utf8");
+	assert.match(app, /sortLocationsByName\(entry\.ports\)/);
+	assert.match(app, /sortLocationsByName\(state\.status\.ports\.filter/);
+	assert.match(app, /return sortLocationsByName\(values\.filter/);
+	assert.match(app, /const locations = sortLocationsByName\(locationsById\.values\(\)\)/);
+	assert.match(app, /const standardPorts = sortLocationsByName/);
 });
