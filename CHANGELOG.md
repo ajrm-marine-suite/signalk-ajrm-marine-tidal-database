@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.1 — 2026-08-24
+
+- Retain the 24 hours of cached historical extrema preceding each successful
+  due provider refresh, while making the fresh response authoritative from its
+  first event onward and pruning every older cached event at that refresh.
+- Normalize, deduplicate and sort the merged station events, recompute their
+  coverage, and persist the complete result so Planning can use the preceding
+  tide cycle for current-day midnight coverage.
+- Leave the previous cache unchanged when refresh or persistence fails, never
+  carry cached future predictions over a fresh response, and retain the
+  Discovery licence-year boundary.
+
 ## 0.8.0 — 2026-08-23
 
 - Advance the intentionally breaking in-process service, published/HTTP status

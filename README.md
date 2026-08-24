@@ -60,6 +60,16 @@ If a provider cannot be reached, the latest permitted disk-backed record remains
 
 UKHO responses are retained on disk so ordinary restarts and offline operation do not repeat requests. Discovery records are scoped to the UTC calendar/licence year in which they were fetched and are rejected at the year boundary; Foundation and Premium records are retained under their configured subscription. All tiers still use the same 24-hour minimum refresh floor.
 
+After a successful due refresh, the station cache keeps only the extrema from
+the preceding 24 hours at refresh time and combines them with the fresh provider
+response. Fresh events are authoritative from their first timestamp onward;
+overlap is replaced, cached future predictions are not carried forward, and
+older events are discarded at that refresh. The retained tail is pruned again
+at the next successful refresh; an offline stale fallback remains unchanged.
+This historical tail lets consumers calculate the phase spanning local
+midnight after the cache has crossed a refresh. A new cache cannot recover
+provider events that were never fetched.
+
 ## Setup
 
 For the breaking v0.8 contract correction, install Marine Location Editor first,
@@ -95,8 +105,8 @@ Location whenever Location Editor is available.
 ```sh
 cd ~/.signalk
 npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-location-editor.git#v0.7.2 --omit=dev --no-package-lock
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-planning.git#v0.10.2 --omit=dev --no-package-lock
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.8.0 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-planning.git#v0.10.3 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.8.1 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

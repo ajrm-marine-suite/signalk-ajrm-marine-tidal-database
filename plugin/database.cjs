@@ -3,10 +3,11 @@
 const fs = require("node:fs/promises");
 const path = require("node:path");
 const { applyReferenceLevelCorrections, applySecondaryCorrections } = require("./secondary-corrections.cjs");
-const { tideEventCapabilities } = require("./tide-calculation.cjs");
+const { normalizeTideEvents, tideEventCapabilities } = require("./tide-calculation.cjs");
 
 const RECORD_CONTRACT = "ajrm-marine-tidal-station-cache-v1";
 const MINIMUM_REFRESH_MS = 24 * 3600000;
+const HISTORY_RETENTION_MS = 24 * 3600000;
 const OFFLINE_RETRY_MS = 60 * 60000;
 
 function safePart(value) {
@@ -23,9 +24,64 @@ function coverage(events = []) {
 	} : { startAt: null, endAt: null };
 }
 
+function normalizedFreshEvents(events) {
+	const byInstant = new Map();
+	for (const event of normalizeTideEvents(events)) {
+		const existing = byInstant.get(event.at);
+		if (existing && (existing.type !== event.type || existing.heightM !== event.heightM)) {
+			throw new Error(`Tide provider returned conflicting events at ${event.at}.`);
+		}
+		byInstant.set(event.at, event);
+	}
+	return [...byInstant.values()].sort((left, right) => Date.parse(left.at) - Date.parse(right.at));
+}
+
+function normalizedCachedEvents(events) {
+	const byInstant = new Map();
+	const conflicts = new Set();
+	for (const event of normalizeTideEvents(events)) {
+		if (conflicts.has(event.at)) continue;
+		const existing = byInstant.get(event.at);
+		if (existing && (existing.type !== event.type || existing.heightM !== event.heightM)) {
+			byInstant.delete(event.at);
+			conflicts.add(event.at);
+			continue;
+		}
+		byInstant.set(event.at, event);
+	}
+	return [...byInstant.values()].sort((left, right) => Date.parse(left.at) - Date.parse(right.at));
+}
+
+function mergeRefreshEvents(cachedEvents, fetchedEvents, nowMs) {
+	const cutoffMs = nowMs - HISTORY_RETENTION_MS;
+	const fresh = normalizedFreshEvents(fetchedEvents).filter((event) => Date.parse(event.at) >= cutoffMs);
+	const freshStartMs = fresh.length ? Date.parse(fresh[0].at) : nowMs;
+	const cachedHistoryEndMs = Math.min(nowMs, freshStartMs);
+	const byInstant = new Map();
+	const retain = (event) => byInstant.set(event.at, event);
+	const cachedHistory = normalizedCachedEvents(cachedEvents).filter((event) => {
+		const atMs = Date.parse(event.at);
+		return atMs >= cutoffMs && atMs < cachedHistoryEndMs;
+	});
+	// A shifted provider prediction is the same extremum when the cached tail
+	// and first fresh event have the same type. Remove that tail until the
+	// cached/fresh boundary alternates instead of publishing HW/HW or LW/LW.
+	// One-type stations retain their history because they explicitly cannot
+	// provide the alternating extrema needed for current-height calculation.
+	const alternatingBoundary = tideEventCapabilities(cachedHistory).completeExtrema
+		&& tideEventCapabilities(fresh).completeExtrema;
+	while (alternatingBoundary && cachedHistory.at(-1)?.type === fresh[0].type) cachedHistory.pop();
+	for (const event of cachedHistory) retain(event);
+	// Fresh provider data is authoritative from its first event onward. Keying
+	// by canonical instant also replaces any corrected type or height cleanly.
+	for (const event of fresh) retain(event);
+	return [...byInstant.values()].sort((left, right) => Date.parse(left.at) - Date.parse(right.at));
+}
+
 function createTidalDatabase(options) {
 	const directory = options.directory;
 	const providers = options.providers;
+	const writeRecord = options.writeRecord || writeAtomic;
 	const memory = new Map();
 	const attempts = new Map();
 	const inflight = new Map();
@@ -88,7 +144,8 @@ function createTidalDatabase(options) {
 		attempts.set(cacheKey, { attemptedAt: nowMs });
 		try {
 			const fetched = await provider.fetchEvents(station);
-			const eventCoverage = coverage(fetched.events);
+			const events = mergeRefreshEvents(cached?.events, fetched.events, nowMs);
+			const eventCoverage = coverage(events);
 			const result = {
 				contract: RECORD_CONTRACT,
 				contractVersion: 1,
@@ -97,14 +154,14 @@ function createTidalDatabase(options) {
 				stationName: station.stationName || station.stationId,
 				fetchedAt: now.toISOString(),
 				coverage: eventCoverage,
-				events: fetched.events,
+				events,
 				timestampContract: fetched.timestampContract || "explicit-offset-v1",
 				cacheUseUntil: provider.cacheUseUntil?.(now) || null,
 			};
+			if (provider.persistentCachePermitted) await writeRecord(file(station.providerId, station.stationId), result);
 			memory.set(cacheKey, result);
 			attempts.set(cacheKey, { attemptedAt: nowMs, succeededAt: nowMs });
 			networkBackoffUntil = 0;
-			if (provider.persistentCachePermitted) await writeAtomic(file(station.providerId, station.stationId), result);
 			return { ...result, cache: "network", due: false };
 		} catch (error) {
 			attempts.set(cacheKey, { attemptedAt: nowMs, failedAt: nowMs, error: error.message });
@@ -174,4 +231,4 @@ function createTidalDatabase(options) {
 	return Object.freeze({ stationData, resolvePort, inspectStation, providers: providers.list, refreshHours: 24 });
 }
 
-module.exports = { MINIMUM_REFRESH_MS, createTidalDatabase, coverage };
+module.exports = { HISTORY_RETENTION_MS, MINIMUM_REFRESH_MS, createTidalDatabase, coverage, mergeRefreshEvents };
