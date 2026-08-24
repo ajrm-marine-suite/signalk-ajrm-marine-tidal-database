@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.3 — 2026-08-24
+
+- Publish the enabled Tidal Database v2 status contract as soon as startup
+  initialization completes, independently of automatic provider maintenance.
+- Restore Console BITE preflight detection when automatic maintenance is
+  disabled or no provider refresh has yet completed.
+
 ## 0.8.2 — 2026-08-24
 
 - Linearly extrapolate secondary-port height differences beyond the parent's

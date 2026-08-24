@@ -224,6 +224,10 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 			maintenanceTimer = setInterval(() => maintainAll(), 60 * 60000);
 			maintenanceTimer.unref?.();
 		}
+		initialized
+			.then(() => databaseStatus())
+			.then((status) => { if (running) publish(STATUS_PATH, status); })
+			.catch((error) => app.error?.(`Could not publish Tidal Database startup status: ${error.message}`));
 		resolve().catch(() => {});
 		app.setPluginStatus?.(`Started v${packageJson.version}; ${uniqueProviderStations(definitions).length} provider stations`);
 	};

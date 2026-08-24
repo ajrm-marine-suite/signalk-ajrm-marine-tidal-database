@@ -16,6 +16,7 @@ function response() { return { statusCode:200, status(code){ this.statusCode=cod
 async function fixture(t, { legacyGateMigration = null, mutateLocations = null } = {}) {
 	const directory = await fs.mkdtemp(path.join(os.tmpdir(), "ajrm-tidal-plugin-"));
 	t.after(() => fs.rm(directory, { recursive:true, force:true }));
+	const messages = [];
 	if (legacyGateMigration) {
 		await fs.writeFile(path.join(directory,"definitions.json"),`${JSON.stringify({
 			...definitions,
@@ -34,15 +35,37 @@ async function fixture(t, { legacyGateMigration = null, mutateLocations = null }
 	mutateLocations?.(locations);
 	locations.find((entry) => entry.id === port.locationId).feature = { geometry:{ type:"Point",coordinates:[-5.47,56.41] } };
 	const app = {
-		getDataDirPath:() => directory, setPluginStatus(){}, handleMessage(){},
+		getDataDirPath:() => directory, setPluginStatus(){}, handleMessage(_pluginId,message){ messages.push(message); },
 		ajrmMarineLocations:{ list:async () => locations },
 	};
 	const routes = new Map(); const router = {};
 	for (const method of ["get","post","put","delete"]) router[method] = (route,handler) => routes.set(`${method.toUpperCase()} ${route}`,handler);
 	const plugin = createPlugin(app); plugin.registerWithRouter(router); plugin.start({ automaticMaintenance:false });
 	async function call(method,route,req={}) { const res=response(); await routes.get(`${method} ${route}`)({ query:{},body:{},...req },res); return res; }
-	return { app,plugin,call,locations,port,routes };
+	return { app,plugin,call,locations,port,routes,messages };
 }
+
+async function waitForValue(read, timeoutMs = 1000) {
+	const deadline = Date.now() + timeoutMs;
+	while (Date.now() < deadline) {
+		const value = read();
+		if (value) return value;
+		await new Promise((resolve) => setTimeout(resolve,5));
+	}
+	throw new Error("Timed out waiting for published test value.");
+}
+
+test("startup publishes enabled status when automatic maintenance is disabled", async (t) => {
+	const { plugin,messages } = await fixture(t);
+	const status = await waitForValue(() => messages
+		.flatMap((message) => message.updates || [])
+		.flatMap((update) => update.values || [])
+		.find((value) => value.path === "plugins.ajrmMarineTidalDatabase")?.value);
+	assert.equal(status.contract,"ajrm-marine-tidal-database-status-v2");
+	assert.equal(status.contractVersion,2);
+	assert.equal(status.enabled,true);
+	await plugin.stop();
+});
 
 test("the standalone service owns only tidal-provider data and exposes all seeded ports", async (t) => {
 	const { app,plugin,call,port,routes } = await fixture(t);
