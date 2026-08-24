@@ -70,6 +70,13 @@ This historical tail lets consumers calculate the phase spanning local
 midnight after the cache has crossed a refresh. A new cache cannot recover
 provider events that were never fetched.
 
+Tidal predictions do not become stale merely because they were fetched earlier:
+an event for a particular instant remains the prediction for that instant. Fetch
+age controls when the station is due to be updated, while coverage states whether
+the stored events span the requested time. Correction-based secondary ports
+linearly extrapolate their entered neap/spring height differences when the
+parent-port tide lies beyond the mean neap/spring reference heights.
+
 ## Setup
 
 For the breaking v0.8 contract correction, install Marine Location Editor first,
@@ -106,7 +113,7 @@ Location whenever Location Editor is available.
 cd ~/.signalk
 npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-location-editor.git#v0.7.2 --omit=dev --no-package-lock
 npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-planning.git#v0.10.3 --omit=dev --no-package-lock
-npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.8.1 --omit=dev --no-package-lock
+npm install git+https://github.com/ajrm-marine-suite/signalk-ajrm-marine-tidal-database.git#v0.8.2 --omit=dev --no-package-lock
 sudo systemctl restart signalk
 ```
 

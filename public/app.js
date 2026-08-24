@@ -5,7 +5,7 @@ const API_BASE = "/plugins/signalk-ajrm-marine-tidal-database";
 const LOCATION_API = "/plugins/signalk-ajrm-marine-location-editor";
 const TIDE_GRAPH_DAYS_KEY = "ajrmMarineTidalDatabase.tideGraphDays";
 const TIDE_DIALOG_SIZE_KEY = "ajrmMarineTidalDatabase.tideDialogSize";
-const tideCurveTools = import("./tide-curve.mjs?v=0.8.1");
+const tideCurveTools = import("./tide-curve.mjs?v=0.8.2");
 const byId = (id) => document.getElementById(id);
 const sortLocationsByName = (entries) => globalThis.AJRMLocationOrder.sortLocationsByName(entries);
 
@@ -87,8 +87,9 @@ async function renderTideProjection() {
 	byId("tideDistanceToFall").textContent=height(fall);
 	byId("tideDatum").textContent=(valid||hasEvents)?tide.datum || "—":"—";
 	byId("tideStation").textContent=(valid||hasEvents)&&tide.station?`${tide.station.name} (${tide.station.id})`:"—";
-	const age=Number.isFinite(Number(tide?.freshness?.ageSeconds))?`${(Number(tide.freshness.ageSeconds)/3600).toFixed(1)} h old`:"age unknown";
-	byId("tideSourceFreshness").textContent=(valid||hasEvents)&&tide.source?`${tide.source.provider} · ${tide.freshness?.state || "unknown"} · ${age}`:"—";
+	const age=Number.isFinite(Number(tide?.freshness?.ageSeconds))?`${(Number(tide.freshness.ageSeconds)/3600).toFixed(1)} h since fetch`:"fetch age unknown";
+	const refresh=tide?.freshness?.refreshDue?"refresh due":"refresh not due";
+	byId("tideSourceFreshness").textContent=(valid||hasEvents)&&tide.source?`${tide.source.provider} · ${tide.freshness?.state || "unknown coverage"} · ${age} · ${refresh}`:"—";
 	const phase=springNeap(tide?.calculationReferenceAt || Date.now());
 	byId("tideSpringNeapStatus").textContent=phase?.status || "—";
 	byId("tideSpringNeapTiming").textContent=phase?.timing || "—";

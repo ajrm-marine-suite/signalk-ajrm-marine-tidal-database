@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "AJRM Marine Tidal Database",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "description": "Provider-neutral tidal predictions, provider-station mappings, secondary-port corrections, tidal-region relationships and persistent event caches. Location Editor owns spatial ids, classifications, geometry and names. Tidal definitions expose joined read-only names and identify any explicit cached-name fallback."
   },
   "paths": {

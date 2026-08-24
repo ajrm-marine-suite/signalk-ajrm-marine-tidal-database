@@ -456,10 +456,11 @@ module.exports = function ajrmMarineTidalDatabase(app) {
 			};
 			const ageSeconds = Math.max(0, (now.getTime() - Date.parse(data.fetchedAt)) / 1000);
 			const freshness = {
-				state: !covered ? "expired" : ageSeconds > 24 * 3600 ? "stale" : "fresh",
+				state: covered ? "available" : "outside-coverage",
 				ageSeconds,
 				refreshAfterSeconds: 24 * 3600,
-				staleAfterSeconds: 24 * 3600,
+				refreshDue: ageSeconds > 24 * 3600,
+				predictionExpiresAt: null,
 				coverageStartAt: data.coverage?.startAt || data.events[0]?.at || null,
 				coverageEndAt: data.coverage?.endAt || data.events.at(-1)?.at || null,
 			};

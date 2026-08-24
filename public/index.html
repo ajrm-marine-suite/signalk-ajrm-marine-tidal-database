@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AJRM Marine Tidal Database</title>
   <link rel="icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css?v=0.8.1">
+  <link rel="stylesheet" href="styles.css?v=0.8.2">
 </head>
 <body>
   <header>
@@ -62,7 +62,7 @@
           <dt>Spring/neap</dt><dd id="tideSpringNeapStatus">—</dd>
           <dt>Phase timing</dt><dd id="tideSpringNeapTiming">—</dd>
         </dl>
-        <p class="muted tide-note">Spring/neap timing is an astronomical estimate. Predictions are planning aids; verify the station, datum and freshness.</p>
+        <p class="muted tide-note">Spring/neap timing is an astronomical estimate. Predictions are planning aids; verify the station, datum and time coverage. Fetch age controls updates; it does not make a prediction for a covered time stale.</p>
       </section>
       <section id="tideGraphPane" class="tab-pane" role="tabpanel" aria-labelledby="tideGraphTab" hidden>
         <h3 id="tideGraphPortName">No tidal port — tidal curve</h3>
@@ -73,7 +73,7 @@
       <div class="dialog-actions"><button id="refreshTide" type="button" class="primary">Refresh if due</button><span></span><button id="closeTideBottom" type="button">Close</button></div>
     </div>
   </dialog>
-  <script src="location-order.js?v=0.8.1"></script>
-  <script src="app.js?v=0.8.1"></script>
+  <script src="location-order.js?v=0.8.2"></script>
+  <script src="app.js?v=0.8.2"></script>
 </body>
 </html>

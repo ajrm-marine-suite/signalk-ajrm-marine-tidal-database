@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.8.2 — 2026-08-24
+
+- Linearly extrapolate secondary-port height differences beyond the parent's
+  mean-neap and mean-spring reference heights instead of clamping them.
+- Separate station refresh age from prediction validity: tide projections now
+  report available/outside-coverage and an explicit refresh-due flag, and do
+  not describe covered predictions as stale or expired.
+- Continue retaining only the preceding 24 hours of historical extrema at each
+  successful refresh.
+
 ## 0.8.1 — 2026-08-24
 
 - Retain the 24 hours of cached historical extrema preceding each successful

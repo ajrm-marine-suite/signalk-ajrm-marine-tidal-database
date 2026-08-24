@@ -272,6 +272,24 @@ test("a locally corrected secondary reuses its parent provider record", async (t
 	assert.equal(result.datum, "CD");
 });
 
+test("secondary height differences extrapolate linearly beyond mean spring and neap levels", async (t) => {
+	const value = await fixture(t, { async fetchEvents() { return { events:[
+		{ at:"2026-08-21T00:00:00Z",type:"low",heightM:.8 },
+		{ at:"2026-08-21T06:00:00Z",type:"high",heightM:4.2 },
+	] }; } });
+	const parent = { locationId:"parent",name:"Parent",datum:"CD",referenceLevels:{ mhws:4,mhwn:3,mlwn:2,mlws:1 },
+		prediction:{ mode:"provider",providerId:"test",stationId:"one",stationName:"One" } };
+	const secondary = { locationId:"child",name:"Child",prediction:{ mode:"corrections",parentLocationId:"parent",corrections:{
+		timeOffsetPeriodMinutes:720,
+		highWaterTimeOffsets:[{ referenceTimeMinutes:0,offsetMinutes:0 }],
+		lowWaterTimeOffsets:[{ referenceTimeMinutes:0,offsetMinutes:0 }],
+		heightDifferencesM:{ mhws:.2,mhwn:.1,mlwn:-.1,mlws:-.2 },
+	} } };
+	const result = await value.db.resolvePort(secondary,new Map([["parent",parent],["child",secondary]]),{ now:"2026-08-21T00:00:00Z" });
+	assert.equal(result.events.find((event) => event.type === "high").heightM,4.42);
+	assert.ok(Math.abs(result.events.find((event) => event.type === "low").heightM - .58) < 1e-12);
+});
+
 test("memory-only providers do not recover forbidden disk records", async (t) => {
 	const value = await fixture(t);
 	const station = { providerId:"test", stationId:"one", stationName:"One" };

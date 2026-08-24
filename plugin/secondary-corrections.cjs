@@ -32,11 +32,11 @@ function heightDifference(type, parentHeight, corrections, referenceLevels = {})
 	const neapLow = Number(referenceLevels.mlwn);
 	const springLow = Number(referenceLevels.mlws);
 	if (type === "high" && Number.isFinite(springHigh) && Number.isFinite(neapHigh) && springHigh !== neapHigh) {
-		const fraction = Math.max(0, Math.min(1, (parentHeight - neapHigh) / (springHigh - neapHigh)));
+		const fraction = (parentHeight - neapHigh) / (springHigh - neapHigh);
 		return Number(differences.mhwn) + (Number(differences.mhws) - Number(differences.mhwn)) * fraction;
 	}
 	if (type === "low" && Number.isFinite(neapLow) && Number.isFinite(springLow) && springLow !== neapLow) {
-		const fraction = Math.max(0, Math.min(1, (parentHeight - neapLow) / (springLow - neapLow)));
+		const fraction = (parentHeight - neapLow) / (springLow - neapLow);
 		return Number(differences.mlwn) + (Number(differences.mlws) - Number(differences.mlwn)) * fraction;
 	}
 	return type === "high"
